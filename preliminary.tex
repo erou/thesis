@@ -62,8 +62,46 @@ In the case of a multiplication, we have
 \[
   ab = (a_0b_0+a_1b_1) + (a_0b_1+a_1b_0)x,
 \]
-so the complexity of a multiplication in $\mathbb{F}_4$ is (at least with this
-formula) $6$, because we need
-$4$ multiplications and $2$ additions in $\mathbb{F}_2$.
-Ah ah AH ah of of et là
+so the complexity of a multiplication in $\mathbb{F}_4$ (at least with this
+formula) is $6$, because we need
+$4$ multiplications and $2$ additions in $\mathbb{F}_2$. In the context of
+finite fields, it makes sense to consider that the cost of an operation is
+independent of the operands, because the elements have a fixed size; but this is
+no longer the case in other rings, for example in $\mathbb{Z}$, $\mathbb{Q}$,
+$\mathbb{R}$, or $\mathbb{C}$. We could also argue that the different operations
+in $\K$ should not have the same cost, we thus present an other manner of
+computing the complexity of an algorithm, that is called \emph{bilinear
+complexity}, in Chapter~\ref{chap:bilinear}.
 
+\subsection{Landau notations}
+
+In order to describe the asymptotic behaviour of an algorithm, we use the
+classical \emph{big O} and \emph{little o} notations $O$ and $o$. Let $f:\mathbb{R}\to\mathbb{R}$ and
+$g:\mathbb{R}\to\mathbb{R}$ be two functions, we write
+\[
+  f(x) = O(g(x))
+\]
+if there exist $M\in\mathbb{R}$ and $C>0$ such that
+\[
+  \forall x\geq M,\,|f(x)|\leq Cg(x).
+\]
+and we write
+\[
+  f(x)=o(g(x))
+\]
+if there exist $M\in\mathbb{R}$ and $\varepsilon:\mathbb{R}\to\mathbb{R}$, a
+function with $\varepsilon(x)\to 0$ when $x\to\infty$, such
+that
+\[
+  \forall x\geq M,\,|f(x)|\leq \varepsilon(x)g(x).
+\]
+We say that $f$ is equivalent to $g$ and we write
+\[
+  f(x)\sim g(x)
+\]
+if 
+\[
+  \cfrac{f(x)}{g(x)}\to 1
+\]
+when $x\to\infty$. Finally, we also use the \emph{soft O} notation to neglect
+logarithmic factors in the big O notation.

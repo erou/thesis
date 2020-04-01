@@ -1,2 +1,62 @@
+Indeed, multiplication of two variable quantities in $\K$ is arguably more expensive than
+addition, or than multiplication of a variable by a fixed constant. In the
+context of the computation of
+bilinear maps, extensive work has been done to reduce the number of
+two-variable multiplications involved. Notable examples are Karatsuba's
+algorithm~\cite{Karatsuba63} and
+Strassen's algorithm~\cite{Strassen69}. Karatsuba's algorithm is
+based on the fact that the bilinear map associated to the product of two
+polynomials of degree $1$
+\[
+  A = a_1 X + a_0\text{ and }B = b_1 X + b_0
+\]
+can be computed with three products
+\[
+  c_0 = a_0b_0,
+\]
+\[
+  c_1 = (a_0+a_1)(b_0+b_1),
+\]
+and
+\[
+  c_\infty = a_1b_1,
+\]
+instead
+of the four classic ones $a_0b_0$, $a_0b_1$, $a_1b_0$ and $a_1b_1$ as follows:
+\[
+  AB = c_\infty X^2 + (c_1-c_\infty-c_0) X + c_0.
+\]
+It will become clear in Section~\ref{sec:evalinter} why we use the index
+$\infty$ instead of $2$ for $c_\infty = a_1b_1$. Strassen's algorithm
+exploits a similar idea in the case of $2\times2$ matrices: only $7$ products
+are used instead of $8$ in order to compute a matrix product. Both these
+algorithms have very practical consequences. The \emph{bilinear complexity}
+$\mu(\Phi)$ of a bilinear map $\Phi$ over $\K$ represents the minimum number of two-variable
+multiplications in a formula that computes $\Phi$, discarding the cost of other
+operations such as addition or multiplication by a constant.
+In particular when $\A$ is a finite dimensional algebra over $\K$,
+we define the bilinear complexity of $\A$ as $\mu(\A/\K)=\mu(m_{\A})$
+where $m_{\A}:\A\times\A\to\A$ is the multiplication map in $\A$ seen
+as a $\K$-bilinear map.
+
+Let $\K^{2\times2}$ be the algebra
+of $2\times2$ matrices over $\K$. We know thanks to Strassen's algorithm that
+\[
+  \mu(\K^{2\times 2}/\K) \leq 7.
+\]
+In fact, this is optimal, so we have exactly $\mu(\K^{2\times2}/\K)=7$. In
+general, it seems to be hard to find the bilinear complexity of a given algebra,
+for example the bilinear complexity of $\K^{3\times3}$ is not known.
+In the litterature, work has been done both to algorithmically find the bilinear complexity of
+small algebras~\cite{BDEZ12, Covanov19} and to understand how the bilinear
+complexity asymptotically grows~\cite{CC88, BCPRRR19}. Chudnovsky and Chudnovsky
+proved in 1988 that the bilinear complexity of an extension field
+$\mathbb{F}_{q^k}/\mathbb{F}_{q}$ is linear in the degree $k$ of the
+extension, using an evaluation-interpolation method on curves.
+As the main contribution of this article, we
+investigate both questions for \emph{trisymmetric} bilinear complexity,
+and solve a certain number of the open problems stated in \cite[\S5.2]{BCPRRR19}.
+
 \section{Evaluation - Interpolation}
+\label{sec:evalinter}
 \section{Complexities}
