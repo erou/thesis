@@ -1,9 +1,12 @@
-Indeed, multiplication of two variable quantities in $\K$ is arguably more expensive than
-addition, or than multiplication of a variable by a fixed constant. In the
-context of the computation of
-bilinear maps, extensive work has been done to reduce the number of
-two-variable multiplications involved. Notable examples are Karatsuba's
-algorithm~\cite{Karatsuba63} and
+In the \emph{algebraic complexity model}~\cite{BCS13}, we assume that our
+machine is able to perform any operation in some base field $\K$ in constant,
+unit time. This is an idealized model made in order to simplify the
+computation of the complexity of algebraic algorithms. Nevertheless,
+multiplication of two variable quantities in $\K$ is arguably more expensive
+than addition, or than multiplication of a variable by a fixed constant. In the
+context of the computation of bilinear maps, extensive work has been done to
+reduce the number of two-variable multiplications involved. Notable examples are
+Karatsuba's algorithm~\cite{Karatsuba63} and
 Strassen's algorithm~\cite{Strassen69}. Karatsuba's algorithm is
 based on the fact that the bilinear map associated to the product of two
 polynomials of degree $1$
@@ -30,10 +33,23 @@ It will become clear in Section~\ref{sec:evalinter} why we use the index
 $\infty$ instead of $2$ for $c_\infty = a_1b_1$. Strassen's algorithm
 exploits a similar idea in the case of $2\times2$ matrices: only $7$ products
 are used instead of $8$ in order to compute a matrix product. Both these
-algorithms have very practical consequences. The \emph{bilinear complexity}
+algorithms have very practical consequences. Karatsuba's algorithm is used in
+computer algebra softwares, when the standard multiplication is no longer
+optimal, and when the Discrete Fourier Transform (DFT) is not yet the fastest.
+Strassen's algorithm, used reccursively, is the fastest strategy available for
+large matrix multiplication. Both these questions are treated in~\cite{GG13}.
+Thus the idea of minimizing the number of multiplications, even if it means
+having to compute more additions and substractions, seems a good idea.
+
+The \emph{bilinear complexity}
 $\mu(\Phi)$ of a bilinear map $\Phi$ over $\K$ represents the minimum number of two-variable
 multiplications in a formula that computes $\Phi$, discarding the cost of other
-operations such as addition or multiplication by a constant.
+operations such as addition or multiplication by a constant. In other words, in
+this model of computation, we only count $2$-variable multiplications, and other
+operations are assumed to have no cost. It is motivated by the fact that
+$2$-variable multiplication is often more expensive to compute than other
+operations and by the practicality of algorithms minimizing the multiplications,
+such as Karatsuba's and Strassen's.
 In particular when $\A$ is a finite dimensional algebra over $\K$,
 we define the bilinear complexity of $\A$ as $\mu(\A/\K)=\mu(m_{\A})$
 where $m_{\A}:\A\times\A\to\A$ is the multiplication map in $\A$ seen
@@ -52,11 +68,120 @@ small algebras~\cite{BDEZ12, Covanov19} and to understand how the bilinear
 complexity asymptotically grows~\cite{CC88, BCPRRR19}. Chudnovsky and Chudnovsky
 proved in 1988 that the bilinear complexity of an extension field
 $\mathbb{F}_{q^k}/\mathbb{F}_{q}$ is linear in the degree $k$ of the
-extension, using an evaluation-interpolation method on curves.
-As the main contribution of this article, we
-investigate both questions for \emph{trisymmetric} bilinear complexity,
-and solve a certain number of the open problems stated in \cite[\S5.2]{BCPRRR19}.
+extension, using an evaluation-interpolation method on curves. We present this
+technique in the next section.
 
 \section{Evaluation - Interpolation}
 \label{sec:evalinter}
+
+Let $P\in\K[x]$ be a polynomial with coefficients in a finite field $\K$. The
+evaluation-interpolation strategy is based on two facts:
+\begin{itemize}
+  \item a polynomial of degree $n$ can be described by its values at $n+1$
+    points and reconstructed via \emph{interpolation};
+  \item the \emph{evaluation} map at some point $a\in\K$ is a homomorphism of ring from
+    $\K[x]$ to $\K$.
+\end{itemize}
+\paragraph{Interpolation.} The fact that a polynomial $P\in\K[x]$ of degree $n$
+is uniquely determined by its values at $n+1$ (different) points in $\K$ follows
+from the fact that a polynomial of degree $n$ with coefficients in $\K$ has up
+to $n$ roots. This gives us the \emph{uniqueness} of the polynomial. As for the
+\emph{existence}, it follows from the Lagrange interpolation. Let $x_1, \dots,
+x_{n+1}\in\K$ be $n+1$ points in $\K$ and $y_1, \dots, y_{n+1}$ the
+corresponding evaluation values, such that
+\[
+  \forall j\in\left\{ 1, \dots, n+1 \right\},\,y_j = P(x_j).
+\]
+Let 
+\[
+  L_j = \prod_{i\neq j}\frac{x-x_i}{x_j-x_i},
+\]
+we then have $L_j(x_i) = \delta_{i, j}$ with
+\[
+  \delta_{i, j} = 
+  \left\{\begin{array}{ll}
+      1&\mbox{if } i=j\\
+      0&\mbox{if } i\neq j
+    \end{array}
+    \right.
+\]
+the Kronecker symbol. Now, the polynomial
+\[
+  P = \sum_{j=1}^{n+1} y_j L_j
+\]
+meets all the evaluation conditions and is the sum of polynomials of degree $n$
+so $P$ is of degree at most $n$.
+
+\paragraph{Evaluation.} Let $P, Q\in\K[x]$ be two polynomials with coefficients
+in $\K$ and $a\in\K$, then we have
+\[
+  (P+_{\K[x]}Q)(a) = P(a) +_{\K} Q(a)
+\]
+and 
+\[
+  (P\times_{\K[x]} Q)(a) = P(a) \times_{\K} Q(a),
+\]
+where $+_{\K[x]}, \times_{\K[x]}$ (resp. $+_{\K}, \times_{\K})$ are the addition
+and multiplication operations in $\K[x]$ (resp. $\K$).
+In other words, the map
+\[
+\begin{array}{llll}
+  \textrm{ev}_a:&\K[x]&\to&\K\\
+  &P&\mapsto&P(a)
+\end{array}
+\]
+is an homomorphism of rings from $\K[x]$ to $\K$.
+
+We are used to represent polynomials by their coefficients, but these two facts
+suggest that we can also represent polynomials by their values at some points.
+With this representation, adding two polynomials is done by adding the
+values, which is done with linear complexity, the same as with the coefficient
+representation. But the multiplication of polynomials is also obtained via the
+multiplication of the values, which is linear again and better than the
+quadratic complexity obtained with the usual multiplication formula for the
+coefficients. An important problem is then to be able to change between
+representations at a small cost, this is done using well-chosen points of
+evaluation and this strategy is known under the name of Fast Fourier
+Transform (FFT)~\cite{GG13}. Let $P, Q\in\K[x]$ be two polynomials with
+coefficients in $\K$ represented by their coefficients, such that
+$\deg(PQ)=n-1$. In order to multiply $P$ and $Q$ we need at least $n$ points in
+$\K$ and the evaluation-interpolation strategy consists in $3$ steps:
+\begin{enumerate}
+  \item multipoint evaluation of $P$ and $Q$ at $n$ points $a_1, \dots, a_n$;
+  \item coordinate-wise multiplication;
+  \item interpolation to reconstruct the product $PQ$.
+\end{enumerate}
+When there are not enough points in $\K$ to use this method, instead of
+evaluating on points of $\K$, we can evaluate the polynomials on points of
+curves on $\K$ with enough points. As a first example, we can interpret
+Karatsuba's algorithm as an evaluation-interpolation scheme on
+the projective line $\mathbb{P}^1(\K)$. Let 
+\[
+  P = a_1 x + a_0
+\]
+and 
+\[
+  Q = b_1 x + b_0,
+\]
+then
+\[
+  c_0 = \textrm{ev}_0(P)\textrm{ev}_0(Q) = a_0b_0
+\]
+is obtained via evaluation at $0$,
+\[
+  c_1 = \textrm{ev}_1(P)\textrm{ev}_1(Q) = (a_0+a_1)(b_0+b_1)
+\]
+is obtained via evaluation at $1$,
+\[
+  c_\infty = \textrm{ev}_\infty(P)\textrm{ev}_\infty(Q) = a_1b_1
+\]
+is obtained via evaluation at the point at infinity, where the evaluation at
+infinity $\textrm{ev}_{\infty}$ is the function mapping a polynomial to its
+leading coefficient. This strategy can be generalized to curves more complex
+that $\mathbb{P}^1(\K)$, as was done by Chudnovsky and Chudnovsky in
+$1988$~\cite{CC88}.
+
+
 \section{Complexities}
+% Both algorithmic results in small dimension and asymptotic results with
+% Chudnosky-like techniques would be better I guess

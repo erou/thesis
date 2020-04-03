@@ -101,7 +101,12 @@ We say that $f$ is equivalent to $g$ and we write
 \]
 if 
 \[
-  \cfrac{f(x)}{g(x)}\to 1
+ f(x)-g(x) = o(g(x))
 \]
-when $x\to\infty$. Finally, we also use the \emph{soft O} notation to neglect
-logarithmic factors in the big O notation.
+when $x\to\infty$. Finally, we also use the \emph{soft O} notation $\tilde{O}$ to neglect
+logarithmic factors in the big O notation, we write
+\[
+  f(x) = \tilde{O}(g(x))
+\]
+if there exist some $k$ with $f(x) = O(g(x)\log^k(g(x)))$.
+
