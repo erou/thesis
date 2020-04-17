@@ -250,3 +250,7 @@ TSWLatexianTemp*
 # C stuff
 *.o
 *.exe
+
+# ??
+*.mtc
+*.swp

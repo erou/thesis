@@ -1,3 +1,11 @@
+We have presented in Section~\ref{sec:complexity-models} an abstract model made
+to understand the asymptotic behaviour of our algorithms. In this chapter, we
+present an alternative notion of complexity called \emph{bilinear complexity},
+where the focus is on the number of multiplications needed to compute some map.
+\minitoc
+
+\section{Bilinear complexity}
+
 In the \emph{algebraic complexity model}~\cite{BCS13}, we assume that our
 machine is able to perform any operation in some base field $\K$ in constant,
 unit time. This is an idealized model made in order to simplify the
@@ -69,9 +77,26 @@ complexity asymptotically grows~\cite{CC88, BCPRRR19}. Chudnovsky and Chudnovsky
 proved in 1988 that the bilinear complexity of an extension field
 $\mathbb{F}_{q^k}/\mathbb{F}_{q}$ is linear in the degree $k$ of the
 extension, using an evaluation-interpolation method on curves. We present this
-technique in the next section.
+technique in Section~\ref{sec:evalinter}.
 
-\section{Evaluation - Interpolation}
+% TODO
+% ====
+%
+% Add the notations for the bilinear complexity of F_q^m with mu and maybe all
+% the other needed notations.
+%
+% Needed
+% ======
+%
+% - proper definition of the bilinear complexity
+% - link with tensor rank
+% - definition symmetric complexity
+% - obvious inequality
+
+\section{Chudnovsky-Chudnovsky algorithm}
+Chudnovsky and Chudnovsky algorithm is based on evaluation-interpolation on
+curves, we thus begin by presenting this principle.
+\subsection{Evaluation - Interpolation}
 \label{sec:evalinter}
 
 Let $P\in\K[x]$ be a polynomial with coefficients in a finite field $\K$. The
@@ -171,17 +196,60 @@ is obtained via evaluation at $0$,
 \[
   c_1 = \textrm{ev}_1(P)\textrm{ev}_1(Q) = (a_0+a_1)(b_0+b_1)
 \]
-is obtained via evaluation at $1$,
+is obtained via evaluation at $1$, and
 \[
   c_\infty = \textrm{ev}_\infty(P)\textrm{ev}_\infty(Q) = a_1b_1
 \]
 is obtained via evaluation at the point at infinity, where the evaluation at
 infinity $\textrm{ev}_{\infty}$ is the function mapping a polynomial to its
-leading coefficient. This strategy can be generalized to curves more complex
-that $\mathbb{P}^1(\K)$, as was done by Chudnovsky and Chudnovsky in
+leading coefficient. This strategy can be generalized to curves (or their
+function fields) more complex
+than $\mathbb{P}^1(\K)$, as was done by Chudnovsky and Chudnovsky in
 $1988$~\cite{CC88}.
 
+\subsection{Asymptotic complexity}
 
-\section{Complexities}
-% Both algorithmic results in small dimension and asymptotic results with
-% Chudnosky-like techniques would be better I guess
+In 1988, Chudnovsky and Chudnovsky~\cite{CC88} extended the idea of polynomial
+interpolation to interpolation on rational places, \ie places of degree $1$, of
+a function field. It led to an algorithm for the finite field product with an
+asymptotically linear complexity in the extension degree. We first present the historical theorem
+in~\cite{CC88}.
+\begin{thm}
+  \label{thm:CC88}
+  Let $F$ be a function field over $\mathbb{F}_q$.
+  Assume there exist a place $Q\in\mathbb{P}_{F}$ of $F$ of degree $k$, $P_1,
+  \dots, P_n\in\mathbb{P}_F$ places of $F$ of degree $1$, and a divisor
+  $D\in\D_F$ of $F$ such that the places $Q$ and $P_1, \dots, P_n$ are not in
+  the support of $D$ and such that the following conditions hold.
+  \begin{enumerate}[(i)]
+    \item \label{cond:1} The evaluation map
+      \[
+        \begin{array}{cccc}
+        \ev_{Q, D}: & L(D) & \to & \mathbb{F}_{q^k}\\
+  & f & \mapsto & f(Q)
+\end{array}
+\]
+is \emph{surjective}.
+    \item \label{cond:2} The evaluation map
+      \[
+        \begin{array}{cccc}
+        \ev_{\Pcal, 2D}: & L(2D) & \to & (\mathbb{F}_{q})^n\\
+  & h & \mapsto & (h(P_1), \dots, h(P_n))
+\end{array}
+\]
+is \emph{injective}.
+  \end{enumerate}
+  Then the product in the extension field 
+  \[
+    \mathbb{F}_{q^k}/\mathbb{F}_q
+  \]
+  admits a symmetric formula of length $n$, \ie we have $\musym_q(k)\leq n$.
+\end{thm}
+
+\section{Algorithmic searches in small dimension}
+
+% Contents
+% ========
+%
+% - Barbulescu, Detrey, et al 
+% - Covanov 
