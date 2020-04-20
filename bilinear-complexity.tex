@@ -77,7 +77,45 @@ complexity asymptotically grows~\cite{CC88, BCPRRR19}. Chudnovsky and Chudnovsky
 proved in 1988 that the bilinear complexity of an extension field
 $\mathbb{F}_{q^k}/\mathbb{F}_{q}$ is linear in the degree $k$ of the
 extension, using an evaluation-interpolation method on curves. We present this
-technique in Section~\ref{sec:evalinter}.
+method in Section~\ref{sec:evalinter}.
+
+\paragraph{Bilinear formulas.}
+
+We can precisely define bilinear complexity with \emph{bilinear formulas}. We
+also sometimes use the terms \emph{bilinear decomposition}, or \emph{bilinear
+algorithm}, but it is really the same notion.
+\begin{defi}[Bilinear formula]
+  Let $V_1, V_2$ and $W$ be three finite dimensional vector spaces over $\K$ and 
+  \[
+    \Phi:V_1\times V_2\to W
+  \]
+  a bilinear map. A \emph{bilinear fomula}, or \emph{bilinear decomposition}, or
+  \emph{bilinear algorithm} of length $n$ for $\Phi$ is a
+  collection of $2n$ linear forms $\varphi_1, \dots, \varphi_n$ and $\psi_1,
+  \dots, \psi_n$, and $n$ vectors $w_1, \dots, w_n$ in $W$ such that for all
+  $x\in V_1$ and $y\in V_2$, we have
+  \[
+    \Phi(x, y) = \sum_{j=1}^n \phi_j(x)\psi_j(y)w_j.
+  \]
+\end{defi}
+\begin{defi}[Bilinear complexity]
+  Let $V_1, V_2$ and $W$ be three finite dimensional vector spaces over $\K$ and 
+  \[
+    \Phi:V_1\times V_2\to W
+  \]
+  a bilinear map. The \emph{bilinear complexity} 
+  \[
+    \mu(\Phi)
+  \]
+  of $\Phi$ is the minimal length $n$ of a bilinear formula for $\Phi$.
+\end{defi}
+Equivalently, we can define the bilinear complexity as the rank of the tensor in 
+\[
+  V_1^\vee \times V_2^\vee \times W
+\]
+corresponding to $\Phi$, where $V_1^\vee$ (resp. $V_2^\vee$) is the dual space
+of $V_1$ (resp. $V_2$).
+
 
 % TODO
 % ====
