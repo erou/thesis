@@ -95,7 +95,7 @@ algorithm}, but it is really the same notion.
   \dots, \psi_n$, and $n$ vectors $w_1, \dots, w_n$ in $W$ such that for all
   $x\in V_1$ and $y\in V_2$, we have
   \[
-    \Phi(x, y) = \sum_{j=1}^n \phi_j(x)\psi_j(y)w_j.
+    \Phi(x, y) = \sum_{j=1}^n \varphi_j(x)\psi_j(y)w_j.
   \]
 \end{defi}
 \begin{defi}[Bilinear complexity]
@@ -114,7 +114,47 @@ Equivalently, we can define the bilinear complexity as the rank of the tensor in
   V_1^\vee \times V_2^\vee \times W
 \]
 corresponding to $\Phi$, where $V_1^\vee$ (resp. $V_2^\vee$) is the dual space
-of $V_1$ (resp. $V_2$).
+of $V_1$ (resp. $V_2$). When the spaces $V_1$ and $V_2$ are equal
+\[
+  V_1 = V_2 = V
+\]
+the bilinear maps 
+\[
+  \Phi:V\times V\to W
+\]
+can be symmetric, \ie they can verify that, for all $x, y\in V$
+\[
+  \Phi(x, y) = \Phi(y, x).
+\]
+In that case, it is natural to investigate the existence and the length of
+\emph{symmetric bilinear formulas}, \ie bilinear formulas where the linear forms
+$\varphi_j$ and $\psi_j$ are equal, for all $j$.
+\begin{defi}[Symmetric bilinear formula]
+  Let $V$ and $W$ be two finite dimensional vector spaces over $\K$ and 
+  \[
+    \Phi:V\times V\to W
+  \]
+  a symmetric bilinear map. A \emph{symmetric bilinear fomula}, or
+  \emph{symmetric bilinear decomposition}, or
+  \emph{symmetric bilinear algorithm} of length $n$ for $\Phi$ is a
+  collection of $n$ linear forms $\varphi_1, \dots, \varphi_n$
+  and $n$ vectors $w_1, \dots, w_n$ in $W$ such that for all
+  $x, y\in V$, we have
+  \[
+    \Phi(x, y) = \sum_{j=1}^n \varphi_j(x)\varphi_j(y)w_j.
+  \]
+\end{defi}
+\begin{defi}[Symmetric bilinear complexity]
+  Let $V$ and $W$ be two finite dimensional vector spaces over $\K$ and 
+  \[
+    \Phi:V\times V\to W
+  \]
+  a bilinear map. The \emph{symmetric bilinear complexity} 
+  \[
+    \musym(\Phi)
+  \]
+  of $\Phi$ is the minimal length $n$ of a symmetric bilinear formula for $\Phi$.
+\end{defi}
 
 
 % TODO
@@ -130,6 +170,7 @@ of $V_1$ (resp. $V_2$).
 % - link with tensor rank
 % - definition symmetric complexity
 % - obvious inequality
+
 
 \section{Chudnovsky-Chudnovsky algorithm}
 Chudnovsky and Chudnovsky algorithm is based on evaluation-interpolation on
