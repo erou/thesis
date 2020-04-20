@@ -254,3 +254,7 @@ TSWLatexianTemp*
 # ??
 *.mtc
 *.swp
+
+# Automatic commits
+date.txt
+commit-msg.txt
