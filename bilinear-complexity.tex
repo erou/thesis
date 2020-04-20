@@ -128,8 +128,12 @@ can be symmetric, \ie they can verify that, for all $x, y\in V$
 \]
 In that case, it is natural to investigate the existence and the length of
 \emph{symmetric bilinear formulas}, \ie bilinear formulas where the linear forms
-$\varphi_j$ and $\psi_j$ are equal, for all $j$.
+$\varphi_j$ and $\psi_j$ are equal, for all $j$. On an algorithmtic point of
+view, it should also be easier to find all such formulas because the
+search space is smaller. It is also easier to represent such formulas because we
+only need to store $n$ linear forms instead of $2n$.
 \begin{defi}[Symmetric bilinear formula]
+  \label{def:sym-bil-for}
   Let $V$ and $W$ be two finite dimensional vector spaces over $\K$ and 
   \[
     \Phi:V\times V\to W
@@ -145,6 +149,7 @@ $\varphi_j$ and $\psi_j$ are equal, for all $j$.
   \]
 \end{defi}
 \begin{defi}[Symmetric bilinear complexity]
+  \label{def:sym-bil-com}
   Let $V$ and $W$ be two finite dimensional vector spaces over $\K$ and 
   \[
     \Phi:V\times V\to W
@@ -153,25 +158,58 @@ $\varphi_j$ and $\psi_j$ are equal, for all $j$.
   \[
     \musym(\Phi)
   \]
-  of $\Phi$ is the minimal length $n$ of a symmetric bilinear formula for $\Phi$.
+  of $\Phi$ is the minimal length $n$ of a symmetric bilinear formula for
+  $\Phi$.
 \end{defi}
-
-
-
-% TODO
-% ====
-%
-% Add the notations for the bilinear complexity of F_q^m with mu and maybe all
-% the other needed notations.
-%
-% Needed
-% ======
-%
-% - proper definition of the bilinear complexity
-% - link with tensor rank
-% - definition symmetric complexity
-% - obvious inequality
-
+Note that it is not clear from Definition~\ref{def:sym-bil-for} that a
+\emph{symmetric} bilinear formula always
+exists for symmetric bilinear maps, but it is indeed true, thus
+% TODO: find a reference for that fact
+Definiton~\ref{def:sym-bil-com} makes sense. We are particularly
+interested in algebras $\A$ of the form
+\[
+  \A = \mathbb{F}_{q^k}[T]/(T^l)
+\]
+and for that reason we introduce a special notation for the bilinear complexity
+of those algebra
+\[
+  \mu_q(k, l) = \mu(\A/\K).
+\]
+Among these algebras, the case $l=1$, where the algebra $\A$ is a finite field
+extension of $\mathbb{F}_q$ of degree $k$ also plays a special role, so we
+define 
+\[
+  \mu_q(k) = \mu_q(k, 1).
+\]
+Because these algebras are all commutative, the product 
+\[
+\begin{array}{lccl}
+  m_\A:&\A\times \A&\to&\A\\
+  &(x, y)&\mapsto&xy
+\end{array}
+\]
+is a symmetric bilinear map, and we define the symmetric bilinear complexity of
+the algebra $\A$ as the symmetric bilinear complexity of $m_\A$
+\[
+  \musym(\A) = \musym(m_\A).
+\]
+We also define the quantities
+\[
+  \musym_q(k, l)
+\]
+and 
+\[
+  \musym_q(k)
+\]
+the same way it was done for the usual bilinear complexity. Since a symmetric
+bilinear formula is in particular a bilinear formula, we have for all $k\geq1$
+and $l\geq1$
+\[
+  \mu_q(k, l)\leq\musym_q(k, l).
+\]
+We have no example of algebra $\A = \mathbb{F}_{q^k}[T]/(T^l)$ where the
+quantities $\mu_q(k, l)$ and $\musym_q(k, l)$ are different.
+% TODO: elaborate on this
 
 \section{Chudnovsky-Chudnovsky algorithm}
 Chudnovsky and Chudnovsky algorithm is based on evaluation-interpolation on
@@ -230,7 +268,7 @@ where $+_{\K[x]}, \times_{\K[x]}$ (resp. $+_{\K}, \times_{\K})$ are the addition
 and multiplication operations in $\K[x]$ (resp. $\K$).
 In other words, the map
 \[
-\begin{array}{llll}
+\begin{array}{lccl}
   \textrm{ev}_a:&\K[x]&\to&\K\\
   &P&\mapsto&P(a)
 \end{array}
