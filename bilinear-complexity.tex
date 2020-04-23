@@ -163,8 +163,8 @@ only need to store $n$ linear forms instead of $2n$.
 \end{defi}
 Note that it is not clear from Definition~\ref{def:sym-bil-for} that a
 \emph{symmetric} bilinear formula always
-exists for symmetric bilinear maps, but it is indeed true, thus
-% TODO: find a reference for that fact
+exists for symmetric bilinear maps, but it is indeed
+true~\cite[Lemma $1.6$]{Randriam12}, thus
 Definiton~\ref{def:sym-bil-com} makes sense. We are particularly
 interested in algebras $\A$ of the form
 \[
@@ -207,9 +207,18 @@ and $l\geq1$
 \[
   \mu_q(k, l)\leq\musym_q(k, l).
 \]
-We have no example of algebra $\A = \mathbb{F}_{q^k}[T]/(T^l)$ where the
-quantities $\mu_q(k, l)$ and $\musym_q(k, l)$ are different.
-% TODO: elaborate on this
+In the other direction, we know (\cite[Theorem $1$]{SL84} or \cite[Lemma
+$1.6$]{Randriam12}) that when the characteristic of $\A$ is not $2$,
+or equivalently when $k$ is not a power of $2$ , that we have
+\[
+  \musym_q(k, l)\leq2\mu_q(k, l).
+\]
+Finally, we have no example of algebra $\A = \mathbb{F}_{q^k}[T]/(T^l)$ where the
+quantities $\mu_q(k, l)$ and $\musym_q(k, l)$ are different when $q\geq3$.
+% TODO: elaborate on this, is it true for q = 2?
+% see for example
+% [ 0 1 ]
+% [ 1 0 ]
 
 \section{Chudnovsky-Chudnovsky algorithm}
 Chudnovsky and Chudnovsky algorithm is based on evaluation-interpolation on
