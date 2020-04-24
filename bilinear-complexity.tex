@@ -109,6 +109,8 @@ algorithm}, but it is really the same notion.
   \]
   of $\Phi$ is the minimal length $n$ of a bilinear formula for $\Phi$.
 \end{defi}
+% TODO: explain the link between this definition and the previous definition
+% where we said that it was the number of 2-variable multiplication
 Equivalently, we can define the bilinear complexity as the rank of the tensor in 
 \[
   V_1^\vee \times V_2^\vee \times W
@@ -380,3 +382,67 @@ is \emph{injective}.
 %
 % - Barbulescu, Detrey, et al 
 % - Covanov 
+
+The last results based on Chudnovsky and Chudnovsky algorithm allow us to find
+one decomposition, and thus give us an (asymptotic) upper bound on the bilinear
+complexity of algebras
+\[
+  \A = \mathbb{F}_{q^k}[T]/(T^l).
+\]
+When one wants to find the exact value of the bilinear complexity of a given
+bilinear map $\Phi$, one can either find all bilinear formulas for $\Phi$, or
+find a theoretical argument to directly find the bilinear complexity of $\Phi$. The latter
+solution is often hard, and there also exist some in-between approaches such
+as finding a bilinear formula of a given length and proving that no shorter formula
+could exist. Still, because it seems hard to directly find the bilinear
+complexity of a bilinear map, algorithms were developped to find bilinear
+formulas. These algorithms are essentially exhaustive searches, so they 
+have an exponential complexity, but they also exploit the eventual symmetries
+in the definition of $\Phi$ to eliminate a lot of potential candidates along the
+way, in order to be as efficient as possible in practice. We first see
+Barbulescu \emph{et al} algorithm~\cite{BDEZ12}.
+
+\subsection{Barbulescu, Detrey, Estibals and Zimmerman's algorithm}
+
+In $2012$, Barbulescu, Detrey, Estibals and Zimmerman published a new framework
+to find bilinear formulas for arbitrary bilinear maps over finite fields. Let
+$V_1$, $V_2$ and $W$ be three finite dimensional $\K$-vector space of respective
+dimension $l$, $m$, and $n$, such that we have
+\[
+  V_1\cong\K^l\hspace{3cm}V_2\cong\K^m\hspace{3cm}W\cong\K^n.
+\]
+Let
+\[
+  \Phi:V_1\times V_2\to W
+\]
+be a bilinear map, and denote by $\B$ the space of bilinear \emph{forms} from
+$V_1\times V_2$ to $\K$. Let $\gamma\in\B$ a bilinear form, then if
+\[
+  x = (x_1, \dots, x_l)\in V_1
+\]
+and
+\[
+  y = (y_1, \dots, y_m)\in V_2,
+\]
+then $\gamma$ is given by
+\[
+  \gamma(x, y) = \sum_{i=1}^{l}\sum_{j=1}^m \gamma_{i, j} x_i y_j.
+\]
+Hence, we can see $\B$ as a $\K$-vector space of dimension $lm$ and $\gamma$ as
+a vector
+\[
+  \gamma = (\gamma_{1, 1}, \dots, \gamma_{l, m}).
+\]
+An other interesting representation is to see $\gamma$ as a $l\times m$ matrix
+\[
+  G = (\gamma_{i, j})_{i, j}
+\]
+such that $\gamma$ is given by
+\[
+  \gamma(x, y) = x G y^t
+\]
+where $y^t$ is the transposed of $y$ and thus $y^t$ is a column vector. In this
+setting, the \emph{bilinear complexity} of $\gamma$ is directly given by the
+rank of $G$. Indeed, a rank $r$ matrix is the sum of $r$ matrices of rank $1$,
+and a rank $1$ matrix corresponds to a rank $1$ bilinear form.
+% 
