@@ -13,7 +13,7 @@ computation of the complexity of algebraic algorithms. Nevertheless,
 multiplication of two variable quantities in $\K$ is arguably more expensive
 than addition, or than multiplication of a variable by a fixed constant. In the
 context of the computation of bilinear maps, extensive work has been done to
-reduce the number of two-variable multiplications involved. Notable examples are
+reduce the number of $2$-variable multiplications involved. Notable examples are
 Karatsuba's algorithm~\cite{Karatsuba63} and
 Strassen's algorithm~\cite{Strassen69}. Karatsuba's algorithm is
 based on the fact that the bilinear map associated to the product of two
@@ -98,6 +98,42 @@ algorithm}, but it is really the same notion.
     \Phi(x, y) = \sum_{j=1}^n \varphi_j(x)\psi_j(y)w_j.
   \]
 \end{defi}
+Let $V_1$ and $V_2$ be $\K$-vector spaces of respective dimensions $l$ and $m$
+and let
+\[
+  x = (x_1, \dots, x_l)\in V_1
+\]
+and
+\[
+  y = (y_1, \dots, y_m)\in V_2
+\]
+be two vectors.
+A bilinear formula of length $n$ for a bilinear map $\Phi$ is essentially a way
+of computing $\Phi(x, y)$ using a number $n$ of $2$-variable multiplicaitons in $\K$.
+Indeed, for each $1\leq j \leq n$ we have
+\[
+  \varphi_j(x) = \sum_{i=1}^l a_{i, j}x_i
+\]
+and
+\[
+  \psi_j(y) = \sum_{i=1}^m b_{i, j}y_i
+\]
+where the elements $a_{i, j}$ and $b_{i, j}$ are \emph{constants} depending only
+on $\Phi$. Thus the evaluation
+\[
+  \varphi_j(x)\psi_j(y)
+\]
+only requires one $2$-variable multiplication. The vectors $w_j\in W$ are also
+constants depending only on $\Phi$, so we still need one $2$-variable
+multiplication to compute 
+\[
+  \varphi_j(x)\psi_j(y)w_j.
+\]
+We said that the bilinear complexity measures the minimal number of
+$2$-multiplication needed to compute a bilinear map $\Phi$. Knowing that a
+bilinear formula of length $n$ for $\Phi$ implies that we can compute $\Phi$
+with the same number $n$ of $2$-variable multiplication, the definition of
+bilinear complexity follows.
 \begin{defi}[Bilinear complexity]
   Let $V_1, V_2$ and $W$ be three finite dimensional vector spaces over $\K$ and 
   \[
@@ -109,8 +145,6 @@ algorithm}, but it is really the same notion.
   \]
   of $\Phi$ is the minimal length $n$ of a bilinear formula for $\Phi$.
 \end{defi}
-% TODO: explain the link between this definition and the previous definition
-% where we said that it was the number of 2-variable multiplication
 Equivalently, we can define the bilinear complexity as the rank of the tensor in 
 \[
   V_1^\vee \times V_2^\vee \times W
@@ -428,21 +462,55 @@ then $\gamma$ is given by
 \[
   \gamma(x, y) = \sum_{i=1}^{l}\sum_{j=1}^m \gamma_{i, j} x_i y_j.
 \]
-Hence, we can see $\B$ as a $\K$-vector space of dimension $lm$ and $\gamma$ as
+Hence, $\B$ is a $\K$-vector space of dimension $lm$ and we can see $\gamma$ as
 a vector
 \[
   \gamma = (\gamma_{1, 1}, \dots, \gamma_{l, m}).
 \]
 An other interesting representation is to see $\gamma$ as a $l\times m$ matrix
 \[
-  G = (\gamma_{i, j})_{i, j}
+  G = (\gamma_{i, j})_{i, j},
 \]
 such that $\gamma$ is given by
 \[
   \gamma(x, y) = x G y^t
 \]
-where $y^t$ is the transposed of $y$ and thus $y^t$ is a column vector. In this
-setting, the \emph{bilinear complexity} of $\gamma$ is directly given by the
-rank of $G$. Indeed, a rank $r$ matrix is the sum of $r$ matrices of rank $1$,
-and a rank $1$ matrix corresponds to a rank $1$ bilinear form.
+where $y^t$ is the transposed of $y$ and thus $y^t$ is a column vector. We let
+$\gamma_j$ be the $j$-th coordinate of $\Phi$ in $W$, such that
+\[
+  \Phi = (\gamma_1, \dots, \gamma_n).
+\]
+If $n=1$, $\Phi$ is a bilinear form and its bilinear complexity is given by the
+rank of its matrix representation. The reason is that a rank $r$ matrix is the sum of $r$ matrices of rank $1$,
+and a rank $1$ matrix corresponds to a bilinear form that can be evaluated using
+only one $2$-variable multiplication. Indeed, let $A$ be a $l\times m$ matrix of rank $1$, we know that
+there exist a nonzero vector 
+\[
+  b=(b_1, \dots, b_m)\in\K^m
+\]
+such that the rows $(r_j)_{1\leq j \leq m}$ of $A$, seen as vectors $\K^m$, are
+all multiple of $b$, \ie for all $1\leq j \leq l$, we have
+\[
+  r_j = a_j b
+\]
+with $a_j\in\K$, and so
+\[
+  A =
+\begin{bmatrix}
+  & & & & a_1 b & & & & \\
+  & & & & \vdots & & & & \\
+  & & & & a_l b & & & & \\
+\end{bmatrix}.
+\]
+Let $\gamma$ be the bilinear form represented by $A$, $x\in\K^l$ and $y\in\K^m$, then
+\begin{align*}
+  \gamma(x, y) &= x A y^t \\
+  &= \sum_{i=1}^{l}(x_i \sum_{j=1}^m a_i b_j y_j) \\
+  &= (\sum_{i=1}^l a_i x_i)\times(\sum_{j=1}^m b_j y_j).
+\end{align*}
+The elements $a_1, \dots, a_l$ and $b_1, \dots, b_m$ only depend on $\gamma$ (or
+equivalently, on $A$), so they are constants, thus evaluating $\gamma$ only
+requires one $2$-variable multiplication. When $n>1$, \ie $\Phi$ is not a
+bilinear form, there is no similar way of knowing the bilinear complexity of
+$\Phi$.
 % 
