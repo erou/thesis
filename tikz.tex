@@ -1,8 +1,24 @@
 \usepackage{tikz}
 \usetikzlibrary{arrows}
+\usetikzlibrary{math}
 
 % Tikz style
 
 \tikzset{round/.style={circle, draw=black, very thick, scale = 0.7}}
 \tikzset{arrow/.style={->, >=latex}}
 \tikzset{dashed-arrow/.style={->, >=latex, dashed}}
+
+% New command
+\newcommand{\drawrec}[3]{
+  \ifthenelse{\equal{#1}{1}}{
+    \fill (#2,#3) -- ++(1,0) -- ++(0, 1) -- ++(-1, 0) -- cycle;
+    }
+    {
+      \tikzmath{\x = #2; \y = #3; \a = #1;
+                \b =\a/2; \xx = \x+\b; \yy = \y+\b; }
+
+      \drawrec{\b}{\x}{\y}
+      \drawrec{\b}{\xx}{\y}
+      \drawrec{\b}{\x}{\yy}
+    }
+}

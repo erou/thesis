@@ -4,6 +4,14 @@ present an alternative notion of complexity called \emph{bilinear complexity},
 where the focus is on the number of multiplications needed to compute some map.
 \minitoc
 
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.5]{img/karatsuba.pdf}
+  \caption{Representation of Karatsuba's algorithm complexity.}
+  \label{fig:karatsuba}
+\end{figure}
+\clearpage
+
 \section{Bilinear complexity}
 
 In the \emph{algebraic complexity model}~\cite{BCS13}, we assume that our
@@ -85,6 +93,7 @@ We can precisely define bilinear complexity with \emph{bilinear formulas}. We
 also sometimes use the terms \emph{bilinear decomposition}, or \emph{bilinear
 algorithm}, but it is really the same notion.
 \begin{defi}[Bilinear formula]
+  \label{defi:bilinear-formula}
   Let $V_1, V_2$ and $W$ be three finite dimensional vector spaces over $\K$ and 
   \[
     \Phi:V_1\times V_2\to W
@@ -150,7 +159,61 @@ Equivalently, we can define the bilinear complexity as the rank of the tensor in
   V_1^\vee \times V_2^\vee \times W
 \]
 corresponding to $\Phi$, where $V_1^\vee$ (resp. $V_2^\vee$) is the dual space
-of $V_1$ (resp. $V_2$). When the spaces $V_1$ and $V_2$ are equal
+of $V_1$ (resp. $V_2$).
+\begin{ex}
+  \label{ex:bilinear-complexity}
+  Let $\K=\mathbb{F}_2$ and $V_1=V_2=W=(\mathbb{F}_2)^2$. We consider the
+  bilinear map $\Phi$ that follows.
+\[
+\begin{array}{llcl}
+  \Phi:&(\mathbb{F}_2)^2\times (\mathbb{F}_{2})^2&\to&(\mathbb{F}_2)^2\\
+  &((x_0, x_1), (y_0, y_1))&\mapsto&(x_0y_0+x_1y_1, x_0y_1+x_1y_0+x_1y_1)
+\end{array}
+\]
+Let $e_0=(1,0)$ and $e_1=(0,1)$ the vectors of the cannonical basis of
+$(\mathbb{F}_{2})^2$, and let $e_0^\vee$ and $e_1^\vee$ the vectors of the dual
+basis, \ie the linear forms $e_0^\vee$ and $e_1^\vee$ are given by
+\[
+\begin{array}{llcl}
+  e_0^\vee:&(\mathbb{F}_2)^2&\to&\mathbb{F}_2\\
+  &(x_0, x_1)&\mapsto&x_0
+\end{array}
+\]
+and
+\[
+\begin{array}{llcl}
+  e_1^\vee:&(\mathbb{F}_2)^2&\to&\mathbb{F}_2\\
+  &(x_0, x_1)&\mapsto&x_1
+\end{array}.
+\]
+Let $x = (x_0, x_1)$ and $y = (y_0, y_1)$, we have 
+\begin{align*}
+  \Phi(x,y) &= (x_0y_0+x_1y_1, x_0y_1+x_1y_0+x_1y_1) \\
+  &= (x_0y_0, x_0y_0)+(x_1y_1, 0)+(0, (x_0+x_1)(y_0+y_1)) \\
+  &=
+  e_0^\vee(x)e_0^\vee(y)(e_0+e_1)+e_1^\vee(x)e_1^\vee(y)e_0+(e_0^\vee+e_1^\vee)(x)(e_0^\vee+e_1^\vee)(y)e_1.
+\end{align*}
+This last line is a bilinear formula of length $3$ for $\Phi$, and we can check
+that no formula of length $2$ exists. Therefore the bilinear complexity of
+$\Phi$ is 
+\[
+  \mu(\Phi) = 3.
+\]
+Equivalently, the tensor in
+$((\mathbb{F}_2)^2)^\vee\otimes((\mathbb{F}_2)^2)^\vee\otimes(\mathbb{F}_2)^2$
+corresponding to $\Phi$ is
+\begin{align*}
+  \widetilde{\Phi} &= e_0^\vee\otimes e_0^\vee\otimes e_0 + e_1^\vee\otimes
+  e_1^\vee\otimes e_0 + e_0^\vee\otimes e_1^\vee\otimes e_1 + e_1^\vee\otimes
+  e_0^\vee\otimes e_1 + e_1^\vee\otimes e_1^\vee\otimes e_1 \\
+  &= e_0^\vee\otimes e_0^\vee\otimes(e_0+e_1)+e_1^\vee\otimes
+  e_1^\vee\otimes e_0+(e_0^\vee+e_1^\vee)\otimes (e_0^\vee+e_1^\vee)\otimes e_1,
+\end{align*}
+and we can check that no smaller decomposition of $\widetilde\Phi$ into a sum of simple
+tensors $a\otimes b\otimes c$ exist,
+so we also see that the rank of the tensor $\widetilde\Phi$ is $3$.
+\end{ex}
+When the spaces $V_1$ and $V_2$ are equal
 \[
   V_1 = V_2 = V
 \]
@@ -201,7 +264,9 @@ Note that it is not clear from Definition~\ref{def:sym-bil-for} that a
 \emph{symmetric} bilinear formula always
 exists for symmetric bilinear maps, but it is indeed
 true~\cite[Lemma $1.6$]{Randriam12}, thus
-Definiton~\ref{def:sym-bil-com} makes sense. We are particularly
+Definiton~\ref{def:sym-bil-com} makes sense. The formula obtained in
+Example~\ref{ex:bilinear-complexity} is an example of bilinear formula that is
+also a symmetric bilinear formula. We are particularly
 interested in algebras $\A$ of the form
 \[
   \A = \mathbb{F}_{q^k}[T]/(T^l)
@@ -256,8 +321,8 @@ quantities $\mu_q(k, l)$ and $\musym_q(k, l)$ are different when $q\geq3$.
 % [ 0 1 ]
 % [ 1 0 ]
 % ~~~~~~~~~~~~~~
-% but that one does *not* come from a *regular* algebra A is it? If we take a
-% counter example is has to have in the same realm as the fact that we are
+% but that one does *not* come from a *regular* algebra A does it? If we take a
+% counter example it has to have in the same realm as the fact that we are
 % stating. 
 
 \section{Chudnovsky-Chudnovsky algorithm}
@@ -821,4 +886,24 @@ and
 $\Card\G=4$ and $t-\dim V=3$.}
   \label{fig:rec-call-tree}
 \end{figure}
+Algorithm~\ref{algo:BDEZ} can also be adapted to to find \emph{symmetric}
+formulas: instead of searching in the set $\G$, we search in the set
+\[
+  \G_\text{sym} = \left\{ \phi\in\B\,|\,\phi\text{ is symmetric and is of rank
+  }1 \right\}.
+\]
+Since
+\[
+  \Card\G_\text{sym} = \sqrt{\Card\G},
+\]
+the complexity of Algorithm~\ref{algo:BDEZ} adapted to the symmetric case is
+naturally better.
+Although not initially published in~\cite{BDEZ12}, Barbulescu, Detrey, Estibals
+and Zimmerman improved on their algorithms by using symmetries in the definition
+of the subspaces of $\B$. Their strategy
+was described in~\cite{Covanov19}, as well as further improvements from Covanov,
+exploiting even more symmetries.
+% TODO: add BDEZStab (i.e. the version with RP-automorphisms)? Is that
+% necessary since we do not quite use that in the case of trisymmetric bilinear
+% forms? Sould we also present Covanov's method?
 % 

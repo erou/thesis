@@ -1,3 +1,99 @@
-\section{Symmetric and hypersymmetric fomulae}
+In Chapter~\ref{chap:bilinear}, we have seen the notions of bilinear complexity
+and symmetric bilinear complexity. We now investigate even stronger
+notions of symmetry, allowing to have very short representations of a bilinear
+map.
+
+\minitoc
+
+% TODO
+% ====
+%
+% Find a nice picture to put here to illustrate something in link with the
+% chapter.
+
+\clearpage
+\section{Symmetric and hypersymmetric fomulas}
+% Table of content
+% ================
+%
+% - Recall of the definition of symmetric
+% - Existence and lemma for the symmetric case
+% - non degenerate bilinear form, link with the trace, but not only
+% - Link between symmetric and hypersymmetric in smaller dimension
+% - Galois invariance
+% - Comment for the case of the particular algebras we study, what is known and
+%   what is not
+%
+% Comment
+% =======
+%
+% Comment about the trisymmetric formulas, it is true that F_4/F_2 can be
+% represented by a trisymmetric formula but it is not the case for F_8/F_2. We
+% should check the lemma saying something on the existence of the trisymmetric
+% decomposition, but it is probably just simpler.
+
+Let $\K$ be a finite field, $V_1$, $V_2$ and $W$ three finite-dimensional $\K$-vector
+space and
+\[
+  \Phi:V_1\times V_2\to W
+\]
+a bilinear map. Recall Definition~\ref{defi:bilinear-formula}:
+\[
+  \Phi(x, y) = \sum_{j=1}^t\varphi_j(x)\psi_j(y)w_j,
+\]
+where for all $1\leq j\leq t$, $\varphi_j\in V_1^\vee$ and $\phi_j\in V_2^\vee$ are linear forms and
+$w_j\in W$ is a vector, is called a \emph{bilinear formula} of length $t$. If
+the spaces $V_1$ and $V_2$ are equal and if the bilinear map $\Phi$ is
+symmetric, \ie if for all $x, y\in V$
+\[
+  \Phi(x, y) = \Phi(y, x),
+\]
+we can investigate the existence of formulas satisfying the same condition of
+symmetry, \ie formulas where for all $1\leq j\leq t$, $\varphi_j=\psi_j$,
+resulting in \emph{symmetric} bilinear form:
+\[
+  \Phi(x, y) = \sum_{j=1}^t\varphi_j(x)\varphi_j(y)w_j.
+\]
+In fact, we can define other interesting types of symmetries, but it is useful
+to first generalize the notions that we saw in Chapter~\ref{chap:bilinear} to
+higher dimensions.
+\begin{defi}[Multilinear formula]
+Let $V_1, V_2, \dots, V_s$ and $W$ be $s+1$ finite-dimensional $\K$-vector
+spaces and
+\[
+  \Phi:V_1\times V_2\times\dots\times V_s\to W
+\]
+an $s$-multilinear map. A \emph{multilinear formula}, or \emph{multilinear
+decomposition}, or \emph{multilinear algorithm} of length $t$ for $\Phi$ is a
+collection of $s\times t$ linear forms $\varphi_1^{(1)}, \varphi_2^{(1)}, \dots,
+\varphi_t^{(1)}\in V_1^\vee$ up to $\varphi_1^{(s)}, \varphi_2^{(s)}, \dots,
+\varphi_t^{(s)}\in V_s^{\vee}$ and $t$ vectors $w_1, \dots, w_t$, such that for all $x_1\in V_1, \dots, x_s\in
+V_s$, we have
+\[
+  \Phi(x_1, \dots, x_s) =
+  \sum_{j=1}^t\varphi_j^{(1)}(x_1)\dots\varphi_j^{(s)}(x_s)w_j.
+\]
+\end{defi}
+\begin{defi}[Multilinear complexity]
+Let $V_1, V_2, \dots, V_s$ and $W$ be $s+1$ finite-dimensional $\K$-vector
+spaces and
+\[
+  \Phi:V_1\times V_2\times\dots\times V_s\to W
+\]
+an $s$-multilinear map. The \emph{multilinear complexity} $\mu(\Phi)$ of $\Phi$ is the
+minimal length $t$ of a multilinear formula for $\Phi$.
+\end{defi}
+As in the case of bilinear complexity, the multilinear complexity $\mu(\Phi)$ of a
+multilinear map $\Phi$ can also be defined as the rank of the tensor in 
+\[
+  V_1^\vee\otimes\dots\otimes V_s^\vee\otimes W
+\]
+corresponding to $\Phi$.
+% Comment
+% =======
+%
+% There should be an example of that for the bilinear case, such that now it is
+% not so obscure.
+
 \section{Algorithmic seach in small dimension}
 \section{Asymptotic complexities}
