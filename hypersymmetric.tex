@@ -57,6 +57,9 @@ resulting in \emph{symmetric} bilinear form:
 In fact, we can define other interesting types of symmetries, but it is useful
 to first generalize the notions that we saw in Chapter~\ref{chap:bilinear} to
 higher dimensions.
+\subsection{Generalization to multilinear maps}
+The definitions of bilinear formula and bilinear complexity are not bound to the
+bilinear case and can be generalized to arbitrary dimension.
 \begin{defi}[Multilinear formula]
 Let $V_1, V_2, \dots, V_s$ and $W$ be $s+1$ finite-dimensional $\K$-vector
 spaces and
@@ -88,12 +91,56 @@ multilinear map $\Phi$ can also be defined as the rank of the tensor in
 \[
   V_1^\vee\otimes\dots\otimes V_s^\vee\otimes W
 \]
-corresponding to $\Phi$.
-% Comment
-% =======
-%
-% There should be an example of that for the bilinear case, such that now it is
-% not so obscure.
+corresponding to $\Phi$, see Example~\ref{ex:bilinear-complexity} for an
+illustration of this correspondence in the bilinear case. In the case where
+\[
+  V_1 = V_2 = \dots = V_s,
+\]
+symmetric formulas and
+symmetric complexity can also be generalized when $\Phi$ is a \emph{symmetric}
+multilinear map, \ie when for all permutation $\sigma\in\mathfrak S_s$ and for
+all vectors $x_1, \dots, x_s\in V$, we have
+\[
+  \Phi(x_1, \dots, x_s) = \Phi(\sigma(x_1), \dots, \sigma(x_s)).
+\]
+\begin{defi}[Symmetric multilinear formula]
+Let $V$ and $W$ be two finite-dimensional $\K$-vector
+spaces and
+\[
+  \Phi:\underset{\textrm{$s$ times}}{\underbrace{V\times\dots\times V}}\to W
+\]
+a symmetric $s$-multilinear map. A \emph{symmetric multilinear formula}, or
+\emph{symmetric multilinear
+decomposition}, or \emph{symmetric multilinear algorithm} of length $t$ for $\Phi$ is a
+collection of $t$ linear forms $\varphi_1, \varphi_2, \dots,
+\varphi_t\in V^\vee$ and $t$ vectors $w_1, \dots, w_t$, such that for all $x_1, \dots, x_s\in
+V$, we have
+\[
+  \Phi(x_1, \dots, x_s) =
+  \sum_{j=1}^t\varphi_j(x_1)\dots\varphi_j(x_s)w_j.
+\]
+\end{defi}
+\begin{defi}[Symmetric multilinear complexity]
+Let $V$ and $W$ be two finite-dimensional $\K$-vector
+spaces and
+\[
+  \Phi:\underset{\textrm{$s$ times}}{\underbrace{V\times\dots\times V}}\to W
+\]
+a symmetric $s$-multilinear map. The \emph{symmetric multilinear complexity} $\musym(\Phi)$ of $\Phi$ is the
+minimal length $t$ of a symmetric multilinear formula for $\Phi$. If no such
+formula exists, we set
+\[
+  \musym(\Phi) = \infty.
+\]
+\end{defi}
+Contrary to the bilinear case, some symmetric multilinear maps do not admit a symmetric
+decomposition, but the problem of whether a symmetric multilinear map admits
+a symmetric multilinear formula is well understood and follows from
+Lemma~\ref{lm:symmetric-formula}.
+\begin{lm}
+  \label{lm:symmetric-formula}
+  Yes Hugues did it!
+\end{lm}
 
 \section{Algorithmic seach in small dimension}
 \section{Asymptotic complexities}

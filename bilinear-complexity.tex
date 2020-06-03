@@ -260,13 +260,17 @@ only need to store $n$ linear forms instead of $2n$.
   of $\Phi$ is the minimal length $n$ of a symmetric bilinear formula for
   $\Phi$.
 \end{defi}
-Note that it is not clear from Definition~\ref{def:sym-bil-for} that a
+In other words, a symmetric bilinear formula is a bilinear formula where the
+domain spaces are equal: $V_1=V_2$; and such that for all $1\leq j\leq n$,
+the linear forms $\varphi_j=\psi_j$ are equal too. Note that it is not
+clear from Definition~\ref{def:sym-bil-for} that a
 \emph{symmetric} bilinear formula always
 exists for symmetric bilinear maps, but it is indeed
 true~\cite[Lemma $1.6$]{Randriam12}, thus
 Definiton~\ref{def:sym-bil-com} makes sense. The formula obtained in
 Example~\ref{ex:bilinear-complexity} is an example of bilinear formula that is
-also a symmetric bilinear formula. We are particularly
+also a symmetric bilinear formula, therefore the symmetric bilinear complexity
+is the same as the bilinear complexity in that case. We are particularly
 interested in algebras $\A$ of the form
 \[
   \A = \mathbb{F}_{q^k}[T]/(T^l)
