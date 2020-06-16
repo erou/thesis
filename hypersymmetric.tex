@@ -59,7 +59,9 @@ to first generalize the notions that we saw in Chapter~\ref{chap:bilinear} to
 higher dimensions.
 \subsection{Generalization to multilinear maps}
 The definitions of bilinear formula and bilinear complexity are not bound to the
-bilinear case and can be generalized to arbitrary dimension.
+bilinear case and can be generalized to arbitrary dimension. These general
+definitions will be used in Section~\ref{subsec:trisym} to define
+\emph{hypersymmetric} complexity.
 \begin{defi}[Multilinear formula]
 Let $V_1, V_2, \dots, V_s$ and $W$ be $s+1$ finite-dimensional $\K$-vector
 spaces and
@@ -136,11 +138,101 @@ formula exists, we set
 Contrary to the bilinear case, some symmetric multilinear maps do not admit a symmetric
 decomposition, but the problem of whether a symmetric multilinear map admits
 a symmetric multilinear formula is well understood and follows from
-Lemma~\ref{lm:symmetric-formula}.
-\begin{lm}
-  \label{lm:symmetric-formula}
-  Yes Hugues did it!
-\end{lm}
+Theorem~\ref{thm:symmetric-formula}.
+\begin{thm}[{\cite[Thm.~A.7]{Randriam15}}]\label{th:criterion}
+\label{thm:symmetric-formula}
+Let $\Phi:V^s\to W$ be a $s$-multilinear map between finite dimensional vector spaces over $\mathbb{F}_q$.
+Then $\Phi$ admits a symmetric decomposition if and only if $\Phi$ is \emph{Frobenius-symmetric},
+\ie if and only if it is symmetric and one of the following two conditions holds:
+\begin{itemize}
+\item $s\leq q$
+\item $s\geq q+1$ and for all $u,v,z_1,\dots,z_{s-q-1}$ in $V$,
+\[
+\Phi(\underset{\textrm{$q$ times}}{\underbrace{u,\dots,u}},v,z_1,\dots,z_{s-q-1})=\Phi(u,\underset{\textrm{$q$ times}}{\underbrace{v,\dots,v}},z_1,\dots,z_{s-q-1}).
+\]
+\end{itemize}
+\end{thm}
+
+\subsection{Trisymmetric and hypersymmetric complexity}
+\label{subsec:trisym}
+
+Under even stricter conditions, we can study the existence of even more
+symmetric formulas. These formulas allow to describe a multilinear map with
+fewer elements, and thus give a compact definition of the map. Since the
+symmetry conditions are stonger there are fewer such formulas, and as a
+consequence the search space is smaller. Thus, we expect algorithms to be
+faster, as was the case when using Barbulescu \etal algorithm
+(Algorithm~\ref{algo:BDEZ}) to find symmetric formulas. Let us define those
+``stricter conditions''. Let
+\[
+  \Phi:V^s\to V
+\]
+be an $s$-multilinear symmetric map, \ie we additionnaly ask that $W=V$. We also
+assume that $V$ has a non-degenerate symmetric bilinear form, that we write as a
+scalar product
+\[
+ \begin{array}{ccc}
+ V\times V &\to&\K\\
+ (v,w)&\mapsto&\ps{v}{w}.
+ \end{array}
+\]
+In that case, we know that the vector space $V$ is isomorphic to its dual space
+$V^\vee$:
+\[
+  V\cong V^\vee,
+\]
+\ie for each linear form $\varphi\in V^\vee$, there exist a unique vector $a\in
+V$ such that for all $x\in V$, we have
+\[
+  \varphi(x) = \ps{a}{x}.
+\]
+Under these conditions, we can now write a symmetric formula for $\Phi$ as
+\[
+  \Phi(x, y) = \sum_{j=1}^t\ps{a_i}{x}\ps{a_i}{y}w_j
+\]
+where for all $1\leq j\leq t$, $a_j\in V$ is a vector of $V$. As a consequence,
+we can also describe a symmetric formula for $\Phi$ as the data of vectors
+$(a_j)_{1\leq j\leq t}$ and $(w_j)_{1\leq j\leq t}$. In order to have an even
+more compact description of $\Phi$, one can ask for the vectors $w_j$ to be
+proportional to $a_i$, leading to the definition of hypersymmetric
+formula.
+\begin{defi}[Hypersymmetric formula]
+Let $V$ a finite-dimensional $\K$-vector
+spaces equipped with a saclar product and
+\[
+  \Phi:\underset{\textrm{$s$ times}}{\underbrace{V\times\dots\times V}}\to W
+\]
+a symmetric $s$-multilinear map. A \emph{hypersymmetric formula}, or
+\emph{hypersymmetric decomposition}, or \emph{hypersymmetric algorithm} of length $t$ for $\Phi$ is a
+collection of $t$ vectors $a_1, \dots, a_t\in V$ and $t$ scalars $\lambda_1,
+\dots, \lambda_t\in\K$, such that for all $x_1, \dots, x_s\in
+V$, we have
+\[
+  \Phi(x_1, \dots, x_s) =
+  \sum_{j=1}^t\lambda_j\ps{a_j}{x_1}\dots\ps{a_j}{x_s}a_j.
+\]
+\end{defi}
+\begin{defi}[Hypersymmetric complexity]
+Let $V$ a finite-dimensional $\K$-vector spaces equipped with a saclar product
+and
+\[
+  \Phi:\underset{\textrm{$s$ times}}{\underbrace{V\times\dots\times V}}\to W
+\]
+a symmetric $s$-multilinear map. The \emph{hypersymmetric complexity} $\muhyp(\Phi)$ of $\Phi$ is the
+minimal length $t$ of a hypersymmetric formula for $\Phi$. If no such
+formula exists, we set
+\[
+  \muhyp(\Phi) = \infty.
+\]
+\end{defi}
+\begin{ex}
+  % TODO
+  % ====
+  %
+  % Finish the example with some paper
+
+  Let $\K=\mathbb{F}_2$ and $V=\mathbb{F}_4$. 
+\end{ex}
 
 \section{Algorithmic seach in small dimension}
 \section{Asymptotic complexities}
