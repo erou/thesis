@@ -159,7 +159,7 @@ Then $\Phi$ admits a symmetric decomposition if and only if $\Phi$ is \emph{Frob
 Under even stricter conditions, we can study the existence of even more
 symmetric formulas. These formulas allow to describe a multilinear map with
 fewer elements, and thus give a compact definition of the map. Since the
-symmetry conditions are stonger there are fewer such formulas, and as a
+symmetry conditions are stronger there are fewer such formulas, and as a
 consequence the search space is smaller. Thus, we expect algorithms to be
 faster, as was the case when using Barbulescu \etal algorithm
 (Algorithm~\ref{algo:BDEZ}) to find symmetric formulas. Let us define those
@@ -196,6 +196,18 @@ $(a_j)_{1\leq j\leq t}$ and $(w_j)_{1\leq j\leq t}$. In order to have an even
 more compact description of $\Phi$, one can ask for the vectors $w_j$ to be
 proportional to $a_i$, leading to the definition of hypersymmetric
 formula.
+% Note
+% ====
+%
+% But is that really natural? Wouldn't it be better to say that we would like
+% the a_i and the b_i to be equal? 
+%
+% TODO
+% ====
+%
+% Maybe change this to include the case a_i = b_i and discuss it a little, or
+% maybe not, we'll see.
+
 \begin{defi}[Hypersymmetric formula]
 Let $V$ a finite-dimensional $\K$-vector
 spaces equipped with a saclar product and
@@ -213,7 +225,7 @@ V$, we have
 \]
 \end{defi}
 \begin{defi}[Hypersymmetric complexity]
-Let $V$ a finite-dimensional $\K$-vector spaces equipped with a saclar product
+Let $V$ be a finite-dimensional $\K$-vector spaces equipped with a saclar product
 and
 \[
   \Phi:\underset{\textrm{$s$ times}}{\underbrace{V\times\dots\times V}}\to W
@@ -231,7 +243,59 @@ formula exists, we set
   %
   % Finish the example with some paper
 
-  Let $\K=\mathbb{F}_2$ and $V=\mathbb{F}_4$. 
+  We take the same case as in Example~\ref{ex:bilinear-complexity}, but viewed
+  a bit differently. Let $\K=\mathbb{F}_2$ and 
+  \[
+    V=\mathbb{F}_4\cong\mathbb{F}_2[T]/(T^2+T+1)\cong\mathbb{F}_2(\zeta)
+  \]
+  seen as a $\mathbb{F}_2$-vector space of dimension $2$ using the base $(1,
+  \zeta)$. The $\mathbb{F}_2$-bilinear map $\Phi$ that we
+  consider is the product in $\mathbb{F}_4$:
+  \[
+ \begin{array}{cccc}
+   \Phi: & \mathbb{F}_4\times \mathbb{F}_4 &\to&\mathbb{F}_4\\
+ &(x,y)&\mapsto&xy.
+ \end{array}
+  \]
+  We also consider the non-degenerate symmetric bilinear form
+\[
+ \begin{array}{ccc}
+   \mathbb{F}_4\times \mathbb{F}_4 &\to&\mathbb{F}_2\\
+ (v,w)&\mapsto&\tr(vw),
+ \end{array}
+\]
+where $\tr$ is the trace of the field extension $\mathbb{F}_4/\mathbb{F}_2$,
+and we write
+\[
+  \tr(xy) = \ps{x}{y}.
+\]
+If $x = x_0 + x_1\zeta\in\mathbb{F}_4$ is an element in the extension field, we have $\tr(x) = x_1$, and if $y = y_0
++ y_1\zeta\in\mathbb{F}_4$ is another element, then their product is
+\[
+  xy = x_0y_0 + x_1y_1 + (x_0y_1 + x_1y_0 + x_1y_1)\zeta.
+\]
+We also see that
+\[
+\left\{ 
+  \begin{array}{lll}
+    \ps{1}{x}\ps{1}{y} &=& x_1y_1 \\
+    \ps{1+\zeta}{x}\ps{1+\zeta}{y} &=& x_0y_0 \\
+    \ps{\zeta}{x}\ps{\zeta}{y} &=& (x_0+x_1)(y_0+y_1)
+  \end{array}
+\right.
+\]
+and thus we have
+\[
+  xy =
+  \ps{1}{x}\ps{1}{y}\cdot1+\ps{1+\zeta}{x}\ps{1+\zeta}{y}\cdot(1+\zeta)+\ps{\zeta}{x}\ps{\zeta}{y}\cdot\zeta.
+\]
+This is an hypersymmetric formula of length $3$, and we can prove that there are
+no formulas of length $2$, so we have
+\[
+  \muhyp(\Phi) = 3.
+\]
+This is in fact the very same formula as in
+Example~\ref{ex:bilinear-complexity}.
 \end{ex}
 
 \section{Algorithmic seach in small dimension}
