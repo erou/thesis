@@ -379,5 +379,68 @@ trisymmetric map $\Phi$ always admits a trisymmetric decomposition.
 
 \subsection{Galois invariance}
 
+An other type of interesting decompositions is Galois invariant decompositions.
+It is motivated by the study of group actions on the set of decompositions, that
+can sometimes be used to cut branches in the search tree of the algorithms.
+% TODO
+% ====
+%
+% Link that with BDEZ stab, the version using automorphisms, and Covanov.
+Let 
+\[
+ \begin{array}{cccc}
+   \sigma: & V\times V &\to&V\\
+ &x&\mapsto&x^\sigma
+ \end{array}
+\]
+be a $\K$-automorphism of $V$ that respects the scalar product, \ie for all $x,
+y\in V$, we have
+\[
+  \ps{x^\sigma}{y^\sigma} = \ps{x}{y}.
+\]
+Then, if $\sigma$ is also compatible with some studied multilinear map $\Phi$, it induces
+an action on the set of decomposition, as explained in
+Lemma~\ref{lm:action-sym}.
+\begin{lm}
+  \label{lm:action-sym}
+  Let $V$ a finite-dimensional $\K$-vector space and
+  \[
+    \Phi:V^s\to V
+  \]
+  a symmetric $s$-linear map that is compatible with $\Phi$, \ie for all $x_1,
+  \dots, x_s$ in $V$, we have
+  \[
+    \Phi(x_1^\sigma, \dots, x_s^\sigma) = \Phi(x_1, \dots, x_s)^\sigma.
+  \]
+  If $(a_j)_{1\leq j \leq t}$ and $(b_j)_{1\leq j \leq t}$ define a symmetric
+  formula for $\Phi$
+  \[
+    \Phi(x_1, \dots, x_s) = \sum_{j=1}^t\ps{a_j}{x_1}\dots\ps{a_j}{x_s}b_j,
+  \]
+  then $(a_j^\sigma)_{1\leq j\leq t}$ and $(b_{j}^\sigma)_{1\leq j\leq t})$ also
+  define a symmetric formula for $\Phi$
+  \[
+    \Phi(x_1, \dots, x_s) =
+    \sum_{j=1}^t\ps{a_j^\sigma}{x_1}\dots\ps{a_j^\sigma}{x_s}b_j^\sigma.
+  \]
+\end{lm}
+\begin{proof}
+ Assume that we have a symmetric decomposition for $\Phi$, with the same
+ notations as in the Lemma. First, notice that for every $x,y\in V$, we have
+ \[
+   \ps{x^\sigma}{y} = \langle{x},{y^{\sigma^{-1}}}\rangle.
+ \]
+ Then, it follows that
+ \begin{align*}
+   \Phi(x_1, \dots, x_s) &= \Phi(x_1^{\sigma^{-1}}, \dots,
+   x_{s}^{\sigma^{-1}})^\sigma\\
+   &=
+   (\sum_{j=1}^t\langle{a_j},{x_1^{\sigma^{-1}}}\rangle\dots\langle{a_j},{x_s^{\sigma^{-1}}}\rangle
+   b_j)^\sigma\\
+   &= \sum_{j=1}^t\ps{a_j^{\sigma}}{x_1}\dots\ps{a_j^\sigma}{x_s}b_j^\sigma.
+ \end{align*}
+ Thus we have a new symmetric formula for $\Phi$.
+\end{proof}
+
 \section{Algorithmic seach in small dimension}
 \section{Asymptotic complexities}
