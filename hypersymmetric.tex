@@ -238,6 +238,7 @@ formula exists, we set
 \]
 \end{defi}
 \begin{ex}
+  \label{ex:trisymmetric-formula}
   We take the same case as in Example~\ref{ex:bilinear-complexity}, but viewed
   a bit differently. Let $\K=\mathbb{F}_2$ and 
   \[
@@ -407,7 +408,7 @@ Lemma~\ref{lm:action-sym}.
   \[
     \Phi:V^s\to V
   \]
-  a symmetric $s$-linear map that is compatible with $\Phi$, \ie for all $x_1,
+  a symmetric $s$-linear map that is compatible with $\sigma$, \ie for all $x_1,
   \dots, x_s$ in $V$, we have
   \[
     \Phi(x_1^\sigma, \dots, x_s^\sigma) = \Phi(x_1, \dots, x_s)^\sigma.
@@ -441,6 +442,82 @@ Lemma~\ref{lm:action-sym}.
  \end{align*}
  Thus we have a new symmetric formula for $\Phi$.
 \end{proof}
+When this action, does not change the formula, we then say that it is
+$\sigma$-invariant.
+\begin{defi}[$\sigma$-invariance]
+  Let $(a_j)_{1\leq j\leq t}$ and
+$(b_j)_{1\leq j\leq t}$ define a symmetric formula for $\Phi$
+  \[
+    \Phi(x_1, \dots, x_s) = \sum_{j=1}^t\ps{a_j}{x_1}\dots\ps{a_j}{x_s}b_j.
+  \]
+We say that this
+formula is $\sigma$-invariant if it is the same as the formula defined by
+$(a_j^\sigma)_{1\leq j\leq t}$ and $(b_j^\sigma)_{1\leq j\leq t}$,
+\ie if there is a permutation $\pi\in\mathfrak S_t$ of $\{1,\dots,t\}$ such that
+$(a_j^\sigma,b_j^\sigma)=(a_{\pi(j)},b_{\pi(j)})$ for all $j$. This also applies
+to hypersymmetric formulas, setting $b_j=\lambda_j a_j$. 
+\end{defi}
+\begin{ex}
+  In fact, the trisymmetric formula seen in
+  Example~\ref{ex:trisymmetric-formula} was already $\sigma$-invariant. Recall
+  that we work in $\mathbb{F}_4$, defined by
+  \[
+   \mathbb{F}_4\cong\mathbb{F}_2[T]/(T^2+T+1)\cong\mathbb{F}_2(\zeta),
+  \]
+  and we take
+\[
+  \tr(xy) = \ps{x}{y}.
+\]
+The $\mathbb{F}_2$-automorphism that we consider is the Frobenius automorphism
+\[
+  \begin{array}{cccc}
+    \sigma: & \mathbb{F}_4 & \to & \mathbb{F}_4 \\
+    & x & \mapsto & x^2.
+  \end{array}
+\]
+We still have, for all $x, y\in\mathbb{F}_4$
+\[
+  xy =
+  \ps{1}{x}\ps{1}{y}\cdot1+\ps{1+\zeta}{x}\ps{1+\zeta}{y}\cdot(1+\zeta)+\ps{\zeta}{x}\ps{\zeta}{y}\cdot\zeta.
+\]
+Since
+\[
+\left\{ 
+  \begin{array}{lll}
+    1^\sigma = 1 \\
+    \zeta^\sigma=\zeta+1\\
+    (\zeta+1)^\sigma=\zeta
+  \end{array}
+\right.
+\]
+we wee that the formula is $\sigma$-invariant.
+\end{ex}
 
-\section{Algorithmic seach in small dimension}
+\subsection{Multiplication formulas in algebras}
+
+In the previous pages, we have defined (hyper)symmetric formulas for any
+multilinear map defined over some finite-dimensional $\K$-vector space.
+Nevertheless, as seen in the examples, we are often interested in special
+instances of multilinear maps. In fact, the map that we have in mind is almost
+always the $s$-variable product of some $\K$-algebra $\A$, with $s=2$. There are
+two types of algebras we are particularly interested in:
+\begin{itemize}
+  \item the finite field extensions $\A=\mathbb{F}_{q^m}$, in which we take the
+    trace bilinear form
+    \[
+      \ps{x}{y}=\tr(xy)
+    \]
+    for our scalar product, and the Frobenius automorphism
+    \[
+  \begin{array}{cccc}
+    \sigma: & \mathbb{F}_{q^m} & \to & \mathbb{F}_{q^m} \\
+    & x & \mapsto & x^q.
+  \end{array}
+\]
+for our $\K$-automorphism ;
+\item 1 
+
+\end{itemize}
+
+\section{Algorithmic search in small dimension}
 \section{Asymptotic complexities}
