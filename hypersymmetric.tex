@@ -515,8 +515,23 @@ two types of algebras we are particularly interested in:
   \end{array}
 \]
 for our $\K$-automorphism ;
-\item 1 
-
+\item algebras of truncated polynomials $\A = \mathbb{F}_q[T]/(T^m)$. In this
+  case, we let 
+  \[
+  \begin{array}{cccc}
+    \tau: & \A & \to & \K \\
+    & \sum_{j=0}^{m-1}x_j T^j & \mapsto & x_0
+  \end{array}
+\]
+and
+\[
+  \ps{x}{y} = \tau(xy).
+\]
+Indeed, if $x=\sum_{j=0}^{m-1}T^j$ and $y=\sum_{j=0}^{m-1}y_jT^j$, we have
+\[
+  \tau(x, y) = x_0y_{m-1} + x_1y_{m-2} + \dots + x_{m-1}y_0,
+\]
+thus $\tau$ is a non-degenerate bilinear form.
 \end{itemize}
 
 \section{Algorithmic search in small dimension}
