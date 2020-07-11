@@ -207,6 +207,12 @@ formula.
 %
 % Maybe change this to include the case a_i = b_i and discuss it a little, or
 % maybe not, we'll see.
+%
+% Remark
+% ======
+%
+% If this is presented, it could be nice to have the tensor point of view, with
+% a decomposition with the same elements three times being then very clear.
 
 \begin{defi}[Hypersymmetric formula]
 Let $V$ a finite-dimensional $\K$-vector
@@ -533,6 +539,55 @@ Indeed, if $x=\sum_{j=0}^{m-1}T^j$ and $y=\sum_{j=0}^{m-1}y_jT^j$, we have
 \]
 thus $\tau$ is a non-degenerate bilinear form.
 \end{itemize}
+We denote by $\mutri_q(k)$ the trisymmetric bilinear complexity of the
+$2$-variable product in $\mathbb{F}_{q^k}$ and by $\hmutri_q(k)$ the
+trisymmetric bilinear complexity of the $2$-variable product in
+$\mathbb{F}_q[T]/(T^k)$.
 
 \section{Algorithmic search in small dimension}
+
+In very small dimension, \eg in Examples~\ref{ex:bilinear-complexity}
+and~\ref{ex:trisymmetric-formula} where we are working with $\K$-vector spaces
+of dimension $2$, the search of formulas can be done by hand relatively easily
+because the length of the formulas is short. Though, even in small dimension, if
+the characteristic $q$ of $\K$ is large, the number of different formulas can be
+big, thus making it hard to list \emph{all} different solutions. For these
+reasons, it is highly desirable to \emph{algorithmically} find the formulas.
+Let $V$ be a finite dimensional $\K$-vector space and $\Phi:V\times V\to V$ a bilinear map.
+When wanting to list all the symmetric formulas of the form
+\[
+  \Phi(x, y) = \sum_{j=0}^t\varphi_j(x)\varphi_j(y)a_j,
+\]
+Barbulescu~\etal\!\!\!'s and Covanov's algorithms exhaustively search through
+all linear forms $\varphi$, cleverly eliminating useless branches in the search
+tree. Nevertheless, their methods exploit the fact that it is possible to freely
+choose the vectors $a_j\in V$, independently of the linear forms $\varphi_j\in
+V^\vee$. This is
+no longer possible when searching for trisymmetric decompositions
+\[
+  \Phi(x, y) = \sum_{j=0}^t\ps{a_j}{x}\ps{a_j}{y}a_j,
+\]
+because each
+linear form $\varphi\in V^\vee$ is linked with a unique vector $a\in V$ such
+that for all $x\in V$
+\[
+  \varphi(x) = \ps{a}{x},
+\]
+and the choice of a linear form $\varphi_j$ with $\varphi_j(x)=\ps{a_j}{x}$
+imposes the choice of the vector $a_j\in V$. We thus propose \emph{ad hoc}
+algorithms to find trisymmetric formulas, exploiting the vector space structure.
+
+% TODO
+% ====
+%
+% Explain in *details* the algorithms, the different ideas to represent the
+% bilinear forms, the margins, the fact that some elements can be forgotten
+% without them, the way it is implemented in Julia, etc
+%
+% Note
+% ====
+%
+% Maybe begin with the general framework/idea, like in the WAIFI paper, and
+% continue with the different possibilites for the implementation later
+
 \section{Asymptotic complexities}
