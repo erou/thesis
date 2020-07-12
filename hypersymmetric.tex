@@ -574,8 +574,8 @@ that for all $x\in V$
   \varphi(x) = \ps{a}{x},
 \]
 and the choice of a linear form $\varphi_j$ with $\varphi_j(x)=\ps{a_j}{x}$
-imposes the choice of the vector $a_j\in V$. We thus propose \emph{ad hoc}
-algorithms to find trisymmetric formulas, exploiting the vector space structure.
+imposes the choice of the vector $a_j\in V$. We thus propose an \emph{ad hoc}
+algorithm to find trisymmetric formulas, exploiting the vector space structure.
 
 % TODO
 % ====
@@ -589,5 +589,92 @@ algorithms to find trisymmetric formulas, exploiting the vector space structure.
 %
 % Maybe begin with the general framework/idea, like in the WAIFI paper, and
 % continue with the different possibilites for the implementation later
+
+\subsection{General algorithm description}
+
+In all the section, we assume that $\K=\mathbb{F}_q$ is the finite field with
+$q$ elements, $V$ is a finite-dimensional $\K$-vector space equipped with a
+non-degenerate bilinear form, written as a sclar product $\ps{\cdot}{\cdot}$,
+and $\Phi:V\times V\to V$ is a hypersymmetric bilinear map for which we want to
+compute trisymmetric decompositions
+\[
+  \Phi(x, y) = \sum_{j=1}^t\lambda_j\ps{a_j}{x}\ps{a_j}{y}a_j.
+\]
+Assume that
+\[
+  V\cong\K^m
+\]
+is a $\K$-vector space of dimension $m$, for which a basis has been chosen and
+allows us to identify $V$ to $\K^m$, and
+let $(b_j)_{1\leq j\leq m}$ be the bilinear forms on each coordinates, \ie for
+all $x,y\in V$, we have
+\[
+  \Phi(x, y) = (b_1(x, y), \dots, b_m(x, y)).
+\]
+We have already seen that the difficulty in the trisymmetric case resides in the
+fact that each linear form, or equivalently each symmetric rank $1$ bilinear
+form, comes with a given vector in $V$ that dictates its impact on the different
+coordinates in a trisymmetric formula. Therefore, a central idea is to
+exhaustively search through vectors in $V$ instead of linear forms in $V^\vee$.
+This is equivalent since 
+\[
+  V\cong V^\vee
+\]
+in this case anyway. Moreover, we search through special sets of vectors that
+have easy-to-manage coordinates, \eg well-placed zeros and ones, in order to
+control the impact on certain coordinates. Assume $(a_j)_{1\leq j \leq t}$ in $V$ and
+$(\lambda_j)_{1\leq j \leq t}$ in $\K$ define a trisymmetric decomposition
+\[
+  \Phi(x, y) = \sum_{j=1}^t\lambda_j\ps{a_j}{x}\ps{a_j}{y}a_j.
+\]
+Without loss of generality, we can consider that every element $a_j$ is
+``normalized'', \ie its first nonzero coordinate is $1$. Indeed, if we have one
+\[
+  a_{j_0} = 0
+\]
+for some $1\leq j_0 \leq t$, then we just remove one term from the formula and
+we still have a trisymmetric decomposition, of length $t-1$. Now if for every
+$1\leq j\leq t$, 
+\[
+  a_j\neq0,
+\]
+we let $x_j$ be the first nonzero coordinate of $a_j$ and we write
+\[
+  a_j = x_j \widetilde a_j.
+\]
+We can now write the trisymmetric formula as
+\begin{align*}
+  \Phi(x, y) &= \sum_{j=1}^t\lambda_j\ps{a_j}{x}\ps{a_j}{y}a_j \\
+  &= \sum_{j=1}^t\lambda_j\ps{x_j\widetilde a_j}{x}\ps{x_j\widetilde
+  a_j}{y}x_j\widetilde a_j \\
+  &= \sum_{j=1}^t\lambda_jx_j^3\ps{\widetilde a_j}{x}\ps{\widetilde
+  a_j}{y}\widetilde a_j \\
+  &= \sum_{j=1}^t\widetilde \lambda_j\ps{\widetilde a_j}{x}\ps{\widetilde
+  a_j}{y}\widetilde a_j,
+\end{align*}
+where $\widetilde\lambda_j = \lambda_jx_j^3$.
+Therefore any trisymmetric formula is equivalent to a trisymmetric formula with
+normalized vectors, and thus we only search for formulas with normalized
+elements. For all $1\leq j\leq m$, we let
+\[
+  \E_j=\left\{ x=(x_1, \dots, x_k)\in V
+  \,|\, \forall i\leq j-1,\,x_i=0\text{ and }x_j=1 \right\}
+\]
+and
+\[
+  \E = \bigcup_{j=1}^m\E_j,
+\]
+and we search for elements $a_j$ in $\E$ instead of the entire vector space $V$.
+% TODO
+% ====
+%
+% Link all that with what we were saying before.
+
+We further
+use the vector space structure of $\A$ by searching for solutions
+on each coordinate.
+
+\subsection{Implementation}
+
 
 \section{Asymptotic complexities}
