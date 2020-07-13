@@ -550,7 +550,7 @@ In very small dimension, \eg in Examples~\ref{ex:bilinear-complexity}
 and~\ref{ex:trisymmetric-formula} where we are working with $\K$-vector spaces
 of dimension $2$, the search of formulas can be done by hand relatively easily
 because the length of the formulas is short. Though, even in small dimension, if
-the characteristic $q$ of $\K$ is large, the number of different formulas can be
+the cardinality of $\K$ is large, the number of different formulas can be
 big, thus making it hard to list \emph{all} different solutions. For these
 reasons, it is highly desirable to \emph{algorithmically} find the formulas.
 Let $V$ be a finite dimensional $\K$-vector space and $\Phi:V\times V\to V$ a bilinear map.
@@ -565,7 +565,7 @@ choose the vectors $a_j\in V$, independently of the linear forms $\varphi_j\in
 V^\vee$. This is
 no longer possible when searching for trisymmetric decompositions
 \[
-  \Phi(x, y) = \sum_{j=0}^t\ps{a_j}{x}\ps{a_j}{y}a_j,
+  \Phi(x, y) = \sum_{j=0}^t\lambda_j\ps{a_j}{x}\ps{a_j}{y}a_j,
 \]
 because each
 linear form $\varphi\in V^\vee$ is linked with a unique vector $a\in V$ such
@@ -655,7 +655,7 @@ We can now write the trisymmetric formula as
 where $\widetilde\lambda_j = \lambda_jx_j^3$.
 Therefore any trisymmetric formula is equivalent to a trisymmetric formula with
 normalized vectors, and thus we only search for formulas with normalized
-elements. For all $1\leq j\leq m$, we let
+elements. In other words, for all $1\leq j\leq m$, we let
 \[
   \E_j=\left\{ x=(x_1, \dots, x_k)\in V
   \,|\, \forall i\leq j-1,\,x_i=0\text{ and }x_j=1 \right\}
@@ -665,16 +665,32 @@ and
   \E = \bigcup_{j=1}^m\E_j,
 \]
 and we search for elements $a_j$ in $\E$ instead of the entire vector space $V$.
-% TODO
-% ====
-%
-% Link all that with what we were saying before.
-
-We further
-use the vector space structure of $\A$ by searching for solutions
-on each coordinate.
+Limiting the search to $\E$ helps us in two different ways. First, it reduces
+the complexity of the exhaustive search since the cardinality of $\E$ is smaller
+than the cardinality of $V$. Indeed, the sets $\E_j$ are disjoint, so
+\begin{align*}
+  \Card\E &= \sum_{j=1}^m\Card\E_j\\
+  &= \sum_{j=1}^m q^{m-j}\\
+  &= \cfrac{q^m-1}{q-1},
+\end{align*}
+whereas
+\[
+  \Card V = q^m.
+\]
+Second, it allows a better understanding of what happens in the algorithm,
+because if we have some vector
+\[
+  a\in\E_j
+\]
+for a given $1\leq j\leq m$, we know that the associated bilinear form
+\[
+  (x, y)\mapsto\ps{a}{x}\ps{a}{y}
+\]
+can only impact the coordinates $i\geq j$. Thus, we further
+use the vector space structure of $V$ by searching for solutions
+on each coordinate, starting with the first coordinates and vectors in $\E_1$,
+then the second coordinate and vectors in $\E_2$, and so on until the last
+coordinate.
 
 \subsection{Implementation}
-
-
 \section{Asymptotic complexities}
