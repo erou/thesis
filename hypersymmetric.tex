@@ -690,7 +690,102 @@ can only impact the coordinates $i\geq j$. Thus, we further
 use the vector space structure of $V$ by searching for solutions
 on each coordinate, starting with the first coordinates and vectors in $\E_1$,
 then the second coordinate and vectors in $\E_2$, and so on until the last
-coordinate.
+coordinate. Let us focus on the first coordinate first and give some details.
+
+Recall that the goal is to obtain a trisymmetric decomposition for the
+hypersymmetric bilinear map $\Phi:V\times V\to V$, that is written
+\[
+  \Phi(x, y) = (b_1(x, y), \dots, b_m(x, y)).
+\]
+in the basis of $V$. We first see how to decompose the bilinear \emph{form}
+$b_1$ as a sum of rank $1$ bilinear forms. Let $\B$ be the set of bilinear forms
+of $V\times V$, recall that $\B$ is a $\K$-vector space of dimension $m^2$, and
+that we identify $b_1$ with the $m\times m$ matrix $B_1\in\K^{m\times m}$ 
+such that for all vectors $x, y\in V$, we have
+\[
+  b_1(x, y) = X B_1 Y^t,
+\]
+where $X, Y\in\K^{1\times m}$ are the row vectors representing $x$ and $y$ and
+where $Y^t$ is the transposed of $y$. Let $r_1$ be the rank of $b_1$, we know
+that $b_1$ can be decomposed as a sum of $r_1$ bilinear forms of rank $1$. Let
+$f$ be the application mapping an element in $V$ to its associated bilinear
+form:
+\[
+  \begin{array}{cccc}
+    f: & V & \to & \B\\
+    & a & \mapsto & (x, y)\mapsto\ps{a}{x}\ps{a}{y}.
+  \end{array}
+\]
+In order to find the decompositions of $b_1$ as a sum of $r_1$ bilinear forms of
+rank $1$, we exhaustively search through scalars $\lambda_1\in\K$ and vectors
+$a_1\in \E_1$ such that
+\[
+  r_1-1=\rank(b_1-\lambda_1 f(a_1)) < \rank(b_1)=r_1,
+\]
+then, for each such couple $(\lambda_1, a_1)$, we exhaustively search through
+scalars $\lambda_2\in\K$ and vectors $a_2\in \E_1$ such that
+\[
+  r_1-2=\rank(b_1-\lambda_1 f(a_1)-\lambda_2f(a_2)) < \rank(b_1-\lambda_1
+  f(a_1))=r_1-1.
+\]
+We continue this process until we have $r_1$ couples $(\lambda_1, a_1), \dots,
+(\lambda_{r_1}, a_{r_1})$ such that
+\[
+  0 = \rank(b_1-\sum_{j=1}^{r_1}\lambda_jf(a_j)) <
+  \rank(\sum_{j=1}^{r_1-1}\lambda_jf(a_j)) = 1,
+\]
+that exactly means that
+\[
+  b_1 = \sum_{j=1}^{r_1}\lambda_jf(a_j).
+\]
+\begin{algorithm}
+  \caption{(Minimal decomposition)}
+  \label{algo:mindecomp}
+  \begin{algorithmic}[1]
+    \Require{$b\in \B$ a bilinear form of rank $r$, $E\subset\E$
+    the space of vectors in which to search}
+    \Ensure{A list of decompositions of $b$ as a sum of bilinear forms of rank
+    $1$, each decomposition represented by a set of $r$ couples $\left\{
+      (\lambda_1, a_1), \dots, (\lambda_{r}, a_{r})\right\}$.}
+
+    \Procedure{MinimalDecomposition}{$b, E, R_{\text{glob}},
+    R_{\text{loc}}=\emptyset$}
+    \If{$\varphi=0$}\Comment{$\rank(\varphi)=0$}
+    \State $R_\text{glob}\gets R_\text{glob}\bigcup\left\{R_\text{loc}\right\}$
+    \Else
+    \State $\mathcal C\gets\emptyset$
+    \ForAll{$a\in E$}
+    \ForAll{$\lambda\in\K$}
+  \If{$\rank(b-\lambda f(a))<\rank(b)$}
+    \State $\mathcal C\gets\mathcal C\bigcup\left\{ (\lambda, a) \right\}$
+    \State \textbf{break}
+    \EndIf
+    \EndFor
+    \EndFor
+    \For{$i=1$ to $\Card\mathcal C$}\Comment{$\mathcal
+      C=\left\{ (\lambda_1, a_1), \dots, (\lambda_u, a_u) \right\}$}
+      \State $E'\gets\left\{ a_{i+1}, \dots, a_u \right\}$
+    \State \Call{FindDecMat}{$b-\lambda_i\f(a_i), E', R_\text{glob},
+    R_\text{loc}\cup\left\{ (\lambda_i, a_i) \right\}$}
+    \EndFor
+    \EndIf
+    \EndProcedure
+
+   \State $\mathcal R\gets\emptyset$
+    \State \Call{MinimalDecomposition}{$b, E, \mathcal R$}
+    \State \Return $\mathcal R$
+  \end{algorithmic}
+\end{algorithm}
+
+% TODO
+% ====
+%
+% Am example of the coordinate search algorithm that is illuminating: probably
+% the example of F_{3^3} because it shows the effect of the margins and the
+% number of decompositions is only 4. Also a tree showing that the rank
+% decreasing technique allows to eliminate some elements in the search would be
+% very nice. Maybe there is someting interesting with F_{5^2}, F_{7^2} also?
+% F_{11^2} is already less interesting than F_{3^3} I think.
 
 \subsection{Implementation}
 \section{Asymptotic complexities}
