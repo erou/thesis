@@ -738,6 +738,19 @@ that exactly means that
 \[
   b_1 = \sum_{j=1}^{r_1}\lambda_jf(a_j).
 \]
+In fact, when we have chosen $(\lambda_1, a_1)$, we do not have to continue the
+search on the whole space $\E_1$. We can in fact restrict ourself to
+\[
+  \E_1^{(1)} = \left\{ a\in\E_1\;|\;\exists\lambda\in\K,\,\rank(b_1-\lambda
+  f(a))<\rank(b_1) \right\}
+\]
+% TODO
+% ====
+% 
+% prove that!
+
+To prevent us from computing the same formula
+where the elements $(\lambda_j, a_j)$, we order the elements
 \begin{algorithm}
   \caption{(Minimal decomposition)}
   \label{algo:mindecomp}
