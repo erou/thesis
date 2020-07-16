@@ -716,13 +716,12 @@ form:
     & a & \mapsto & (x, y)\mapsto\ps{a}{x}\ps{a}{y}.
   \end{array}
 \]
-In order to find the decompositions of $b_1$ as a sum of $r_1$ bilinear forms of
-rank $1$, we exhaustively search through scalars $\lambda_1\in\K$ and vectors
+In order to find these decompositions, we begin by exhaustively searching through scalars $\lambda_1\in\K$ and vectors
 $a_1\in \E_1$ such that
 \[
-  r_1-1=\rank(b_1-\lambda_1 f(a_1)) < \rank(b_1)=r_1,
+  r_1-1=\rank(b_1-\lambda_1 f(a_1)) < \rank(b_1)=r_1.
 \]
-then, for each such couple $(\lambda_1, a_1)$, we exhaustively search through
+Then, for each such couple $(\lambda_1, a_1)$, we exhaustively search through
 scalars $\lambda_2\in\K$ and vectors $a_2\in \E_1$ such that
 \[
   r_1-2=\rank(b_1-\lambda_1 f(a_1)-\lambda_2f(a_2)) < \rank(b_1-\lambda_1
@@ -736,21 +735,36 @@ We continue this process until we have $r_1$ couples $(\lambda_1, a_1), \dots,
 \]
 that exactly means that
 \[
-  b_1 = \sum_{j=1}^{r_1}\lambda_jf(a_j).
+  b_1 = \sum_{j=1}^{r_1}\lambda_jf(a_j),
 \]
-In fact, when we have chosen $(\lambda_1, a_1)$, we do not have to continue the
-search on the whole space $\E_1$. We can in fact restrict ourself to
+and we have found our decomposition.
+In fact, we can search in a more clever way. Since the rank of $b_1$ is $r_1$
+and we are looking for decompositions as a sum of exactly $r_1$ bilinear forms of
+rank $1$, we must choose
+couples $(\lambda_j, a_j)$ that decrease the rank of our bilinear form at each
+step, otherwise we will need strictly more than $r_1$ bilinear forms of rank
+$1$. Therefore, at each step, we can search only through the vectors that can
+decrease the rank of the last considered bilinear form. After each choice of
+$(\lambda_1, a_1)$, we will thus exhaustively search through scalars
+$\lambda_2\in\K$ and vectors $a_2$ in
 \[
-  \E_1^{(1)} = \left\{ a\in\E_1\;|\;\exists\lambda\in\K,\,\rank(b_1-\lambda
-  f(a))<\rank(b_1) \right\}
+  \E_1^{\left\{ (\lambda_1, a_1) \right\}} = \left\{
+  a\in\E_1\;|\;\exists\lambda\in\K,\,\rank(b_1-\lambda f(a)) <\rank(b_1)
+\right\}.
 \]
-% TODO
-% ====
-% 
-% prove that!
-
-To prevent us from computing the same formula
-where the elements $(\lambda_j, a_j)$, we order the elements
+Then, after each choice of $(\lambda_2, a_2)$, we will search through scalars
+$\lambda_3\in\K$ and vectors $a_3$ in
+\[
+  \E_1^{\left\{ (\lambda_1, a_1), (\lambda_2, a_2) \right\}} = \left\{
+    a\in\E_1^{ \left\{ (\lambda_1, a_1)
+    \right\}}\;|\;\exists\lambda\in\K,\,\rank(b_1-\lambda_1f(a_1)-\lambda f(a))
+    <\rank(b_1-\lambda_1f(a_1))
+\right\},
+\]
+and we use the same idea until the end of the process. This strategy, used in
+Algorithm~\ref{algo:mindecomp}, permits to
+save a lot of time in the search because we look only at the vectors that have
+the potential to decrease the rank, instead of all the vectors in $\E_1$.
 \begin{algorithm}
   \caption{(Minimal decomposition)}
   \label{algo:mindecomp}
@@ -789,6 +803,19 @@ where the elements $(\lambda_j, a_j)$, we order the elements
     \State \Return $\mathcal R$
   \end{algorithmic}
 \end{algorithm}
+
+For each decomposition of $b_1$
+\[
+  b_1(x, y) = \sum_{j=1}^{r_1}\lambda_j\ps{a_j}{x}\ps{a_j}{y}
+\]
+that we compute this way, we obtain
+\[
+  \Phi(x, y) - \sum_{j=1}^{r_1}\lambda_j\ps{a_j}{x}\ps{a_j}{y}a_j = (0, b_2'(x,
+  y), \dots, b_m'(x, y))
+\]
+where $b_2', \dots, b_m'\in\B$ are new bilinear forms, depending on the coordinates
+of $a_1, \dots, a_{r_1}$, and where the first coordinate is $0$ because the
+first coordinate of the vectors $a_1, \dots, a_{r_1}$ is always $1$.
 
 % TODO
 % ====
