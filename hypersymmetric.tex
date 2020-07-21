@@ -10,6 +10,13 @@ map.
 %
 % Find a nice picture to put here to illustrate something in link with the
 % chapter.
+%
+% Note
+% ====
+%
+% It could be an illustration of the exhaustive search tree with the rank
+% technique that allows to delete some branches, a nice picture of that just
+% to be ble to understand how much it deletes would be very nice imho
 
 \clearpage
 \section{Symmetric and hypersymmetric fomulas}
@@ -500,6 +507,7 @@ we wee that the formula is $\sigma$-invariant.
 \end{ex}
 
 \subsection{Multiplication formulas in algebras}
+\label{sec:formulas-algebras}
 
 In the previous pages, we have defined (hyper)symmetric formulas for any
 multilinear map defined over some finite-dimensional $\K$-vector space.
@@ -577,20 +585,8 @@ and the choice of a linear form $\varphi_j$ with $\varphi_j(x)=\ps{a_j}{x}$
 imposes the choice of the vector $a_j\in V$. We thus propose an \emph{ad hoc}
 algorithm to find trisymmetric formulas, exploiting the vector space structure.
 
-% TODO
-% ====
-%
-% Explain in *details* the algorithms, the different ideas to represent the
-% bilinear forms, the margins, the fact that some elements can be forgotten
-% without them, the way it is implemented in Julia, etc
-%
-% Note
-% ====
-%
-% Maybe begin with the general framework/idea, like in the WAIFI paper, and
-% continue with the different possibilites for the implementation later
-
 \subsection{General algorithm description}
+\label{sec:general-algorithm}
 
 In all the section, we assume that $\K=\mathbb{F}_q$ is the finite field with
 $q$ elements, $V$ is a finite-dimensional $\K$-vector space equipped with a
@@ -1079,8 +1075,466 @@ decomposition.
    \caption{The margins and the decompositions they permit to find.}
    \label{tab:illustration-margins}
  \end{table}
-
 \end{ex}
 
+% TODO
+% ====
+%
+% Some experiments with *universal* formulae? Should we talk about that in this
+% section or the next?
 \subsection{Implementation}
+
+The ideas discussed in Section~\ref{sec:general-algorithm}, in particular
+Algorithms~\ref{algo:decompmargin}~and~\ref{algo:trisymmargin}, were implemented
+using Nemo~\cite{Nemo}, a number theory library written in the Julia programming
+language~\cite{Julia}. Nemo functionnalities includes a wrapper for
+Flint~\cite{Flint}, a number theory library written in the C programming
+language. The code is available online at
+\url{https://github.com/erou/TriSym.jl}.
+
+\paragraph{Julia and Nemo.} Julia is a free and open-source, high-level programming language
+developed since 2012, with dynamic type system and high-performance. It is
+a compiled language, with a just-in-time (jit) compilation, meaning that the
+compilation is almost invisible for the user but performances are comparable
+with other compiled languages. It is easy to learn and to read, especially
+for someone who already worked with a high-level language like Python.
+There are of course many other things to say about this new language, the
+interested reader can find additional informations on Julia’s
+website\footnote{\url{https://julialang.org/}} and, of
+course, in the documentation of the language. Julia is designed for numerical
+computing, but there are many other kind of possibilities, \eg some symbolic computer algebra packages, such as
+Nemo. Nemo is a computer algebra package for Julia. It aims to cover
+commutative algebra, number theory and group theory. It contains wrappers
+for MPIR, Flint, Arb and Antic, and other features written directly in Julia. Among
+these libraries, the C library Flint (Fast library for number theory) is the
+only one that we use.
+One of the advantages of Julia is that it is fairly easy
+to directly call C functions contained in other libraries. Therefore, all the
+Nemo functions that we use in TriSym.jl are in fact Flint functions. This
+provides efficiency, the main reason why we use the duo Julia/Nemo, as well
+as simplicity, because we are not directly using the C programming language.
+On top of that, if a Flint function is not available in Nemo, we can directly
+call it from Julia. Moreover, it is also possible to write crucial parts of the code
+directly in C and call the code if necessary.
+
+\paragraph{Trisymmetric search in finite fields.}
+
+An algorithm in our Julia library \texttt{Trisym.jl} is specially designed to
+handle trisymmetric decompositions of the product in finite fields. We use a lot
+of native Nemo types, that are wrappers for Flint types. Finite fields elements
+are represented by univariate polynomials modulo an irreducible polynomial and
+only prime field extensions
+\[
+  \mathbb{F}_{p^k}/\mathbb{F}_p,
+\]
+where $p$ is a prime number, can be considered.
+There are two types used to work with finite fields in Flint: \texttt{fq} and
+\texttt{fq\_nmod}, the latter only works for word-size primes $p$. Because the
+algorithms for trisymmetric searchs have an exponential complexity, we focused
+our implementation on finite fields with a word-size characteristic, but there
+are no theoretical nor implementation obstacles preventing an
+implementation with the type \texttt{fq} and arbitrary large characteristic.
+Nonetheless, implementing the algorithms for any kind of extension
+\[
+  \mathbb{F}_{q^k}/\mathbb{F}_q,
+\]
+where $q$ is a prime power, would require additionnal work.
+The
+bilinear forms in $\mathbb{F}_{p^k}$ are represented by $k\times k$ matrices
+over $\mathbb{F}_p$, and the product in $\mathbb{F}_{p^k}$ is represented by a
+$k$-uple of $k\times k$ matrices. The matrix manipulations are all done by Flint using
+efficient C code: it is in particular true the rank computation, that plays a central role
+in Algorithm~\ref{algo:decompmargin}. We always precompute a dictionnary maping
+elements in the finite field
+\[
+  a\in\mathbb{F}_{p^k}
+\]
+to the matrix representing the bilinear form
+\[
+  (x, y)\mapsto\ps{a}{x}\ps{a}{y}.
+\]
+This bilinear form is not hard to compute: it suffices to compute a
+matrix-vector multiplication, but since we have to compute the same bilinear
+forms several times, we prefer to store them in a dictionnary.
+
+% TODO
+% ====
+%
+% Discussion and measures about the speed of the algorithm(s)
+
 \section{Asymptotic complexities}
+\label{sec:asymptotic}
+
+Parallel to the question of finding the hypersymmetric complexity of bilinear
+maps over $\K$-vector spaces of small dimension, it is also of theoretical
+importance to understand how these quantities asymptotically grow. In the
+bilinear case, we have rather precise bounds on
+\[
+  \limsup_{k\to\infty}(\frac{1}{k}\mu_q(k)).
+\]
+In particular, these bounds imply that the bilinear complexity $\mu_q(k)$ grows
+linearly in $k$. Since we have similar results for the symmetric bilinear
+complexity, we also know that $\musym_q(k)$ grows linearly in $k$. A natural
+question that follows is then if we can also prove that the trisymmetric
+complexity
+\[
+  \mutri_q(k)
+\]
+still grows linearly in $k$.
+% COPY PASTE MARKER (!!)
+In this section, we work with $\A=\mathbb{F}_{q^k}$ or $\mathbb{F}_q[T]/(T^k)$, seen as an algebra over $\K=\mathbb{F}_q$, and equipped with the trace-like linear form $\tau$ introduced at the end of Section~\ref{sec:symtrisym}.
+Our aim is to show that the trisymmetric bilinear complexities $\mutri_q(k)$ and $\hmutri_q(k)$ grow linearly as $k\to\infty$.
+Our proof will involve higher multilinear maps, and in turn, give results for them as well.
+
+For any $t$ we define the $t$-multilinear multiplication map in $\A$ over $\K$
+\[
+\begin{array}{cccc}
+m_t:&\A^t&\to&\A\\
+&(x_1,\dots,x_t)&\mapsto&x_1\cdots x_t
+\end{array}
+\]
+and the $t$-multilinear trace form
+\[
+\begin{array}{cccc}
+\tau_t=\tau\circ m_t:&\A^t&\to&\A\\
+&(x_1,\dots,x_t)&\mapsto&\tau(x_1\cdots x_t).
+\end{array}
+\]
+If needed, we will write ${m_t}^{\A/\K}$ or ${\tau_t}^{\A/\K}$ to keep $\A$ and $\K$ explicit. 
+
+The (symmetric) multilinear complexity of $m_t$ has been considered in \cite{Bshouty13} in relation with the theory of testers.
+
+\begin{lm}
+\label{lm:hyp<sym+1}
+The map $m_t$ is hypersymmetric, and we have
+\[
+\muhyp(m_t)=\musym(\tau_{t+1})\leq\musym(m_{t+1}).
+\] 
+\end{lm}
+\begin{proof}
+Indeed we have $\widetilde{m}_t=\tau_{t+1}$, and the equality on the left is a special case of Lemma~\ref{lm:hyp=symtilde}.
+For the inequality on the right, take a symmetric formula for $m_{t+1}$ and apply $\tau$.
+\end{proof}
+
+When studying the variation with the degree of the extension field $\mathbb{F}_{q^k}$ over $\mathbb{F}_q$,
+we will write $\musym_q(k,m_t)$ for $\musym\left({m_t}^{\mathbb{F}_{q^k}/\mathbb{F}_q}\right)$,
+and we will also use the similar notations $\muhyp_q(k,m_t)$, $\musym_q(k,\tau_t)$, etc.
+In particular for $t=2$ we have
+\[
+\mutri_q(k)=\mutri_q(k,m_2)=\musym_q(k,\tau_3). %\muhyp_q(k, m_2) plutôt non ?
+\]
+When working in $\mathbb{F}_q[T]/(T^k)$ over $\mathbb{F}_q$,
+we will write likewise $\hmusym_q(k,m_t)$, $\hmuhyp_q(k,m_t)$, etc.
+
+Our aim is, for fixed $q$ and $t$ with $q\geq t+1$, to show that $\muhyp_q(k,m_t)$ and $\hmuhyp_q(k,m_t)$ grow linearly with $k\to\infty$.
+Thanks to Lemma~\ref{lm:hyp<sym+1}, it suffices to show that
+$\musym_q(k,m_{t+1})$ and $\hmusym_q(k,m_{t+1})$ grow linearly with $k\to\infty$.
+To ease notations we will set
+\vspace{-.5\baselineskip}
+
+\[ \Msym_{q,t}=\limsup_{k\to\infty}\frac{1}{k}\musym_q(k,m_t),\qquad \Mhyp_{q,t}=\limsup_{k\to\infty}\frac{1}{k}\muhyp_q(k,m_t), \]
+\vspace{-1.5\baselineskip}
+
+\[ \Mtri_q=\limsup_{k\to\infty}\frac{1}{k}\mutri_q(k)=\Mhyp_{q,2}, \]
+\vspace{-.5\baselineskip}
+
+\noindent and likewise for $\hMsym_{q,t}$, $\hMhyp_{q,t}$, $\hMtri_q$, etc.
+
+
+\paragraph{Evaluation-interpolation method.}
+%Albeit not optimal, our strategy will be to find a $3$-symmetric decomposition of
+%$m_3$ by an evaluation-interpolation method.
+We use the function field terminology and notations
+presented in~\cite{Stichtenoth09}. Let $F/\mathbb{F}_q$ be an algebraic
+function field of one variable over $\mathbb{F}_{q}$ and let $\mathbb{P}_F$ be the
+set of places of $F$. Let $\D_F$ the set of
+divisors on $F$, and if $D\in\D_F$ is a divisor on
+$F$, we denote by $L(D)$ its Riemann-Roch space and $\ell(D)=\dim L(D)$.
+%The following proposition highlights the method.
+
+\begin{prop}
+  \label{prop:method}
+  Assume there exist a place $Q\in\mathbb{P}_{F}$ of $F$ of degree $k$, $P_1,
+  \dots, P_n\in\mathbb{P}_F$ places of $F$ of degree $1$, and a divisor
+  $D\in\D_F$ of $F$ such that the places $Q$ and $P_1, \dots, P_n$ are not in
+  the support of $D$ and such that the following conditions hold.
+  \begin{enumerate}[(i)]
+    \item \label{cond:1} The evaluation map
+      \[
+        \begin{array}{cccc}
+        \ev_{Q, D}: & L(D) & \to & \mathbb{F}_{q^k}\\
+  & f & \mapsto & f(Q)
+\end{array}
+\]
+is \emph{surjective}.
+    \item \label{cond:2} The evaluation map
+      \[
+        \begin{array}{cccc}
+        \ev_{\Pcal, tD}: & L(tD) & \to & (\mathbb{F}_{q})^n\\
+  & h & \mapsto & (h(P_1), \dots, h(P_n))
+\end{array}
+\]
+is \emph{injective}.
+  \end{enumerate}
+  Then ${m_t}^{\mathbb{F}_{q^k}/\mathbb{F}_q}$ admits a symmetric formula of length $n$, \ie we have $\musym_q(k,m_t)\leq n$.
+\end{prop}
+\begin{proof}
+  Since the map $\ev_{Q, D}$ is surjective, it admits a right inverse, \ie a linear
+  map $s: \mathbb{F}_{q^k} \to L(D)$
+  such that
+  $\ev_{Q, D}\circ s = \Id_{\mathbb{F}_{q^k}}$.
+For all $x\in\mathbb{F}_{q^k}$, we denote $s(x)\in L(D)$ by $f_x$,
+so the map $x\mapsto f_x$ is linear, and $f_x(Q)=x$. We
+  also let
+  \[
+        \begin{array}{cccc}
+          a: & \mathbb{F}_{q^k} & \to & (\mathbb{F}_{q})^n \\
+          & x & \mapsto & (f_x(P_1), \dots, f_x(P_n))
+\end{array}
+  \]
+  be the composite map $a = \ev_{\Pcal, D}\circ s$. The situation is sumed up in the
+  following drawing.
+   \begin{center}
+  \begin{tikzpicture}
+    \node (LD) at (2, 2) {$L(D)$};
+    \node (Fqk) at (0, 0) {$\mathbb{F}_{q^k}$};
+    \node (Fqn) at (4, 0) {$(\mathbb{F}_{q})^n$};
+    \draw[->>] (LD) to (Fqk);
+    \draw[->] (LD) to (Fqn);
+    \draw[->] (Fqk) to[bend left] (LD);
+    \node (s) at (0.5, 1.5) {$s$};
+    \node (evQ) at (1.4, .7) {$\ev_{Q, D}$};
+    \node (evP) at (3.3, 1.3) {$\ev_{\Pcal, D}$};
+    \draw[->] (Fqk) to[out=120,in=180](2, 2.5) to[out=0, in=70] (Fqn);
+    \node (a) at (2, 2.7) {$a$};
+  \end{tikzpicture}
+  \end{center}
+Observe that $a$ is linear, so we can write
+\[ a(x) = (\varphi_1(x), \dots, \varphi_n(x)) \]
+where $\varphi_i:\mathbb{F}_{q^k}\to\mathbb{F}_{q}$ is a linear form, namely $\varphi_i(x)=f_x(P_i)$.
+
+
+
+  Similarly, since the map $\ev_{\Pcal, tD}$ is injective, it admits a left inverse, \ie a linear
+  map $r: (\mathbb{F}_{q})^n \to L(tD)$
+  such that $r\circ\ev_{\Pcal, tD} = \Id_{L(tD)}$.
+We also let $b: (\mathbb{F}_{q})^n \to \mathbb{F}_{q^k}$
+  be the composite map $b = \ev_{Q, tD}\circ r$.   The situation is sumed up in the
+  following drawing.
+  \begin{center}
+  \begin{tikzpicture}
+    \node (LtD) at (2, 2) {$L(tD)$};
+    \node (Fqk) at (0, 0) {$\mathbb{F}_{q^k}$};
+    \node (Fqn) at (4, 0) {$(\mathbb{F}_{q})^n$};
+    \draw[right hook->] (LtD) to (Fqn);
+    \draw[->] (LtD) to (Fqk);
+    \draw[->] (Fqn) to[bend right] (LtD);
+    \node (evP) at (2.5, .7) {$\ev_{\Pcal, tD}$};
+    \node (s) at (3.6, 1.5) {$r$};
+    \node (evQ) at (1.2, .4) {$\ev_{Q, tD}$};
+    \draw[->] (Fqn) to[out=60,in=0](2, 2.5) to[out=180, in=120] (Fqk);
+    \node (d) at (2, 2.7) {$b$};
+  \end{tikzpicture}
+\end{center}
+The map $b$ is linear, so there are $b_1, \dots, b_n$ in
+  $\mathbb{F}_{q^k}$ such that, for all $y=(y_1, \dots, y_n)\in(\mathbb{F}_{q})^n$,
+  \[
+    b(y) = \sum_{i=1}^n y_i b_i.
+  \]
+
+Now for $x,\dots,x_t\in\mathbb{F}_{q^k}$, let
+  \[
+    p = (p_1,\dots,p_n) = ((\prod_{j=1}^tf_{x_j})(P_1), \dots, (\prod_{j=1}^tf_{x_j})(P_n))
+  \]
+in $(\mathbb{F}_{q})^n$  be the coordinatewise product of the vectors $a(x_1)$, ..., $a(x_t)$.
+Then
+\[
+  h = r(p)
+\]
+is an element of $L(tD)$ such that $h(P_i) = p_i = (\prod_{j=1}^tf_{x_j})(P_i)$ for all $i$.
+Since the map $\ev_{\Pcal, tD}$ is injective, this forces
+\[
+  h = \prod_{j=1}^tf_{x_j}.
+\]
+Then, we have
+\begin{equation*}
+b(p) = \ev_{Q, tD}(r(p))
+  = \ev_{Q, tD}(h)
+  = h(Q)
+  = \prod_{j=1}^t f_{x_j}(Q)
+  = \prod_{j=1}^t x_j.
+\end{equation*}
+But we also have
+\[
+  b(p) = \sum_{i=1}^np_ib_i=\sum_{i=1}^n(\prod_{j=1}^tf_{x_j}(P_i))b_i=\sum_{i=1}^n(\prod_{j=1}^t\varphi_i(x_j))b_i
+\]
+and finally we get a symmetric formula for $m_t$:
+\[
+  \prod_{j=1}^t x_j = \sum_{i=1}^n(\prod_{j=1}^t\varphi_i(x_j))b_i.
+\]
+\end{proof}
+
+\begin{prop}
+\label{prop:numerical}
+Let $F/\mathbb{F}_{q}$ be an algebraic function field of genus $g$.
+Assume that $F$ admits a place $Q$ of degree $k$, and a set $\mathcal{S}$ of places of degree $1$ of cardinality
+\[
+  |\mathcal{S}|\geq (k+g-1)t+1.
+\]
+Then we have
+\[ \musym_q(k,m_t)\leq kt+(g-1)(t-1). \]
+\end{prop}
+\begin{proof}
+Set $n=kt+(g-1)(t-1)$. We will show that there are places $P_1,\dots,P_n$ in $\mathcal{S}$,
+and a divisor $D$ on $F$, such that Proposition~\ref{prop:method} applies,
+which gives $\musym_q(k,m_t)\leq n$ as desired.
+
+Using e.g. \cite[Lemma~2.1]{Ballet99} we know $F$ admits a non-special divisor $R$ of degree $g-1$.
+By the strong approximation theorem \cite[Thm.~1.6.5]{Stichtenoth09}
+we can then find a divisor $D$ linearly equivalent to $R+Q$ and of support disjoint from $Q$ and $\mathcal{S}$.
+
+Then $D-Q$ and $D$ are non-special, with $\ell(D-Q)=0$ and $\ell(D)=k$.
+We thus find
+\[
+  \Ker(\ev_{Q, D}:L(D)\to\mathbb{F}_{q^k}) = L(D-Q) = 0,
+\]
+so $\ev_{Q, D}$ is injective, hence also surjective by equality of dimensions,
+\ie the surjectivity condition~\ref{cond:1} in Proposition~\ref{prop:method} is satisfied.
+
+Likewise, $tD$ is non-special, with $\deg(tD)=(k+g-1)t$ and $\ell(tD)=kt+(g-1)(t-1)$.
+Then the evaluation map
+\[
+\begin{array}{cccc}
+\ev_{\mathcal{S}, tD}: & L(tD) & \to & (\mathbb{F}_{q})^{|\mathcal{S}|}\\
+  & h & \mapsto & (h(P))_{P\in\mathcal{S}}
+\end{array}
+\]
+has kernel $L(tD-\sum_{P\in\mathcal{S}}P)=0$, because $\deg(tD-\sum_{P\in\mathcal{S}}P)=(k+g-1)t-|\mathcal{S}|<0$.
+So $\ev_{\mathcal{S}, tD}$ is injective, with image of dimension $\dim\Img(\ev_{\mathcal{S}, tD})=\ell(tD)=n$.
+Then we can find a subset $\Pcal=\{P_1,\dots,P_n\}\subset\mathcal{S}$ of cardinality $n$,
+such that $\ev_{\Pcal, tD}: L(tD) \to (\mathbb{F}_{q})^n$ is an isomorphism,
+and the injectivity condition~\ref{cond:2} in Proposition~\ref{prop:method} is also satisfied.
+\end{proof}
+
+\paragraph{Choice of the curves for $q$ a large enough square.}
+
+\begin{prop}
+\label{prop:asymptsquare}
+Let $t$ be given, and assume $q$ is a square, $q\geq(t+2)^2$.
+Then we have
+\[
+\Msym_{q,t}\leq(1+\epsilon_t(q))t
+\]
+with $\epsilon_t(q)=\frac{t-1}{\sqrt{q}-t-1}$.
+\end{prop}
+\begin{proof}
+We know~\cite{STV92} that there exists a family of function fields
+$F_i/\mathbb{F}_q$ of genus $g_i\to\infty$ such that
+\begin{enumerate}[(i)]
+  \item $\frac{g_{i+1}}{g_i}\to1$
+  \item $N_i\sim (\sqrt q - 1)g_i$
+\end{enumerate}
+where $N_i = \Card\left\{ P\in\mathbb{P}_{F_i}\,|\,\deg P = 1 \right\}$
+is the number of places of degree $1$ of $F_i$. We can also assume that the sequence
+$g_i$ is increasing. 
+
+For any $k$ let $i(k)$ be the smallest index such that
+\[ N_{i(k)} \geq (k + g_{i(k)}-1)t +1. \]
+Such an $i(k)$ always exists since by (ii) we have $N_i\sim (\sqrt q - 1)g_i$,
+with $\sqrt q - 1>t$.
+
+By definition we thus have
+\[ N_{i(k)} \geq (k + g_{i(k)}-1)t +1 > (k + g_{i(k)-1}-1)t +1 > N_{i(k)-1}. \]
+As $k\to\infty$ we have $i(k)\to\infty$, and by (i) we get $g_{i(k)}\sim g_{i(k)-1}$,
+so by (ii) we also get $N_{i(k)}\sim N_{i(k)-1}$. This then gives
+\[ \begin{split} N_{i(k)} &\sim (k + g_{i(k)}-1)t +1\\ &\sim (k + g_{i(k)})t \end{split} \]
+while by (ii),
+\[ N_{i(k)} \sim (\sqrt q - 1)g_{i(k)}. \]
+From these two relations we deduce
+\[ g_{i(k)} \sim \frac{t}{\sqrt{q}-1-t}k. \]
+For $k$ large enough this implies in particular $2g_{i(k)} +1 \leq q^{(k-1)/2}(\sqrt q-1)$,
+so $F_{i(k)}$ admits a place of degree $k$ by~\cite[Cor.~5.2.10]{Stichtenoth09}.
+
+From this we are allowed to apply Proposition~\ref{prop:numerical} to $F_{i(k)}$, which gives
+\[ \musym_q(k,m_t)\;\leq\; kt+(g_{i(k)}-1)(t-1)\;\sim\; kt+g_{i(k)}(t-1)\;\sim\; kt(1+\epsilon_t(q)) \]
+as desired.
+\end{proof}
+
+\begin{cor}
+\label{cor:asymptsquare}
+For $q$ a square, $q\geq(t+3)^2$ we have
+\[
+\Mhyp_{q,t}\leq(1+\epsilon_{t+1}(q))(t+1),
+\]
+and in particular we have
+\[ \Mtri_q\leq 3\left(1+\frac{2}{\sqrt{q}-4}\right) \]
+for $q$ a square, $q\geq 25$.
+\end{cor}
+
+\paragraph{Conclusion for arbitrary $q$.}
+
+\begin{lm}
+\label{lemma:basechange}
+Let $q$ be a prime power. Then for any integers $t,d,k$ we have
+\[ \musym_q(k,m_t)\leq\musym_q(dk,m_t)\leq\musym_q(d,m_t)\musym_{q^d}(k,m_t). \]
+\end{lm}
+\begin{proof}
+For the inequality on the left, there is nothing to prove if $\musym_q(dk,m_t)=\infty$.
+So let us assume $m_t^{\mathbb{F}_{q^{dk}}/\mathbb{F}_{q}}$ admits a symmetric multiplication formula of length $n=\musym_q(dk,m_t)$, \ie
+\[\forall x_1,\dots,x_t\in\mathbb{F}_{q^{dk}},\quad x_1\cdots x_t = \sum_{i=1}^{n}\varphi_i(x_1)\cdots\varphi_i(x_t)a_i \]
+for linear forms $\varphi_i:\mathbb{F}_{q^{dk}}\to\mathbb{F}_{q}$ and elements $a_i\in\mathbb{F}_{q^{dk}}$.
+Choose a linear projection
+\[ p:\mathbb{F}_{q^{dk}}\to\mathbb{F}_{q^{k}} \]
+left inverse for the inclusion $\mathbb{F}_{q^{k}}\subseteq\mathbb{F}_{q^{dk}}$.
+Then we get
+\[\forall x_1,\dots,x_t\in\mathbb{F}_{q^{k}},\quad x_1\cdots x_t = p(x_1,\dots,x_t) = \sum_{i=1}^{n}\varphi_i(x_1)\cdots\varphi_i(x_t)p(a_i) \]
+which is a symmetric multiplication formula of length $n$ for $m_t^{\mathbb{F}_{q^{k}}/\mathbb{F}_{q}}$.
+
+Likewise, for the inequality on the right, there is nothing to prove if $\musym_q(d,m_t)=\infty$ or $\musym_{q^d}(k,m_t)=\infty$.
+So let us assume $m_t^{\mathbb{F}_{q^{d}}/\mathbb{F}_{q}}$ and $m_t^{\mathbb{F}_{q^{dk}}/\mathbb{F}_{q^{d}}}$ admit symmetric multiplication formulae of length $r=\musym_q(d,m_t)$ and $s=\musym_{q^d}(k,m_t)$ respectively, so
+\vspace{-.5\baselineskip}
+
+\[\forall y_1,\dots,y_t\in\mathbb{F}_{q^{d}},\quad y_1\cdots y_t = \sum_{u=1}^{r}\psi_u(y_1)\cdots\psi_u(y_t)b_u \]
+\vspace{-1.5\baselineskip}
+
+\[\forall z_1,\dots,z_t\in\mathbb{F}_{q^{dk}},\quad z_1\cdots z_t = \sum_{v=1}^{s}\chi_v(z_1)\cdots\chi_v(z_t)c_v \]
+\vspace{-.5\baselineskip}
+
+\noindent for linear forms $\psi_u:\mathbb{F}_{q^{d}}\to\mathbb{F}_{q}$, $\chi_v:\mathbb{F}_{q^{dk}}\to\mathbb{F}_{q^{d}}$ and elements $b_u\in\mathbb{F}_{q^{d}}$, $c_v\in\mathbb{F}_{q^{dk}}$.
+Then setting $y_1=\chi_v(z_1)$, ..., $y_t=\chi_v(z_t)$ we find
+\[\forall z_1,\dots,z_t\in\mathbb{F}_{q^{dk}},\quad z_1\cdots z_t = \sum_{v=1}^{s}\sum_{u=1}^{r}(\psi_u\circ\chi_v)(z_1)\cdots(\psi_u\circ\chi_v)(z_t)\cdot(b_uc_v) \]
+which is a symmetric multiplication formula of length $rs$ for $m_t^{\mathbb{F}_{q^{dk}}/\mathbb{F}_{q}}$.
+\end{proof}
+
+
+\begin{thm}
+Let $t\geq2$ be an integer and $q$ a prime power.
+If $q<t$, then $\musym_q(k,m_t)=\infty$ for all $k\geq2$.
+
+On the other hand, if $q\geq t$,
+then $\musym_q(k,m_t)$ grows at most linearly with $k$, \ie we have
+\[
+\Msym_{q,t}\leq C_t(q)
+\]
+for some real constant $C_t(q)<\infty$.
+\end{thm}
+\begin{proof}
+If $q<t$ and $k\geq2$, then $\musym_q(k,m_t)=\infty$ follows from Theorem~\ref{th:criterion}.
+
+On the other hand, for $q\geq t$, we have $\musym_q(d,m_t)<\infty$ for any integer $d$.
+Choose $d$ such that $q^d$ is a square, $q^d\geq(t+2)^2$.
+Then Proposition~\ref{prop:asymptsquare} shows $\musym_{q^d}(k,m_t)$ grows linearly with $k$.
+The Theorem then follows thanks to Lemma~\ref{lemma:basechange}, with $C_t(q)=\musym_q(d,m_t)(1+\epsilon_t(q^d))t$.
+\end{proof}
+\begin{cor}
+For $q\geq t+1$ we have
+\[
+\Mhyp_{q,t}\leq C_{t+1}(q)
+\]
+and in particular for $q\geq 3$ we have
+\[
+\Mtri_q\leq C_{3}(q).
+\]
+\end{cor}
+
+%
