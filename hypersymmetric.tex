@@ -1180,9 +1180,22 @@ complexity
 \[
   \mutri_q(k)
 \]
-still grows linearly in $k$.
-% COPY PASTE MARKER (!!)
-In this section, we work with $\A=\mathbb{F}_{q^k}$ or $\mathbb{F}_q[T]/(T^k)$, seen as an algebra over $\K=\mathbb{F}_q$, and equipped with the trace-like linear form $\tau$ introduced at the end of Section~\ref{sec:symtrisym}.
+still grows linearly in $k$. In this section, we work with either the algebra 
+\[
+  \A=\mathbb{F}_{q^k}\text{ or }\A=\mathbb{F}_q[T]/(T^k),
+\]
+seen as an algebra over $\K=\mathbb{F}_q$, and
+equipped with the scalar product 
+\[
+  \ps{x}{y} = \tau(xy)
+\]
+introduced in
+Section~\ref{sec:formulas-algebras}, \ie
+\begin{itemize}
+  \item if $\A=\mathbb{F}_{q^k}$, $\tau=\tr$ is the trace map;
+  \item if $\A = \mathbb{F}_{q}[T]/(T^k)$ and $x=\sum_{j=0}^{k-1}x_jT^j$, then
+    $\tau(x) = x_0$ is the map sending an element to its constant coefficient.
+\end{itemize}
 Our aim is to show that the trisymmetric bilinear complexities $\mutri_q(k)$ and $\hmutri_q(k)$ grow linearly as $k\to\infty$.
 Our proof will involve higher multilinear maps, and in turn, give results for them as well.
 
@@ -1201,7 +1214,6 @@ and the $t$-multilinear trace form
 \end{array}
 \]
 If needed, we will write ${m_t}^{\A/\K}$ or ${\tau_t}^{\A/\K}$ to keep $\A$ and $\K$ explicit. 
-
 The (symmetric) multilinear complexity of $m_t$ has been considered in \cite{Bshouty13} in relation with the theory of testers.
 
 \begin{lm}
@@ -1212,46 +1224,73 @@ The map $m_t$ is hypersymmetric, and we have
 \] 
 \end{lm}
 \begin{proof}
-Indeed we have $\widetilde{m}_t=\tau_{t+1}$, and the equality on the left is a special case of Lemma~\ref{lm:hyp=symtilde}.
-For the inequality on the right, take a symmetric formula for $m_{t+1}$ and apply $\tau$.
+Recall that we have 
+\begin{align*}
+  \widetilde{m}_t(x_1, \dots, x_{t+1}) &= \ps{m_t(x_1, \dots, x_t)}{x_{t+1}} \\
+  &= \ps{x_1\dots x_{t}}{x_{t+1}}\\
+  &= \tau(x_1\dots x_{t+1})\\
+  &=\tau_{t+1}(x_1, \dots, x_{t+1}),
+\end{align*}
+and thus the equality on the left is a special case of Lemma~\ref{lm:link-hyp-sym}.
+For the inequality on the right, assume we have a symmetric formula of length
+$n$ for $m_{t+1}$, such that for all $x_1, \dots, x_{t+1}\in\A$, we have
+\[
+  m_{t+1}(x_1, \dots, x_{t+1})= x_1\dots x_{t+1} = \sum_{j=1}^{n}
+  \ps{a_j}{x_1}\dots\ps{a_j}{x_{t+1}}b_j
+\]
+and apply $\tau$. We obtain
+\[
+  \tau(x_1\dots x_{t+1})=
+  \sum_{j=1}^n\ps{a_j}{x_1}\dots\ps{a_j}{x_{t+1}}\tau(b_j),
+\]
+that is precisely a symmetric decomposition for $\tau_{t+1}$ so the right
+inequality is proven.
 \end{proof}
 
-When studying the variation with the degree of the extension field $\mathbb{F}_{q^k}$ over $\mathbb{F}_q$,
-we will write $\musym_q(k,m_t)$ for $\musym\left({m_t}^{\mathbb{F}_{q^k}/\mathbb{F}_q}\right)$,
-and we will also use the similar notations $\muhyp_q(k,m_t)$, $\musym_q(k,\tau_t)$, etc.
-In particular for $t=2$ we have
+When studying the variation with the degree of the extension field
+$\mathbb{F}_{q^k}$ over $\mathbb{F}_q$, we will write $\musym_q(k,m_t)$ for
+$\musym\left({m_t}^{\mathbb{F}_{q^k}/\mathbb{F}_q}\right)$, and we will also use
+the similar notations $\muhyp_q(k,m_t)$, $\musym_q(k,\tau_t)$, etc. In
+particular for $t=2$ we have
 \[
-\mutri_q(k)=\mutri_q(k,m_2)=\musym_q(k,\tau_3). %\muhyp_q(k, m_2) plutôt non ?
+\mutri_q(k)=\muhyp_q(k,m_2)=\musym_q(k,\tau_3). %\muhyp_q(k, m_2) plutôt non ?
 \]
 When working in $\mathbb{F}_q[T]/(T^k)$ over $\mathbb{F}_q$,
 we will write likewise $\hmusym_q(k,m_t)$, $\hmuhyp_q(k,m_t)$, etc.
 
-Our aim is, for fixed $q$ and $t$ with $q\geq t+1$, to show that $\muhyp_q(k,m_t)$ and $\hmuhyp_q(k,m_t)$ grow linearly with $k\to\infty$.
+Our aim is, for fixed $q$ and $t$ with $q\geq t+1$, to show that
+$\muhyp_q(k,m_t)$ and $\hmuhyp_q(k,m_t)$ grow linearly with $k\to\infty$. This
+is thus a stronger result than the proof that only the trisymmetric complexity,
+\ie $t=2$, grows linearly in the degree of the extension.
 Thanks to Lemma~\ref{lm:hyp<sym+1}, it suffices to show that
-$\musym_q(k,m_{t+1})$ and $\hmusym_q(k,m_{t+1})$ grow linearly with $k\to\infty$.
-To ease notations we will set
-\vspace{-.5\baselineskip}
-
-\[ \Msym_{q,t}=\limsup_{k\to\infty}\frac{1}{k}\musym_q(k,m_t),\qquad \Mhyp_{q,t}=\limsup_{k\to\infty}\frac{1}{k}\muhyp_q(k,m_t), \]
-\vspace{-1.5\baselineskip}
-
-\[ \Mtri_q=\limsup_{k\to\infty}\frac{1}{k}\mutri_q(k)=\Mhyp_{q,2}, \]
-\vspace{-.5\baselineskip}
+$\musym_q(k,m_{t+1})$ and $\hmusym_q(k,m_{t+1})$ grow linearly with
+$k\to\infty$. Again, this is a generalization of the case $t=2$ for which we
+already know that the symmetric bilinear complexity is linear in the dimension
+of the considered vector space. To ease notations we will set
+\[
+\Msym_{q,t}=\limsup_{k\to\infty}\frac{1}{k}\musym_q(k,m_t),
+\]
+\[
+  \Mhyp_{q,t}=\limsup_{k\to\infty}\frac{1}{k}\muhyp_q(k,m_t),
+\]
+\[
+\Mtri_q=\limsup_{k\to\infty}\frac{1}{k}\mutri_q(k)=\Mhyp_{q,2}
+\]
 
 \noindent and likewise for $\hMsym_{q,t}$, $\hMhyp_{q,t}$, $\hMtri_q$, etc.
 
 
 \paragraph{Evaluation-interpolation method.}
-%Albeit not optimal, our strategy will be to find a $3$-symmetric decomposition of
-%$m_3$ by an evaluation-interpolation method.
 We use the function field terminology and notations
-presented in~\cite{Stichtenoth09}. Let $F/\mathbb{F}_q$ be an algebraic
+presented in~\cite{Stichtenoth09} and recalled in
+Section~\ref{sec:algebraic-function-fields}. Let $F/\mathbb{F}_q$ be an algebraic
 function field of one variable over $\mathbb{F}_{q}$ and let $\mathbb{P}_F$ be the
 set of places of $F$. Let $\D_F$ the set of
 divisors on $F$, and if $D\in\D_F$ is a divisor on
-$F$, we denote by $L(D)$ its Riemann-Roch space and $\ell(D)=\dim L(D)$.
-%The following proposition highlights the method.
-
+$F$, we denote by $L(D)$ its Riemann-Roch space and we $\ell(D)=\dim L(D)$ be
+the dimension of this space. Proposition~\ref{prop:method} generalizes the idea
+of the Chudnovsky brothers to the product of $t$ variables and highlights the
+method to obtain symmetrics formulas.
 \begin{prop}
   \label{prop:method}
   Assume there exist a place $Q\in\mathbb{P}_{F}$ of $F$ of degree $k$, $P_1,
@@ -1280,9 +1319,14 @@ is \emph{injective}.
 \end{prop}
 \begin{proof}
   Since the map $\ev_{Q, D}$ is surjective, it admits a right inverse, \ie a linear
-  map $s: \mathbb{F}_{q^k} \to L(D)$
+  map 
+  \[
+    s: \mathbb{F}_{q^k} \to L(D)
+  \]
   such that
-  $\ev_{Q, D}\circ s = \Id_{\mathbb{F}_{q^k}}$.
+  \[
+    \ev_{Q, D}\circ s = \Id_{\mathbb{F}_{q^k}}.
+  \]
 For all $x\in\mathbb{F}_{q^k}$, we denote $s(x)\in L(D)$ by $f_x$,
 so the map $x\mapsto f_x$ is linear, and $f_x(Q)=x$. We
   also let
@@ -1313,11 +1357,14 @@ Observe that $a$ is linear, so we can write
 \[ a(x) = (\varphi_1(x), \dots, \varphi_n(x)) \]
 where $\varphi_i:\mathbb{F}_{q^k}\to\mathbb{F}_{q}$ is a linear form, namely $\varphi_i(x)=f_x(P_i)$.
 
-
-
   Similarly, since the map $\ev_{\Pcal, tD}$ is injective, it admits a left inverse, \ie a linear
-  map $r: (\mathbb{F}_{q})^n \to L(tD)$
-  such that $r\circ\ev_{\Pcal, tD} = \Id_{L(tD)}$.
+  map 
+  \[
+    r: (\mathbb{F}_{q})^n \to L(tD)
+  \]
+  such that 
+  \[r\circ\ev_{\Pcal, tD} = \Id_{L(tD)}.
+  \]
 We also let $b: (\mathbb{F}_{q})^n \to \mathbb{F}_{q^k}$
   be the composite map $b = \ev_{Q, tD}\circ r$.   The situation is sumed up in the
   following drawing.
@@ -1373,7 +1420,10 @@ and finally we get a symmetric formula for $m_t$:
   \prod_{j=1}^t x_j = \sum_{i=1}^n(\prod_{j=1}^t\varphi_i(x_j))b_i.
 \]
 \end{proof}
-
+Now that we have a method to find formulas, we have to prove that
+Conditions~\ref{cond:1}~and~\ref{cond:2} can be satisfied.
+Proposition~\ref{prop:numerical} gives sufficient assumptions to obtain these
+conditions.
 \begin{prop}
 \label{prop:numerical}
 Let $F/\mathbb{F}_{q}$ be an algebraic function field of genus $g$.
@@ -1417,7 +1467,11 @@ and the injectivity condition~\ref{cond:2} in Proposition~\ref{prop:method} is a
 \end{proof}
 
 \paragraph{Choice of the curves for $q$ a large enough square.}
-
+Now that we have somewhat easier assumptions to fulfill, that are only based on
+the existence of a certain number of places, we prove that we can indeed find
+algebraic number fields that satisfy these properties. We first prove it in the
+special case, where the cardinality $q$ of the base field $\K$ is large enough
+square.
 \begin{prop}
 \label{prop:asymptsquare}
 Let $t$ be given, and assume $q$ is a square, $q\geq(t+2)^2$.
@@ -1445,8 +1499,15 @@ with $\sqrt q - 1>t$.
 
 By definition we thus have
 \[ N_{i(k)} \geq (k + g_{i(k)}-1)t +1 > (k + g_{i(k)-1}-1)t +1 > N_{i(k)-1}. \]
-As $k\to\infty$ we have $i(k)\to\infty$, and by (i) we get $g_{i(k)}\sim g_{i(k)-1}$,
-so by (ii) we also get $N_{i(k)}\sim N_{i(k)-1}$. This then gives
+As $k\to\infty$ we have $i(k)\to\infty$, and by (i) we get 
+\[
+  g_{i(k)}\sim g_{i(k)-1},
+\]
+so by (ii) we also get 
+\[
+  N_{i(k)}\sim N_{i(k)-1}.
+\]
+This then gives
 \[ \begin{split} N_{i(k)} &\sim (k + g_{i(k)}-1)t +1\\ &\sim (k + g_{i(k)})t \end{split} \]
 while by (ii),
 \[ N_{i(k)} \sim (\sqrt q - 1)g_{i(k)}. \]
@@ -1459,7 +1520,6 @@ From this we are allowed to apply Proposition~\ref{prop:numerical} to $F_{i(k)}$
 \[ \musym_q(k,m_t)\;\leq\; kt+(g_{i(k)}-1)(t-1)\;\sim\; kt+g_{i(k)}(t-1)\;\sim\; kt(1+\epsilon_t(q)) \]
 as desired.
 \end{proof}
-
 \begin{cor}
 \label{cor:asymptsquare}
 For $q$ a square, $q\geq(t+3)^2$ we have
@@ -1472,6 +1532,16 @@ for $q$ a square, $q\geq 25$.
 \end{cor}
 
 \paragraph{Conclusion for arbitrary $q$.}
+Finally, we complete our objective of proving that the symmetric multilinear
+complexity is linear in the degree of the extension by extending the previous
+result to arbitrary $q$.
+
+% TODO
+% ====
+%
+% Re-write the first part of this proof. Also what happens with the linear forms
+% phi_i in the proof ? They are linear forms over F_{q^{dk}} and not
+% F_{q^k}. Could this be a problem?
 
 \begin{lm}
 \label{lemma:basechange}
