@@ -1,12 +1,17 @@
 \usepackage{tikz}
 \usetikzlibrary{arrows}
 \usetikzlibrary{math}
+\usetikzlibrary{calc}
 
 % Tikz style
 
 \tikzset{round/.style={circle, draw=black, very thick, scale = 0.7}}
 \tikzset{arrow/.style={->, >=latex}}
 \tikzset{dashed-arrow/.style={->, >=latex, dashed}}
+\tikzset{dotstyle/.style={circle, inner sep = 1.2pt, outer sep = 4pt, fill = gray},
+         edgetower/.style={thick},
+         edgecomp/.style={thick, lightgray}}
+           
 
 % New command
 \newcommand{\drawrec}[3]{

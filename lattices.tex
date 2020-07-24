@@ -1,2 +1,188 @@
+In Chapter~\ref{chap:isomorphism}, we have seen algorithms to compute
+isomorphisms, or inclusions, between pairs of finite fields. Now, we want to
+integrate these algorithms in a larger global system with potentially as many
+finite fields as we want.
+\minitoc
+
+\begin{figure}%[h]
+  \centering
+
+    \tikzset{
+        dotstyle/.style={circle, inner sep = 1.2pt, outer sep = 4pt, fill =
+        gray},
+        edgetower/.style={thick},
+        edgecomp/.style={thick, lightgray}
+          }
+          \begin{tikzpicture}[scale=.9]
+    \coordinate (T2) at (-2, 0.5);
+    \node (Fp) at (0, 0) {$\mathbb{F}_p$};
+    \node (Fp2) at ($(Fp) + (T2)$) {$\mathbb{F}_{p^2}$};
+    \node (Fp4) at ($(Fp2) + (T2)$) {$\mathbb{F}_{p^4}$};
+    \node (Fp2l) at ($(Fp4) + (T2)$) {};% {$\FF_p^{(2)}$};
+    % ---------------------
+    \coordinate (T3) at (-0.7, 2);
+    \node (Fp3) at ($(Fp) + (T3)$) {$\mathbb{F}_{p^3}$};
+    \node (Fp9) at ($(Fp3) + (T3)$) {$\mathbb{F}_{p^9}$};
+    \node (Fp3l) at ($(Fp9) + (T3)$) {};% {$\FF_p^{(3)}$};
+    % ---------------------
+    \coordinate (T5) at (0.7, 2);
+    \node (Fp5) at ($(Fp) + (T5)$) {$\mathbb{F}_{p^5}$};
+    \node (Fp25) at ($(Fp5) + (T5)$) {$\mathbb{F}_{p^{25}}$};
+    \node (Fp5l) at ($(Fp25) + (T5)$) {};% {$\FF_p^{(5)}$};
+    % ---------------------
+    \coordinate (Tl) at (2, .5);
+    \node (Fpl) at ($(Fp) + (Tl)$) {$\mathbb{F}_{p^\ell}$};
+    \node (Fpl2) at ($(Fpl) + (Tl)$) {$\mathbb{F}_{p^{\ell^2}}$};
+    \node (Fpll) at ($(Fpl2) + (Tl)$) {};% {$\FF_p^{(\ell)}$};
+    % ---------------------
+    \node[dotstyle] (dot1) at ($(Fp2) + (Fp3) - (Fp)$) {};
+    \node[dotstyle] (dot2) at ($(Fp4) + (dot1) - (Fp2)$) {};
+    \node[dotstyle] (dot3) at ($(Fp2) + (Fp5) - (Fp)$) {};
+    \node[dotstyle] (dot4) at ($(Fp3) + (Fp5) - (Fp)$) {};
+    \node[dotstyle] (dot5) at ($(Fp3) + (Fpl) - (Fp)$) {};
+    \node[dotstyle] (dot6) at ($(Fp5) + (Fpl) - (Fp)$) {};
+    \node[dotstyle] (dot7) at ($(Fpl2) + (dot6) - (Fpl)$) {};
+    % ---------------------
+    \draw
+    (Fp)
+    edge[edgetower] (Fp2)
+    edge[edgetower] (Fp3)
+    edge[edgetower] (Fp5)
+    edge[edgetower] (Fpl)
+    (Fp2)
+    edge[edgetower] (Fp4)
+    edge[edgecomp] (dot1)
+    (Fp4)
+    edge[edgetower, dotted] (Fp2l)
+    edge[edgecomp] (dot2)
+    (dot1)
+    edge[edgecomp] (dot2)
+    (Fp3)
+    edge[edgetower] (Fp9)
+    edge[edgecomp] (dot1)
+    edge[edgecomp] (dot4)
+    (Fp9)
+    edge[edgetower, dotted] (Fp3l)
+    (Fp5)
+    edge[edgetower] (Fp25)
+    edge[edgecomp] (dot4)
+    edge[edgecomp] (dot6)
+    (Fp25)
+    edge[edgetower, dotted] (Fp5l)
+    (Fpl)
+    edge[edgetower] (Fpl2)
+    edge[edgecomp] (dot6)
+    (Fpl2)
+    edge[edgetower, dotted] (Fpll)
+    edge[edgecomp] (dot7)
+    (dot3)
+    edge[edgecomp] (Fp2)
+    edge[edgecomp] (Fp5)
+    (dot5)
+    edge[edgecomp] (Fp3)
+    edge[edgecomp] (Fpl)
+    (dot6)
+    edge[edgecomp] (dot7);
+  \end{tikzpicture}
+  \caption{Extensions de $\mathbb{F}_p$.}
+  \label{fig:alg-closure}
+\end{figure}
+
+\clearpage
+\section{The compatibility problem}
+
+Now that we know how to go from one finite field $\mathbb{F}_{p^a}$ to another
+$\mathbb{F}_{p^b}$, with $p\in\mathbb{N}$ a prime number and
+\[
+  a\,|\,b
+\]
+two integers, we would like to be able to manage more than $2$ finite fields
+simultaneously. In other words, given a family
+\[
+  \F=\left\{ \mathbb{F}_{p^{a}}\,|\,a\in E \right\}
+\]
+for $E$ a subset of $\mathbb{N}\setminus\left\{ 0 \right\}$,
+we want to be able to compute an embedding
+\[
+  \mathbb{F}_{p^a}\emb\mathbb{F}_{p^b}
+\]
+each time that we have $\mathbb{F}_{p^a}, \mathbb{F}_{p^b}\in\F$ with $a$
+dividing $b$. On a pratical point of view, we want to build a computer algebra
+system where the users can embed the field they are working with in a bigger
+finite field, or conversely if an element is known to belong to a smaller field
+than the ambient field, project it to a smaller field. In cryptology and coding
+theory, finite fields are ubiquitus, and some algorithms require frequent change
+of field. For example, in the
+quasi-polynomial algorithm for discrete logarithm in small characteristic by
+Granger, Kleinjung and Zumbrägel~\cite{GKZ14}, we have to work with a tower of
+finite field extensions, and thus a computer algebra system automatically
+dealing with the changes would be very convenient in order to implement their
+algorithm. On a theoretical point of view, this leads to the question of the
+arithmetic in the algebraic closure of some finite field $\mathbb{F}_p$
+\[
+  \bar{\mathbb{F}}_p=\bigcup_{j\in\mathbb{N}\setminus\left\{ 0
+  \right\}}\mathbb{F}_{p^j}
+\]
+and its representation on a computer, a question that was for example
+investigated in~\cite{DDS14}. 
+
+If we \emph{just} want to be able to compute embeddings between two finite
+fields in $\F$ when it makes sense, we can just use one of the algorithms presented
+in Chapter~\ref{chap:isomorphism} each time we need it. In fact, we want to
+build a data structure $\Lambda$ to represent all the extensions of
+$\mathbb{F}_p$ that we need, and additionnal sub-goals might be desirable.
+\begin{description}
+\item[\emph{Effective embeddings:}] for any pair of extensions
+  $k\subset K$ in $\Lambda$, there exists an efficiently computable
+  embedding $\phi:k\to K$, and algorithms to evaluate $\phi$ on $k$,
+  and the section $\phi^{-1}$ on $K$.
+\item[\emph{Compatibility:}] the embeddings are \emph{compatible},
+  \ie for any triple $k\subset K\subset L$ in $\Lambda$, and
+  embeddings $\phi:k\to K$, $\psi:K\to L$, $\chi:k\to L$ such as shown in
+  Figure~\ref{fig:compatibility}, one has
+  $\chi=\psi\circ\phi$.
+  \begin{figure}[h]
+    \centering
+    \begin{tikzpicture}
+      \node (E) at (0, 0) {$k$};
+      \node (F) at (1.5, 1) {$K$};
+      \node (G) at (0.5, 2) {$L$};
+
+      \draw[arrow] (E) -- (F);
+      \draw[arrow] (E) -- (G);
+      \draw[arrow] (F) -- (G);
+
+      \node (f12) at (1, 0.25)
+      {$\phi$};
+      \node (f13) at (-0.1, 1)
+      {$\chi$};
+      \node (f23) at (1.4, 1.65)
+      {$\psi$};
+    \end{tikzpicture}
+
+  \caption{Embeddings between finite fields $k\subset K\subset L$.}
+  \label{fig:compatibility} 
+  \end{figure}
+\item[\emph{Incrementality:}] the data associated with an extension
+  (\eg its irreducible polynomial, change-of-basis matrices, \dots)
+  must be computable efficiently and \emph{incrementally}, \ie 
+  adding a new field extension to $\Lambda$ does not require
+  recomputing data for all extensions already in $\Lambda$.
+\item[\emph{Uniqueness:}] any extension of $\mathbb{F}_{p}$ is determined by an
+  irreducible polynomial whose definition only depends on the
+  characteristic $p$ and the degree of the extension.
+\item[\emph{Generality:}] extensions of $\mathbb{F}_{p}$ can be represented by
+  arbitrary irreducible polynomials.
+\end{description}
+We cannot fulfill all these conditions simultaneously, as
+uniqueness and generality are in conflict with each other. One might prefer to
+look for uniqueness of generality, depending on the situation, but it would
+always be better to gave effective embeddings, compatibility and incrementality.
+The two constructions presented in Sections~\ref{sec:conway}
+and~\ref{sec:bosma-canon-steel} are both solutions to achieve
+\emph{compatibility}.
+
 \section{Conway polynomials}
+\label{sec:conway}
 \section{Bosma-Canon-Steel framework}
+\label{sec:bosma-canon-steel}
