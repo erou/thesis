@@ -161,7 +161,7 @@ $\mathbb{F}_p$ that we need, and additionnal sub-goals might be desirable.
     \end{tikzpicture}
 
   \caption{Embeddings between finite fields $k\subset K\subset L$.}
-  \label{fig:compatibility} 
+  \label{fig:compatibility}
   \end{figure}
 \item[\emph{Incrementality:}] the data associated with an extension
   (\eg its irreducible polynomial, change-of-basis matrices, \dots)
@@ -176,13 +176,399 @@ $\mathbb{F}_p$ that we need, and additionnal sub-goals might be desirable.
 \end{description}
 We cannot fulfill all these conditions simultaneously, as
 uniqueness and generality are in conflict with each other. One might prefer to
-look for uniqueness of generality, depending on the situation, but it would
-always be better to gave effective embeddings, compatibility and incrementality.
+look for uniqueness or generality, depending on the situation, but it would
+always be better to have effective embeddings, compatibility and incrementality.
+In order to achieve the ``effective embeddings'' condition, we can use the
+efficient algorithms presented in Chapter~\ref{chap:isomorphism}. The only
+problem is that if we have three finite fields
+\[
+  k\subset K\subset L
+\]
+and three embeddings $\phi:k\to K$, $\psi:K\to L$, $\chi:k\to L$, there is no
+warranty that the diagram of Figure~\ref{fig:compatibility} commutes, \ie
+\[
+  \chi = \psi\circ\phi.
+\]
+If we want to achive compatibility, we have to provide extra-work.
 The two constructions presented in Sections~\ref{sec:conway}
-and~\ref{sec:bosma-canon-steel} are both solutions to achieve
-\emph{compatibility}.
+and~\ref{sec:bosma-canon-steel} are both solutions oriented towards this goal.
+Conway polynomials allow \emph{uniqueness} while Bosma, Cannon and Steel
+framework allows \emph{generality}.
 
 \section{Conway polynomials}
 \label{sec:conway}
+
+% TODO
+% ====
+%
+% Give a reference for the fact that Conway polynomials always exist?
+
+Conway polynomials~\cite{Parker90, Scheerhorn92} are named after J. H. Conway,
+who suggested the idea of working with norm-compatible polynomials when
+constructing extension fields. They were introduced by Parker in 1990 and
+provide embeddings that are easy to compute.
+
+\begin{defi}[Conway polynomials]
+  Let $p\in\mathbb{N}$ be a prime number. The $m$-th \emph{Conway polynomial}
+  \[
+    C_m\in\mathbb{F}_p[X]
+  \]
+  is the lexicographically smallest monic irreducible polynomial of degree $m$
+  that is also primitive (\ie its roots generate $\mathbb{F}_{p^m}^\times$) and
+  norm-compatible, \ie if
+  \[
+    m\,|\,n
+  \]
+  we have
+  \[
+    C_m(X^{\frac{p^n-1}{p^m-1}})\mod C_n = 0.
+  \]
+\end{defi}
+The norm compatibility means that if one takes the norm relatively to the
+extension 
+\[
+  \mathbb{F}_{p^n}/\mathbb{F}_{p^m}
+\]
+of a root of $C_n$, one obtains a root of $C_m$. This compatibility will allow
+us to define compatible embeddings. Let $p\in\mathbb{N}$ be a prime number, $m,
+n\in\mathbb{N}$ be two integers such that
+\[
+  m\,|\,n
+\]
+and let $C_m, C_n\in\mathbb{F}_{p}[X]$ be the $m$-th and the $n$-th Conway
+polynomial. Let 
+\[
+  k=\mathbb{F}_{p^m}=\mathbb{F}_p(\alpha_m)\cong\mathbb{F}_{p}[X]/(C_m)
+\]
+and
+\[
+  K = \mathbb{F}_{p^n}=\mathbb{F}_p(\alpha_n)\cong\mathbb{F}_{p}[X]/(C_n)
+\]
+with $\alpha_m=\bar X\in k$ and $\alpha_n=\bar X\in K$. Now, we define the
+embedding
+\[
+\begin{array}{cccl}
+  \embed{k}{K}:&k&\emb &K\\
+  & \alpha_m&\mapsto&(\alpha_n)^{\frac{p^n-1}{p^m-1}}
+\end{array}
+\]
+that sends $\alpha_m$ to $(\alpha_n)^{\frac{p^n-1}{p^m-1}}$, the norm of
+$\alpha_n$ relative to $k$. Because this is a field morphism, it is implied that
+every polynomial in $\alpha_m$ is sent to the same polynomial in
+$(\alpha_m)^{\frac{p^n-1}{p^m-1}}$. That is indeed an embedding because of the
+norm-compatibility condition in Conway polynomials. This definition also
+provides compatibility thanks to the transitivity of the norm: let
+\[
+  k\subset K\subset L
+\]
+three finite fields defined using Conway polynomials, let
+\[
+  N_{K/k}, N_{L/K}, N_{L/k}
+\]
+be the respective norms of the extensions
+\[
+  K/k, L/K, L/k
+\]
+and
+\[
+  \embed{k}{K}, \embed{K}{L}, \embed{k}{L}
+\]
+the corresponding embeddings. Then, for any element $x\in L$, we have
+\[
+  N_{L/k}(x) = N_{K/k}(N_{L/K}(x)),
+\]
+and it follows, using the fact that $\embed{K}{L}$ and $N_{K/k}$ commute, that
+\[
+  \embed{k}{L}=\embed{K}{L}\circ\embed{k}{K}.
+\]
+Therefore, using Conway polynomials to define all finite field extensions allows
+compatibility \emph{a priori}: adding a new extension in the lattice does not
+require any computation and the form of the embedding is already known. The
+only condition is to define each extension using the Conway polynomial of the
+corresponding degree. These polynomial always exist so this is possible,
+although the best known algorithm to compute Conway polynomials has exponential
+complexity~\cite{HL98}. Because the cost of computing Conway polynomials is
+prohibitive, they are often precomputed and tabulated up to a certain degree in
+many computer algebra systems. As a result, most computer algebra systems use
+Conway polynomial to represent finite fields of small degrees, and switch to
+other representations when Conway polynomials are no longer available. This
+strategy leads to efficient lattices of compatibly embedded finite fields, at
+least in small degrees, but at the cost of generality, because the finite fields
+extensions cannot be user-defined and high degree extensions cannot be included
+in the lattice. We see in Section~\ref{sec:bosma-canon-steel} that those issues
+can be adressed, but the price to compute the embeddings is higher.
+
 \section{Bosma-Canon-Steel framework}
 \label{sec:bosma-canon-steel}
+
+In 1987, Bosma, Canon and Steel proposed a new framework~\cite{BCS97} to deal
+with lattices of finite field extensions. These algorithms were initially
+implemented in the computer algebra system MAGMA. The framework allows the user
+to define finite fields with custom polynomials, and compute the
+correct embeddings on the fly, in a way that guarantees that at least one
+compatible embedding will always exist between two finite fields, when that
+makes sense. To the best of my knowledge, this framework was only used in MAGMA
+until very recently. We first implemented the framework using Nemo and Flint and
+presented our software in the symbolic computation conference ISSAC in
+2018~\cite{DRR18}. In 2019, the code was also added to the official branch of
+Nemo, and Nemo can now deal with finite field extensions and compatibly embed
+them, in the case where the characteristic $p$ of the fields fit in a machine
+word. There are no theretical obstacles preventing from implementing the algorithm in arbitrary
+large characteristic, but some tools were lacking at the C level (\ie in
+Flint).
+
+\subsection{Bosma-Canon-Steel algorithm}
+\paragraph{Notations and first results.} Let $p\in\mathbb{N}$ be a prime number
+and $q$ a power of $p$. We present the results over the finite field
+$\mathbb{F}_q$, even if the applications we have in mind apply to prime field
+extensions. Given two finite fields $k$ and $K$ with cardinalities
+\[
+  \Card k = q^m
+\]
+and
+\[
+  \Card K =  q^n
+\]
+such that $m$ divides $n$, we know that $k$ can be embedded in $K$. In other
+words, we know that $K$ contains one subfield
+\[
+  k'=\left\{ x\in K\,|\,x^{q^m}=x \right\}\subset K
+\]
+with 
+\[
+  \Card k' = q^m.
+\]
+There is exactly one subfield $k'$ in $K$ that has the same cardinality as $k$,
+but there exist $m$ different ways to map $k$ to $k'$. One way of seeing that is
+to say that an element $\alpha\in k$ generating $k$ has a minimal polynomial
+$\pi$ over $\mathbb{F}_q$ of degree $m$, and that $\alpha$ can be mapped to any
+one of the $m$ roots of $\pi$ in $K$. This choice sets the embedding because any
+element in $k$ can be written as
+\[
+  \sum_{j=0}^{m-1}a_j \alpha^j,
+\]
+with $a_j\in\mathbb{F}_q$. We write $k\emb K$ if an explicit embedding has been
+chosen. Let
+\[
+  k\subset K\subset L
+\]
+with $k\emb K$ and $k\emb L$, as in Figure~\ref{fig:uncomplete}. The fundations
+of Bosma-Canon-Steel framework lay on the fact that we precisely know how many
+compatible embeddings from $K$ to $L$ we can find.
+  \begin{figure}%[h]
+    \centering
+    \begin{tikzpicture}
+      \node (E) at (0, 0) {$k$};
+      \node (F) at (1.5, 1) {$K$};
+      \node (G) at (0.5, 2) {$L$};
+
+      \draw[arrow] (E) -- (F);
+      \draw[arrow] (E) -- (G);
+      \draw[dashed-arrow] (F) -- (G);
+
+      \node (f12) at (1, 0.25) {$\phi$};
+      \node (f13) at (-0.1, 1) {$\chi$};
+      %\node (f23) at (1.4, 1.65) {$\psi$};
+    \end{tikzpicture}
+  \caption{Uncomplete embedding diagram.}
+  \label{fig:uncomplete}
+  \end{figure}
+  \begin{prop}[{\cite[Thm.~2.1]{BCS97}}]
+    \label{prop:number-embeddings}
+    Let $l\,|\,m\,|\,n$ three integers and
+    \[
+      k\subset K\subset L
+    \]
+    three finite fields extensions of $\mathbb{F}_q$, with respective
+    cardinalities $q^l$, $q^m$ and $q^n$. Assume that $k\emb K$ and $k\emb L$,
+    then there are $m/l$ compatible embeddings from $K$ to $L$.
+  \end{prop}
+  \begin{proof}
+    Let $\phi:k\to K$ be the embedding from $k$ to $K$ and $\chi:k\to L$ the
+    embedding from $k$ to $L$. Let $\widetilde\psi:K\to L$ be any embedding from $K$ to
+    $L$. The maps $\chi$ and $\widetilde\psi\circ\phi$ are two embeddings from
+    $k$ to $L$. Since there are only $l$ such maps, and since the difference
+    between them is only a matter of which conjugate is chosen for a generating
+    element in $k$, we know that there exist
+    \[
+      \sigma\in\Gal(L/\mathbb{F}_q)
+    \]
+    such that
+    \[
+      \chi = \sigma\circ\widetilde\psi\circ\phi.
+    \]
+    If we set
+    \[
+      \psi=\sigma\circ\widetilde\psi,
+    \]
+    we obtain a compatible embedding $\psi:K\to L$ from $K$ to $L$. If we
+    compose $\psi$ with a $\chi(k)$-automorphism of $L$, \ie an automorphism of
+    $\psi(K)$ that
+    fixes the subfield $\chi(k)$, we still obtain a compatible embedding because
+    the images of the elements in $\chi(k)$ are unchanged. Now, we know that
+    \[
+      \Card\Gal(\psi(K)/\chi(k)) = m/l,
+    \]
+    thus we know that there are exactly $m/l$ embeddings from $K$ to $L$ that
+    are compatible with $\phi$ and $\chi$.
+  \end{proof}
+  In the future, if we have two finite fields $k$ and $K$ such that $k\emb K$
+  with an explicit embedding $\phi:k\to K$, we will often identify $k$ with
+  its isomorphic image $\phi(k)\cong k$ in $K$, for the sake of simplicity. We
+  also have a constructive version of Proposition~\ref{prop:number-embeddings}.
+\begin{prop}[{\cite[Thm.~2.2]{BCS97}}]
+    \label{prop:number-embeddings}
+    Let $l\,|\,m\,|\,n$ three integers and
+    \[
+      k\subset K\subset L
+    \]
+    three finite fields extensions of $\mathbb{F}_q$, with respective
+    cardinalities $q^l$, $q^m$ and $q^n$. Assume that $k\emb K$ and $k\emb L$,
+    and let $\phi=\embed{k}{K}$, $\chi=\embed{k}{L}$ the respective embeddings.
+    Let also $\alpha\in K$ be an element that generates $K$ over $k$ and
+    \[
+      \pi_k=\Minpoly_k(\alpha)
+    \]
+    the minimum polynomial of $\alpha$ over $k$. Let $\rho\in L$ be a root of
+    $\pi_k$ in $L$. Let $\psi:K\to L$ be the map defined by
+    \[
+      \psi(\sum_{j=0}^{m/l-1}x_j\alpha^j) = \sum_{j=0}^{m/l}x_j\rho^j,
+    \]
+    using the unique representation of any element of $K$ as $\sum_j x_j
+    \alpha^j$ with $x_j\in k$. Then $\psi$ is an embedding from $K$ to $L$ that
+    is compatible with $\phi$ and $\chi$, \ie we have
+    \[
+      \chi = \psi\circ\phi.
+    \]
+  \end{prop}
+  \begin{proof}
+    The root $\rho$ in $L$ exist since we know that $\pi_k$ has a root in $K$
+    and $K\subset L$. The map $\psi$ is then well-defined because of the uniqueness of the
+    representation of the elements in $K$ as $\sum_jx_j\alpha^j$. The elements
+    $\alpha$ and $\rho$ have the same minimum polynomial so the map $\psi$ is a
+    homomorphism. The map $\psi$ is also injective and thus it is an embedding
+    from $K$ to $L$. The compatibility condition holds by construction.
+  \end{proof}
+  Although the result of Proposition~\ref{prop:number-embeddings} captures only
+  one configuration among the three different possibilities of
+  Figure~\ref{fig:triangles}, it is the most important case. Indeed, if we
+  already know $\embed{k}{K}$ and $\embed{K}{L}$ (the configuration in the
+  middle of Figure~\ref{fig:triangles}), we can just set
+  \[
+    \embed{k}{L} = \embed{K}{L}\circ\embed{k}{K}.
+  \]
+  Finally the configuration on the right, where we know $\embed{k}{L}$ and
+  $\embed{K}{L}$, is also unrelevant because, by construction, this case never
+  happens when working with Bosma-Canon-Steel framework.
+    \begin{figure}
+    \centering
+    \begin{tikzpicture}
+      \node (E) at (0, 0) {$k$};
+      \node (F) at (1.5, 1) {$K$};
+      \node (G) at (0.5, 2) {$L$};
+
+      \draw[arrow] (E) -- (F);
+      \draw[arrow] (E) -- (G);
+      \draw[dashed-arrow] (F) -- (G);
+    \end{tikzpicture}
+    \phantom{and}
+    \begin{tikzpicture}
+      \node (E) at (0, 0) {$k$};
+      \node (F) at (1.5, 1) {$K$};
+      \node (G) at (0.5, 2) {$L$};
+
+      \draw[arrow] (E) -- (F);
+      \draw[dashed-arrow] (E) -- (G);
+      \draw[arrow] (F) -- (G);
+
+    \end{tikzpicture}
+    \phantom{and}
+    \begin{tikzpicture}
+      \node (E) at (0, 0) {$k$};
+      \node (F) at (1.5, 1) {$K$};
+      \node (G) at (0.5, 2) {$L$};
+
+      \draw[dashed-arrow] (E) -- (F);
+      \draw[arrow] (E) -- (G);
+      \draw[arrow] (F) -- (G);
+
+    \end{tikzpicture}
+    \caption{The different configurations with triangles.}
+    \label{fig:triangles}
+  \end{figure}
+
+\paragraph{Description of the framework.} The general strategy of Bosma, Canon,
+and Steel to compute and maintain the data of several finite fields and
+compatible embeddings between them is to ensure that some properties are
+conserved at all times. In all the section, we fixe $p\in\mathbb{N}$ a prime
+number and $q$ a power of $p$. The results are true for an arbitrary power of
+$p$, although the applications and the implementations we have in mind are
+relevant for $q=p$. If $k=\mathbb{F}_{q^m}$ is a finite extension of
+$\mathbb{F}_q$, we define
+\[
+  \partial (k) = \left[ k:\mathbb{F}_q \right] = m
+\]
+the extension degree over $\mathbb{F}_q$.
+\begin{defi}[Lattice of compatibly embedded finite fields]
+  \label{defi:lattice-bcs}
+  Let $q$ be a power of $p$ a prime number and $\mathbb{F}_q$ the finite field
+  with $q$ elements. The couple
+\[
+  \Lambda = (\mathcal K, \Phi),
+\]
+where $\mathcal K$ is a collection of finite fields sharing the same base field
+$\mathbb{F}_q$ and $\Phi$ is a collection of embeddings between members of
+$\mathcal K$,
+is called a \emph{lattice of compatibly embedded finite fields} if the following
+conditions are satisfied:
+\begin{description}
+  \item[CE1 (unicity)] for each pair $(k, K)$ of elements in $\mathcal K$, there exists
+    at most one corresponding embedding $\embed{k}{K}\in\Phi$.
+    \item[CE2 (reflexivity)] For each $k\in \mathcal K$, the identity map
+    $\Id_k=\embed{k}{k}$ is in $\Phi$.
+  \item[CE3 (base subfield)] There is exactly one $k\in \mathcal K$ such that
+    $\partial(k)=1$, and for all $K\in \mathcal K$, there exists $\embed{\mathbb{F}_q}{K}\in\Phi$.
+  \item[CE4 (invertibility)] If $k\emb K$ and $\partial(k)=\partial(K)$, then $K\emb k$ and
+    $\embed{K}{k}=\embed{k}{K}^{-1}$.
+  \item[CE5 (transitivity)] For any triple $(k, K, L)$ of elements in $\mathcal
+    K$, if $E\emb F\emb G$ then $E\emb G$ and
+    $\embed{E}{G}=\embed{F}{G}\circ\embed{E}{F}$.
+  \item[CE6 (intersections)] For each $k, K, L\in \mathcal K$ such that $K\emb L$ and
+    $k\emb L$, there exists $I\in \mathcal K$ such that
+    $\partial(I)=\gcd(\partial(k), \partial(K))$
+    and $I\emb k$, $I\emb K$.
+\end{description}
+\end{defi}
+Conditions CE1 to CE5 are quite natural, some of them are technical and
+are not important in our implementation. For example, Condition~CE3
+is totally free in our implementation because we work with $q=p$ and the
+elements of our fields are represented by polynomials over
+$\mathbb{F}_p=\mathbb{Z}/p\mathbb{Z}$, thus the subfield
+$\mathbb{F}_p\subset\mathbb{F}_{p^m}$ is always represented by the constant
+polynomials and the embedding is trivial. Nevertheless, Condition~CE6 is
+important both on a theoretical and on an implementation point of view: it
+ensures that the implicit embeddings between common subfields are made explicit,
+in order to prevent any possible future incompatibility, and it forces the
+computer algebra software to compute extra embeddings that the user might not
+need. Assume that we have embedded $\mathbb{F}_{p^4}$ and $\mathbb{F}_{p^6}$
+into $\mathbb{F}_{p^{12}}$, there is now an implicit isomorphism between the two
+copies of the quadratic subfield $\mathbb{F}_{p^2}$ in $\mathbb{F}_{p^4}$ and
+$\mathbb{F}_{p^6}$.
+\begin{center}
+      \begin{tikzpicture}
+        \node (4) at (0, 0) {$\mathbb{F}_{p^{4}}$};
+        \node (6) at (2, 0) {$\mathbb{F}_{p^{6}}$};
+        \node (12) at (1, 2) {$\mathbb{F}_{p^{12}}$};
+
+      \draw[arrow] (4) -- (12);
+      \draw[arrow] (6) -- (12);
+%      \draw[dashed-arrow] (F) -- (G);
+    \end{tikzpicture}
+\end{center}
+
+Under the conditions described in Definition~\ref{defi:lattice-bcs}, we
+can add new embeddings in our lattice $\Lambda$ without compromising the
+compatibility of the lattice.
+
+\subsection{Implementation in Nemo}
+%%
