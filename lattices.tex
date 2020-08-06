@@ -417,7 +417,7 @@ compatible embeddings from $K$ to $L$ we can find.
   its isomorphic image $\phi(k)\cong k$ in $K$, for the sake of simplicity. We
   also have a constructive version of Proposition~\ref{prop:number-embeddings}.
 \begin{prop}[{\cite[Thm.~2.2]{BCS97}}]
-    \label{prop:number-embeddings}
+    \label{prop:number-embeddings-constructive}
     Let $l\,|\,m\,|\,n$ three integers and
     \[
       k\subset K\subset L
@@ -449,6 +449,19 @@ compatible embeddings from $K$ to $L$ we can find.
     homomorphism. The map $\psi$ is also injective and thus it is an embedding
     from $K$ to $L$. The compatibility condition holds by construction.
   \end{proof}
+  \begin{rem}
+   In fact, in our implementation and even in
+   Proposition~\ref{prop:several-subfields}, this result will not be used as is and
+   we will usually take $\alpha\in K$ and element generating $K$ over the base
+   field $\mathbb{F}_q$ instead of over $k$. Indeed, if $\alpha$ generates $K$
+   over $\mathbb{F}_q$, it also generates $K$ over $k$. We can still take a root
+   $\rho$ of $\Minpoly_{k}(\alpha)$ because
+   \[
+     \Minpoly_k(\alpha)\,|\,\Minpoly_{\mathbb{F}_q}(\alpha)
+   \]
+   and so a root of $\Minpoly_{k}(\alpha)$ is \emph{a fortiori} a root of
+   $\Minpoly_{\mathbb{F}_q}(\alpha)$.
+  \end{rem}
   Although the result of Proposition~\ref{prop:number-embeddings} captures only
   one configuration among the three different possibilities of
   Figure~\ref{fig:triangles}, it is the most important case. Indeed, if we
@@ -553,22 +566,161 @@ computer algebra software to compute extra embeddings that the user might not
 need. Assume that we have embedded $\mathbb{F}_{p^4}$ and $\mathbb{F}_{p^6}$
 into $\mathbb{F}_{p^{12}}$, there is now an implicit isomorphism between the two
 copies of the quadratic subfield $\mathbb{F}_{p^2}$ in $\mathbb{F}_{p^4}$ and
-$\mathbb{F}_{p^6}$.
+$\mathbb{F}_{p^6}$. Any future embedding from $\mathbb{F}_{p^4}$ of
+$\mathbb{F}_{p^6}$ in an extension of
+$\mathbb{F}_{p^{12}}$, say $\mathbb{F}_{p^{24}}$ for example, must now take into
+account the isomorphism between the two quadratic fields. Condition CE6 ensures
+that this implicit isomorphism is made explicit by adding a quadratic field
+$\mathbb{F}_{p^2}$ in the lattice and explicitly embedding it in
+$\mathbb{F}_{p^4}$ and $\mathbb{F}_{p^6}$, and by transitivity in
+$\mathbb{F}_{p^{12}}$ and $\mathbb{F}_{p^{24}}$.
 \begin{center}
       \begin{tikzpicture}
         \node (4) at (0, 0) {$\mathbb{F}_{p^{4}}$};
         \node (6) at (2, 0) {$\mathbb{F}_{p^{6}}$};
         \node (12) at (1, 2) {$\mathbb{F}_{p^{12}}$};
+        \node (24) at (1, 4) {$\mathbb{F}_{p^{24}}$};
 
       \draw[arrow] (4) -- (12);
       \draw[arrow] (6) -- (12);
-%      \draw[dashed-arrow] (F) -- (G);
+
+      \node[rotate=90] (sub1) at (0, -0.5) {$\subset$};
+      \node[rotate=90] (sub2) at (2, -0.5) {$\subset$};
+        \node (2) at (0, -1) {$\mathbb{F}_{p^{2}}$};
+        \node (2bis) at (2, -1) {$\mathbb{F}_{p^{2}}$};
+        \node (iso) at (1, -1) {$\cong$};
+      \draw[dashed-arrow] (12) -- (24);
+      \draw[dashed-arrow] (4) to[bend left] (24);
+      \draw[dashed-arrow] (6) to[bend right] (24);
     \end{tikzpicture}
 \end{center}
-
 Under the conditions described in Definition~\ref{defi:lattice-bcs}, we
 can add new embeddings in our lattice $\Lambda$ without compromising the
-compatibility of the lattice.
+compatibility of the lattice. Assume that we want to embed $K$ into $L$. We have
+seen that the relevant elements that restrict the number of compatible
+embeddings are the common subfields of $K$ and $L$. If there is only one common
+subfield $k$, we are in the case described by
+Propositions~\ref{prop:number-embeddings}
+and~\ref{prop:number-embeddings-constructive}. Now, assume that there are many
+common subfields, like shown in Figure~\ref{fig:uncomplete-sev}.% and let
+%\[
+%  C = \left\{ k\in\mathcal K\,|\,k\emb K\text{ and }k\emb L \right\}
+%\]
+%be the set of these common subfields.
+\begin{figure}
+  \centering
+    \begin{tikzpicture}
+      \node (E1) at (-2, 0) {$k_1$};
+      \node (E2) at (-1, 0) {$k_2$};
+      \node (Er) at (0.75, 0) {$k_r$};
+      \node (F) at (1.5, 1) {$K$};
+      \node (G) at (0.5, 2) {$L$};
+      \node (p) at (0, 0) {$\dots$};
+
+      \draw[arrow] (E1) -- (F);
+      \draw[arrow] (E1) -- (G);
+      \draw[arrow] (E2) -- (F);
+      \draw[arrow] (E2) -- (G);
+      \draw[arrow] (Er) -- (F);
+      \draw[arrow] (Er) -- (G);
+      \draw[dashed-arrow] (F) -- (G);
+  \end{tikzpicture}
+  \caption{An uncomplete diagram with several subfields.}
+  \label{fig:uncomplete-sev}
+\end{figure}
+In the same fashion as was done in Proposition~\ref{prop:number-embeddings}, we
+can abtractly describe how many compatible embeddings exist (this is done
+in~\cite[Section 2.5]{BCS97}), but we rather focus on the constructive part. In
+some sense, this is just a generalization of
+Proposition~\ref{prop:number-embeddings-constructive}, where we allow an
+arbitrary number of common subfields.
+\begin{prop}
+  \label{prop:several-subfields}
+  Let $K, L\in\mathcal K$ two finite fields with
+  \[
+    K\subset L
+  \]
+  and let $k_1, \dots, k_r\in\mathcal K$ the common subfields of $K$ and $L$,
+  \ie for all $1\leq j\leq r$, we have
+  \[
+    k_j\emb K\text{ and }k_j\emb L.
+  \]
+  Let $\alpha\in K$ an element generating $K$ over $\mathbb{F}_q$ and
+  \[
+    \pi = \gcd_{1\leq j\leq r}(\Minpoly_{k_j}(\alpha)).
+  \]
+  Let $\rho\in L$ a root of $\pi$ in $L$ and let $\psi:K\to L$ be the map
+  defined by
+  \[
+    \psi(\sum_{j=0}^{\partial(K)-1}x_j\alpha^j) =
+    \sum_{j=0}^{\partial(K)-1}x_j\rho^j
+  \]
+  using the unique representation of elements in $K$ as $\sum_j x_j\alpha^j$
+  with $x_j\in\mathbb{F}_q$. Then $\psi$ is an embedding from $K$ to $L$ that is
+  compatible with all the embeddings $\embed{k_j}{K}$ and $\embed{k_j}{L}$.
+\end{prop}
+\begin{proof}
+  Let $\alpha\in K$ be an element generating $K$ over the base field
+  $\mathbb{F}_q$. Then, for all $1\leq j\leq r$, $\alpha$ also generates $K$
+  over $k_j$. Now consider the polynomial
+  \[
+    \pi = \gcd_{1\leq j\leq r}(\Minpoly_{k_j}(\alpha)).
+  \]
+  For all $1\leq j\leq r$, we have by definition
+  \[
+    (\Minpoly_{k_j}(\alpha))(\alpha) = 0
+  \]
+  and so
+  \[
+    T-\alpha\,|\,\Minpoly_{k_j},
+  \]
+  thus the polynomial $T-\alpha\in K[T]$ also divides $\pi$, which consequently is not the constant
+  polynomial $1$ and has a root in $K$. Since we have
+  \[
+    K\subset L,
+  \]
+  it follows that $\pi$ also has a root in $L$. Let $\rho\in L$ be a root of $\pi$
+  in $L$, then for all $1\leq j\leq r$, $\rho$ is a root of
+  the polynomial $\Minpoly_{k_j}(\alpha)$ and thus the map $\psi$ is an
+  embedding that is compatible, by
+  Proposition~\ref{prop:number-embeddings-constructive}, with the embeddings
+  $\embed{k_j}{K}$ and $\embed{k_j}{L}$.
+  % TODO:
+  % ====
+  %
+  % Explain (via a remark like in BCS97 maybe) the fact that we can work over
+  % the base field instead of the subfield k_j.
+\end{proof}
+\begin{rem}
+  There is another way of describing the polynomial $\pi$ in
+  Proposition~\ref{prop:several-subfields}. Let $K'\subset K$ be the
+  subfield of $K$ generated by the fields $k_j\subset K$, in fact we have
+  \[
+    \pi = \Minpoly_{K'}(\alpha).
+  \]
+  Indeed, we have
+  \begin{align*}
+    \Gal(K/K') &= \left\{ \sigma\in\Gal(K/\mathbb{F}_q)\,|\,\forall x\in
+  K',\,\sigma(x) = x \right\}\\
+  &= \left\{ \sigma\in\Gal(K/\mathbb{F}_q)\,|\,\forall 1\leq j\leq r,\,\forall x\in
+  k_j,\,\sigma(x) = x \right\}\\
+  &= \bigcap_{1\leq j\leq r}\Gal(K/k_j),
+  \end{align*}
+  and thus it follows that
+  \begin{align*}
+    \Minpoly_{K'}(\alpha) &= \prod_{\sigma\in\Gal(K/K')}T-\sigma(\alpha)\\
+    &=\prod_{\sigma\in\bigcap_{1\leq j\leq r}\Gal(K/k_j)}T-\sigma(\alpha)\\
+    &= \gcd_{1\leq j\leq r}(\prod_{\sigma\in\Gal(K/k_j)}T-\sigma(\alpha))\\.
+    &= \gcd_{1\leq j\leq r}(\Minpoly_{k_j}(\alpha)).
+  \end{align*}
+  where $T$ is the undeterminate. In fact, in~\cite{BCS97}, it is shown that
+  there is exactly one compatible ismorphism between $K'$ and $L'$, the subfield
+  of $L$ generated by the subfields $k_j$ in $L$, and that there is
+  \[
+    \partial(K)/\partial(K'),
+  \]
+  which is the degree of $\pi$, different compatible embeddings from $K$ to $L$.
+\end{rem}
 
 \subsection{Implementation in Nemo}
 %%
