@@ -450,6 +450,11 @@ compatible embeddings from $K$ to $L$ we can find.
     from $K$ to $L$. The compatibility condition holds by construction.
   \end{proof}
   \begin{rem}
+    \label{rem:base-field}
+   % TODO
+   % ====
+   %
+   % Write something clearer.
    In fact, in our implementation and even in
    Proposition~\ref{prop:several-subfields}, this result will not be used as is and
    we will usually take $\alpha\in K$ and element generating $K$ over the base
@@ -460,7 +465,9 @@ compatible embeddings from $K$ to $L$ we can find.
      \Minpoly_k(\alpha)\,|\,\Minpoly_{\mathbb{F}_q}(\alpha)
    \]
    and so a root of $\Minpoly_{k}(\alpha)$ is \emph{a fortiori} a root of
-   $\Minpoly_{\mathbb{F}_q}(\alpha)$.
+   $\Minpoly_{\mathbb{F}_q}(\alpha)$. As a result, we can use the
+   $\mathbb{F}_q$-algebra structure of $K$ and still achieve compatibility with
+   the subfield $k$.
   \end{rem}
   Although the result of Proposition~\ref{prop:number-embeddings} captures only
   one configuration among the three different possibilities of
@@ -683,13 +690,9 @@ arbitrary number of common subfields.
   in $L$, then for all $1\leq j\leq r$, $\rho$ is a root of
   the polynomial $\Minpoly_{k_j}(\alpha)$ and thus the map $\psi$ is an
   embedding that is compatible, by
-  Proposition~\ref{prop:number-embeddings-constructive}, with the embeddings
+  Proposition~\ref{prop:number-embeddings-constructive} and
+  Remark~\ref{rem:base-field}, with the embeddings
   $\embed{k_j}{K}$ and $\embed{k_j}{L}$.
-  % TODO:
-  % ====
-  %
-  % Explain (via a remark like in BCS97 maybe) the fact that we can work over
-  % the base field instead of the subfield k_j.
 \end{proof}
 \begin{rem}
   There is another way of describing the polynomial $\pi$ in
@@ -723,4 +726,117 @@ arbitrary number of common subfields.
 \end{rem}
 
 \subsection{Implementation in Nemo}
+
+Although Proposition~\ref{prop:number-embeddings} suggests to compute a random
+embedding and then to ``correct'' it, we follow the method of
+Propositions~\ref{prop:number-embeddings-constructive} and~\ref{prop:several-subfields} and
+we directly compute compatible embeddings using the naive algorithm, that relies
+on polynomial factorization. The whole framework is implemented in
+Nemo~\cite{Nemo} since Automn $2019$, at least for finite fields with
+word-sized characteristic, \ie finite fields extensions
+\[
+  \mathbb{F}_{p^m}
+\]
+where $p$ is a prime number that fits in $64$ bits. The source code is available
+in Nemo's github repository\footnote{\url{https://github.com/Nemocas/Nemo.jl}}. Almost all of the code is
+directly written in the Julia library Nemo, because it is mostly high level manipulations, but the
+critical routines, such as factorization, are implemented in the C library Flint
+and are called from Nemo.
+
+\paragraph{Types and data structures.} There are two types of finite fields in Nemo/Flint,
+those with a word-sized characteristic and those with arbitrary large
+characteristic. The former have the type \texttt{fq\_nmod\_ctx\_t} in Flint and
+\texttt{FqNmodFiniteField} in Nemo, while the field elements have the type
+\texttt{fq\_nmod\_t} in Flint and \texttt{fq\_nmod} in Nemo. The corresponding types in arbitrary
+characteristic are \texttt{fq\_ctx\_t}, \texttt{FqFiniteField},
+\texttt{fq\_t} and
+\texttt{fq}. We may use a Flint name for a type in Nemo or vice versa, because
+the types represent the same things: Nemo being a wrapper of Flint in this case.
+The main difference between the two types is that the polynomials representing the
+elements of these fields have different types, depending on whether they have
+arbitrary large coefficients (\texttt{fmpz\_mod\_poly\_t}) or if their
+coefficients fit in a $64$ bit word (\texttt{nmod\_poly\_t}). Since the
+representation of the elements varies, so do the algorithms for manipulating
+various elements in Flint (matrices, polynomials) with word-sized or arbitrary
+coefficients. Some of the algorithms implemented for matrices with word-sized
+coefficients are not implemented for arbitrary large coefficient and in
+consequence we were only able to implement Bosma-Canon-Steel algorithm for the
+type \texttt{FqNmodFiniteField}. This type contains
+\begin{itemize}
+  \item the characteristic $p$ (that fits in $64$ bits);
+  \item the irreducible polynomial used to define the field (of type
+    \texttt{nmod\_poly\_t});
+  \item various technical information that are stored for performance;
+  \item two dictionnaries containing informations about the lattice of
+    compatible embeddings.
+\end{itemize}
+Let $K$ be some finite field represented by the type \texttt{FqNmodFiniteField},
+the two dictionnaries stored in the data structure representing $K$ are called
+\texttt{subfields} and \texttt{overfields}. They both map integers to lists of
+embeddings. If the \texttt{subfields} dictionnary has a key \texttt{l}, then the
+associated value \texttt{subfields[l]} is a list of embeddings
+\[
+  \phi_j: k_j\to K
+\]
+where all the $k_j$ are finite fields of the corresponding degree
+\texttt{l}. Note that this is a \emph{list}, because there might be several
+different finite fields of the same degree embedded in $K$. Similarly, if the
+\texttt{overfields} dictionnary has a key \texttt{m}, then the corresponding
+value \texttt{overfield[m]} is a list of embeddings
+\[
+  \psi_j:K\to L_j
+\]
+where all the $L_j$ are finite fields of degree \texttt{m}. Finally, the
+embeddings $\phi:K\to L$ are represented by the type \texttt{FinFieldMorphism}, that
+essentially contains the informations about the domain $K$, the codomain $L$,
+the function $\phi$ and the preimage function $\phi^{-1}$.
+
+\paragraph{General strategy.} The essential idea is to maintain a lattice of
+compatibly embedded finite fields, \ie ensure that the conditions described in
+Definition~\ref{defi:lattice-bcs} are met, at all
+times. To do so, each time the user asks for a new embedding
+\[
+  \phi:K\to L,
+\]
+we must go through $3$ steps:
+\begin{enumerate}
+  \item for each subfield 
+    \[
+      M\subset L
+    \]
+    of $L$, check that the finite field $M\cap K$ is 
+    embedded in $M$ and $K$, and if not, embed it. If there is not
+    any finite field of degree 
+    \[
+      d=\gcd(\partial(M), \partial (K)),
+  \]
+    compute an
+    arbitrary finite field $I$ of degree $d$ using Flint
+    and embed $I$ in $M$ and $K$.
+    \begin{center}
+      \begin{tikzpicture}
+        \node (K) at (0, 2) {$K$};
+        \node (L) at (2, 4) {$L$};
+        \node (M) at (4, 2) {$M$};
+        \node (I) at (2, 0) {$K\cap M$};
+        \node (?) at (1, 1) {?};
+        \node (??) at (3, 1) {?};
+
+        \draw[dashed-arrow] (K) to (L);
+        \draw[arrow] (M) to (L);
+        \draw[possible-arrow] (I) to (K);
+        \draw[possible-arrow] (I) to (M);
+      \end{tikzpicture}
+    \end{center}
+    This step ensures that Condition~CE6 on the
+    \emph{intersections} holds. It is important to begin with this step, in
+    order 
+    that every implicit isomorphism between the different common subfields are
+    made explicit and that the compatibility conditions concerning the
+    embedding $K\emb L$ include them.
+  \item Embed $K$ in $L$ using the procedure described in
+    Proposition~\ref{prop:several-subfields}.
+  \item Compute the ``transitive closure'' of the lattice, \ie compute the
+    embeddings such that Condition~CE5 on \emph{transitivity} holds. 
+\end{enumerate}
 %%
