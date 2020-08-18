@@ -1,3 +1,180 @@
+We studied in Part~\ref{part:single} the arithmetic of a single finite field
+extension. We now study a set of several extensions. The very first step will be
+to understand how to compute an isomorphism (or an embedding) between two finite
+fields: that is the material of this chapter.
+\minitoc
+
+% TODO: figure
+
+\clearpage
+
+Our reference for this chapter is~\cite{BDDFS17}: we cover a subpart of the
+paper because we are interested in the naive isomorphism algorithm (used in
+Chapter~\ref{chap:lattice}) and Allombert's algorithm (used in
+Chapter~\ref{chap:standard}). We thus do not cover all the isomorphism
+algorithms, the reader interested in Rains' algorithm and its elliptic variant
+can take a look at the paper cited above.
+
 \section{Generalities and naive algorithm}
+
+Even if our real goal is to compute \emph{embeddings} of finite fields, \ie
+ring homomorphisms
+\[
+  \phi:K\to L
+\]
+with $K$ and $L$ finite fields, we often refer to the algorithms as
+\emph{isomorphism} algorithms. Indeed, computing the embedding $\phi$ is
+the same as computing an isomorphism
+\[
+  \phi':K\to K'
+\]
+where $K\cong K'$ is isomorphic to a subfield $K'\subset L$ of $L$. The
+isomorphism $\phi'$ is just the embedding $\phi$ with its codomain being
+restricted to $K'$.
+
+\subsection{Description of the problem}
+
+We let $q$ be a prime power, $\K = \mathbb{F}_q$ be the field with $q$ elements,
+and $f, g\in\K[X]$ two irreducible polynomials with
+\[
+  m=\deg f\,|\,\deg g=n.
+\]
+Let
+\[
+  K=\K[X]/(f(X))\cong\mathbb{F}_{q^m}
+\]
+and
+\[
+  L = \K[Y]/(g(Y))\cong\mathbb{F}_{q^n}
+\]
+two extensions of $\K$. We know there is an embedding
+\[
+  \phi:K\to L,
+\]
+unique up to $\K$-automorphism of $K$, \ie there are
+\[
+  \Card\Gal(K/\K)=m
+\]
+different embeddings from $K$ to $L$, than can be described as
+\[
+  \phi\circ\sigma
+\]
+for $\sigma\in\Gal(K/\K)$. Equivalently, they can also be described as
+\[
+  \sigma'\circ\phi
+\]
+with $\sigma'\in\Gal(\phi(K)/\K)$. The \emph{embedding problem} is then to
+efficiently find, represent and evaluate one such embedding $\phi$. The problem
+is split in two sub-parts.
+\begin{description}
+  \item[Embedding description problem.] Compute elements $\alpha\in K$ and
+    $\beta\in L$ such that 
+    \[
+      K=\K(\alpha)
+    \]
+    and such that there exists an embedding $\phi$ mapping $\alpha$ to $\beta$.
+  \item[Embedding evaluation problem.] Given elements $\alpha$ and $\beta$
+    defined above, and elements $\gamma\in K$, $\delta\in L$, solve the
+    following problems:
+    \begin{itemize}
+      \item compute $\phi(\gamma)\in L$;
+      \item test if $\delta\in\phi(K)$;
+      \item if $\delta\in\phi(K)$, then compute $\phi^{-1}(\delta)\in K$.
+    \end{itemize}
+\end{description}
+As the name suggests, the \emph{embedding description problem} focuses on
+finding a pair of elements that are sufficient to describe an embedding. Indeed,
+if 
+\[
+  K=\K(\alpha)
+\]
+we know that every element $x\in K$ can be uniquely written as 
+\[
+  x = \sum_{j=0}^{m-1}a_j\alpha^j
+\]
+with $a_j\in\K$ for al $0\leq j\leq m-1$, and the embedding $\phi$ is then
+defined by
+\[
+  \phi(x) = \sum_{j=0}^{m-1}a_j\beta^j.
+\]
+\begin{prop}
+  \label{prop:description}
+ The elements $\alpha$ and $\beta$
+ describe an embedding if and only if they have the same minimal polynomial. 
+\end{prop}
+\begin{proof}
+  Let $\phi:K\to L$ be an embedding mapping $\alpha$ to $\beta$ and let 
+  \[
+    P = \Minpoly_\K(\alpha)
+  \]
+  be the the minimal polynomial of $\alpha$. Then 
+  \begin{align*}
+    P(\beta) &= P(\phi(\alpha)) \\
+    &= \phi(P(\alpha))\\
+    &= \phi(0) \\
+    &= 0
+  \end{align*}
+  thus $\Minpoly_\K(\beta)\neq 1$ divides $P$ which is irreducible so 
+  \[
+\Minpoly_\K(\beta) = P.
+  \]
+ Conversely, if $\alpha$ and $\beta$ have the same minimal polynomial $P$, then the
+ map $\phi$ is well-defined and defines an isomorphism between the fields $\K(\alpha)$ and
+ $\K(\beta)$, that are both isomorphic to the field
+ \[
+   \K[X]/(P(X)).
+ \]
+\end{proof}
+While the first problem focuses on finding a description of $\phi$, the
+\emph{embedding evaluation problem} independently asks how to efficiently use
+the description to compute the actual embedding. We target this question in
+Section~\ref{sec:evaluation}.
+
+\subsection{Embedding description problem and naive algorithm}
+
+Until the end of this section and in Section~\ref{sec:allombert}, we deal with
+the \emph{embedding description problem}, although we only review a subpart of
+the existing algorithms (see~\cite{BDDFS17} for other algorithms). As above, let
+$f$ and $g$ two irreducible polynomials with coefficients in $\K$ such that
+\[
+  m=\deg f\,|\,\deg g=n.
+\]
+and let
+\[
+  K=\K[X]/(f(X))\cong\mathbb{F}_{q^m}
+\]
+and
+\[
+  L = \K[Y]/(g(Y))\cong\mathbb{F}_{q^n}
+\]
+two finite fields. Then one can simply take $\alpha$ to be the class of $X$ in
+$K$ and choose $\beta$ to be any root of $f$ in $L$. Indeed, we know that there
+is an isomorphic copy of $K$ in $L$ and thus that $f$ splits over $L$.
+Furthermore, any root of $f$ will have $f$ as its minimal polynomial, which is
+also the minimal polynomial of $\alpha$ by construction. By
+Proposition~\ref{prop:description}, the map 
+\[
+  \phi:K\to L
+\]
+sending $\alpha$ to $\beta$ is an embedding. The critical routine in that
+algorithm is to find a root of $f$ in $L$, that can be done using Shoup-Kaltofen
+\emph{equal degree factorization} algorithm~\cite{KS97}. The complexity analysis
+of~\cite{BDDFS17} indicates that the cost is stricly larger than quasi-quadratic
+complexity $\tilde O(m^2)$. A more efficient algorithm, due to Lenstra and
+Allombert, is discussed in Section~\ref{sec:allombert}.
+
 \section{Lenstra-Allombert algorithm}
+\label{sec:allombert}
+
+Both Lenstra~\cite{Lenstra91} and Allombert used
+Kummer theory, the study of certain field extensions, to compute isomorphisms
+between finite fields. But while Lenstra's focus
+was on proving the existence of a deterministic isomorphism algorithm, Allombert 
+wanted to provide a practical algorithm. This led to the invention of the
+Lenstra-Allombert algorithm~\cite{Allombert02} in 2002, for which we give a
+description in this section. The ideas of Allombert play an important part in
+Chapter~\ref{chap:standard} too.
+
 \section{The embedding evaluation problem}
+\label{sec:evaluation}
+

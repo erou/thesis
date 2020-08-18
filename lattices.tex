@@ -819,8 +819,8 @@ we must go through $3$ steps:
         \node (L) at (2, 4) {$L$};
         \node (M) at (4, 2) {$M$};
         \node (I) at (2, 0) {$K\cap M$};
-        \node (?) at (1, 1) {?};
-        \node (??) at (3, 1) {?};
+        \node (?) at (1, 1) {\textbf{?}};
+        \node (??) at (3, 1) {\textbf{?}};
 
         \draw[dashed-arrow] (K) to (L);
         \draw[arrow] (M) to (L);
@@ -839,4 +839,38 @@ we must go through $3$ steps:
   \item Compute the ``transitive closure'' of the lattice, \ie compute the
     embeddings such that Condition~CE5 on \emph{transitivity} holds. 
 \end{enumerate}
+The first step might contain a reccursive call to the embedding algorithm, thus
+one might have to compute many additionnal embeddings behind the scenes in order
+to have only one new embedding. 
+% TODO
+% ====
+%
+% Better understanding of ``many''. Quadratic? Proof? Example?
+
+\paragraph{Main algorithms.} The embedding algorithm thus follows these steps
+(alongside trivial verifications such as checking if the embedding makes sense,
+checking if an embedding already exists, and so on)
+and there are three main algorithms, \texttt{intersections},
+\texttt{find\_morphism} and \texttt{transitive\_closure} corresponding to the
+three steps.
+
+\begin{algorithm}
+  \caption{\texttt{find\_morphism}}
+  \label{algo:find-morphism}
+  \begin{algorithmic}[1]
+    \Require{$K$ and $L$ two finite fields of a lattice of compatibly embedded
+    finite fields $(\mathcal K, \Phi)$}
+    \Ensure{$\phi:K\to L$ a compatible embedding}
+    \State $C\gets\left\{k\in\mathcal K\,|\,k\emb K\text{ and }k\emb L \right\}$
+    \State $\pi\gets\gcd_{k\in C}(\Minpoly_k(\alpha))$\Comment{$\alpha$ is a
+      generator of $K$ over $\mathbb{F}_p$, the minimum polynomial is obtained
+    via Berlekamp-Massey algorithm.}
+  \end{algorithmic}
+\end{algorithm}
+
+\paragraph{Experimental results.}
+% TODO
+% ====
+%
+% Timings, comparison with MAGMA? Critical routines
 %%
