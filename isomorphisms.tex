@@ -166,6 +166,13 @@ Allombert, is discussed in Section~\ref{sec:allombert}.
 \section{Lenstra-Allombert algorithm}
 \label{sec:allombert}
 
+% TODO
+% ====
+%
+% Insist on the fact that the algorithm works for extension with degree prime to
+% the characteristic p, and that we have to use Artin-Shreier theory in order to
+% have a full algorithm.
+
 Both Lenstra~\cite{Lenstra91} and Allombert used
 Kummer theory, the study of certain field extensions, to compute isomorphisms
 between finite fields. But while Lenstra's focus
@@ -174,6 +181,97 @@ wanted to provide a practical algorithm. This led to the invention of the
 Lenstra-Allombert algorithm~\cite{Allombert02} in 2002, for which we give a
 description in this section. The ideas of Allombert play an important part in
 Chapter~\ref{chap:standard} too.
+
+\subsection{Preliminaries}
+
+Let us first discuss a simpler case than the general one, that will highlight
+the method behind Lenstra-Allombert isomorphism algorithm. Let $K$ and $L$ be
+two finite fields of cardinality $q^n$, such that
+\[
+  K\cong L\cong \mathbb{F}_{q^n}.
+\]
+Assume that
+\[
+  n\,|\,q-1,
+\]
+or equivalently that there is a primitive $n$-th root of unity in
+$\K=\mathbb{F}_q$, that we denote by $\zeta$. The algorithm is based on
+Proposition~\ref{prop:h90}.
+
+\begin{prop}
+  \label{prop:h90}
+ Let $\sigma$ be the generator of the Galois group of the extension
+ \[
+   K/\K
+ \]
+ and consider the following equation in $K$.
+ \begin{equation}
+   \tag{H90}
+   \sigma(x) = \zeta x
+   \label{eq:h90}
+ \end{equation}
+The solutions of~\eqref{eq:h90} form a one dimensional $\K$-vector space and if
+$\alpha\in K$ is such a solution, we have
+\[
+  \alpha^n\in\K.
+\]
+If $\alpha$ is also nonzero, then it is a generator of $K$ over $\K$.
+\end{prop}
+\begin{proof}
+  Let us first construct a nonzero solution of~\eqref{eq:h90}. Consider the polynomial
+  \[
+    P = \sum_{j=0}^{n-1}\zeta^{-j} X^{q^j}
+  \]
+  of degree $q^{n-1}$. The polynomial $P$ has at most $q^{n-1}$ roots in $K$,
+  which has cardinality $q^n$, so there exists some element $x\in K$ such that
+  \[
+    y = P(x)\neq0.
+  \]
+  Now, by construction, we have
+  \begin{align*}
+    \sigma(y) &= \sigma(\sum_{j=0}^{n-1}\zeta^{-j}x^{\sigma^{j}})\\
+    &= \sum_{j=0}^{n-1}\zeta^{-j}x^{\sigma^{j+1}}\\
+    &= \zeta \times \sum_{j=0}^{n-1}\zeta^{-(j+1)}x^{\sigma^{j+1}}\\
+    &= \zeta \times \sum_{j=1}^{n}\zeta^{-j}x^{\sigma^{j}}\\
+    &= \zeta y
+  \end{align*}
+  and thus $y$ is a nonzero solution of~\eqref{eq:h90}. All the elements
+  \[
+    \lambda y
+  \]
+  with $\lambda\in\K$ are also solution of~\eqref{eq:h90} since
+  \[
+    \sigma(\lambda y) = \lambda\sigma(y) = \zeta\lambda y,
+  \]
+  and the equation has at most $q$ solutions because the polynomial
+  \[
+    X^q - \zeta X
+  \]
+  has at most $q$ roots in $K$. Thus there are exactly $q$ different solutions,
+  that are the elements of $\Vect(y)$. Let $z$ be a solution of~\eqref{eq:h90},
+  then we have
+  \begin{align*}
+   \sigma(z^n) &= \sigma(z)^n\\
+   &= (\zeta z)^n\\
+   &= z^n,
+  \end{align*}
+  therefore $z^n$ is fixed by $\sigma$, which means that
+  \[
+    z^n\in\K.
+  \]
+  If $z$ is also nonzero, then for all $0\leq j<n$, we have
+  \begin{align*}
+    \sigma^j(z) &= \underbrace{(\sigma\circ\dots\circ\sigma)}_{j\text{ times}}(z)\\
+    &= \underbrace{(\sigma\circ\dots\circ\sigma)}_{j-1\text{ times}}(\zeta z)\\
+    &= \zeta\underbrace{(\sigma\circ\dots\circ\sigma)}_{j-1\text{ times}}(z)\\
+    &= \zeta^j z\\
+    &\neq z.
+  \end{align*}
+  Consequently, $z$ is not in any subfield of $K$ and is thus a generator of $K$
+  over $\K$.
+  
+  
+\end{proof}
 
 \section{The embedding evaluation problem}
 \label{sec:evaluation}
