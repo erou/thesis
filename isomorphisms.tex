@@ -34,18 +34,18 @@ restricted to $K'$.
 
 \subsection{Description of the problem}
 
-We let $q$ be a prime power, $\K = \mathbb{F}_q$ be the field with $q$ elements,
+We let $p$ be a prime number, $\K = \mathbb{F}_p$ be the field with $p$ elements,
 and $f, g\in\K[X]$ two irreducible polynomials with
 \[
-  m=\deg f\,|\,\deg g=n.
+  m=\deg f\mid\deg g=n.
 \]
 Let
 \[
-  K=\K[X]/(f(X))\cong\mathbb{F}_{q^m}
+  K=\K[X]/(f(X))\cong\mathbb{F}_{p^m}
 \]
 and
 \[
-  L = \K[Y]/(g(Y))\cong\mathbb{F}_{q^n}
+  L = \K[Y]/(g(Y))\cong\mathbb{F}_{p^n}
 \]
 two extensions of $\K$. We know there is an embedding
 \[
@@ -137,15 +137,15 @@ the \emph{embedding description problem}, although we only review a subpart of
 the existing algorithms (see~\cite{BDDFS17} for other algorithms). As above, let
 $f$ and $g$ two irreducible polynomials with coefficients in $\K$ such that
 \[
-  m=\deg f\,|\,\deg g=n.
+  m=\deg f\mid \deg g=n.
 \]
 and let
 \[
-  K=\K[X]/(f(X))\cong\mathbb{F}_{q^m}
+  K=\K[X]/(f(X))\cong\mathbb{F}_{p^m}
 \]
 and
 \[
-  L = \K[Y]/(g(Y))\cong\mathbb{F}_{q^n}
+  L = \K[Y]/(g(Y))\cong\mathbb{F}_{p^n}
 \]
 two finite fields. Then one can simply take $\alpha$ to be the class of $X$ in
 $K$ and choose $\beta$ to be any root of $f$ in $L$. Indeed, we know that there
@@ -159,19 +159,12 @@ Proposition~\ref{prop:description}, the map
 sending $\alpha$ to $\beta$ is an embedding. The critical routine in that
 algorithm is to find a root of $f$ in $L$, that can be done using Shoup-Kaltofen
 \emph{equal degree factorization} algorithm~\cite{KS97}. The complexity analysis
-of~\cite{BDDFS17} indicates that the cost is stricly larger than quasi-quadratic
+of~\cite{BDDFS17} indicates that the cost is strictly larger than quasi-quadratic
 complexity $\tilde O(m^2)$. A more efficient algorithm, due to Lenstra and
 Allombert, is discussed in Section~\ref{sec:allombert}.
 
 \section{Lenstra-Allombert algorithm}
 \label{sec:allombert}
-
-% TODO
-% ====
-%
-% Insist on the fact that the algorithm works for extension with degree prime to
-% the characteristic p, and that we have to use Artin-Shreier theory in order to
-% have a full algorithm.
 
 Both Lenstra~\cite{Lenstra91} and Allombert used
 Kummer theory, the study of certain field extensions, to compute isomorphisms
@@ -180,29 +173,40 @@ was on proving the existence of a deterministic isomorphism algorithm, Allombert
 wanted to provide a practical algorithm. This led to the invention of the
 Lenstra-Allombert algorithm~\cite{Allombert02} in 2002, for which we give a
 description in this section. The ideas of Allombert play an important part in
-Chapter~\ref{chap:standard} too.
+Chapter~\ref{chap:standard} too. The techniques based on Kummer theories work
+for extensions of degree $n$ coprime to the characteristic $p$. In order to have
+an algorithm working for any type of extension, the solution is to deal with the
+part of the extension which degree is divisible by $p$ separately using
+Artin-Shreier theory and to glue the results together in the end.
+
+% TODO
+% ====
+%
+% Add a part on Artin-Shreier?
+
 
 \subsection{Preliminaries}
+\label{sec:preliminaries}
 
 Let us first discuss a simpler case than the general one, that will highlight
 the method behind Lenstra-Allombert isomorphism algorithm. Let $K$ and $L$ be
-two finite fields of cardinality $q^n$, such that
+two finite fields of cardinality $p^n$, such that
 \[
-  K\cong L\cong \mathbb{F}_{q^n}.
+  K\cong L\cong \mathbb{F}_{p^n}.
 \]
-Assume that
+Assume that $\gcd(p, n)=1$ and that
 \[
-  n\,|\,q-1,
+  n\mid p-1,
 \]
 or equivalently that there is a primitive $n$-th root of unity in
-$\K=\mathbb{F}_q$, that we denote by $\zeta$. The algorithm is based on
+$\K=\mathbb{F}_p$, that we denote by $\zeta$. The algorithm is based on
 Proposition~\ref{prop:h90}.
 
 \begin{prop}[Hilbert $90$ theorem]
   \label{prop:h90}
-  Let $K$ be a finite extension of $\K=\mathbb{F}_q$ of degree $n$ such that there exists a
+  Let $K$ be a finite extension of $\K=\mathbb{F}_p$ of degree $n$ such that there exists a
 primitive $n$-th root of unity $\zeta\in\K$ in the base field $\K$, \ie such
-that $n$ divides $q-1$. 
+that $n$ divides $p-1$. 
  Let $\sigma$ be the generator of the Galois group of the extension
  \[
    K/\K
@@ -223,10 +227,10 @@ If $\alpha$ is also nonzero, then it is a generator of $K$ over $\K$.
 \begin{proof}
   Let us first construct a nonzero solution of~\eqref{eq:h90}. Consider the polynomial
   \[
-    P = \sum_{j=0}^{n-1}\zeta^{-j} X^{q^j}
+    P = \sum_{j=0}^{n-1}\zeta^{-j} X^{p^j}
   \]
-  of degree $q^{n-1}$. The polynomial $P$ has at most $q^{n-1}$ roots in $K$,
-  which has cardinality $q^n$, so there exists some element $x\in K$ such that
+  of degree $p^{n-1}$. The polynomial $P$ has at most $p^{n-1}$ roots in $K$,
+  which has cardinality $p^n$, so there exists some element $x\in K$ such that
   \[
     y = P(x)\neq0.
   \]
@@ -246,11 +250,11 @@ If $\alpha$ is also nonzero, then it is a generator of $K$ over $\K$.
   \[
     \sigma(\lambda y) = \lambda\sigma(y) = \zeta\lambda y,
   \]
-  and the equation has at most $q$ solutions because the polynomial
+  and the equation has at most $p$ solutions because the polynomial
   \[
-    X^q - \zeta X
+    X^p - \zeta X
   \]
-  has at most $q$ roots in $K$. Thus there are exactly $q$ different solutions,
+  has at most $p$ roots in $K$. Thus there are exactly $p$ different solutions,
   that are the elements of $\Vect(y)$. Let $z$ be a solution of~\eqref{eq:h90},
   then we have
   \begin{align*}
@@ -278,9 +282,9 @@ therefore we can solve Equation~\eqref{eq:h90} in both fields. Let $\alpha_K$ be
 solution of Equation~\eqref{eq:h90} for the root $\zeta$ in $K$, and $\alpha_L$
 a solution in $L$. Since we want the primitive $n$-th root of unity $\zeta$ to
 be the same in $K$ and $L$, we assume that we already have an embedding from
-$\K$ in both these fields. In practice, we work with $q=p$ so that $\K$ is a
+$\K$ in both these fields. In practice, since $\K$ is a
 prime field and the fields $K$ and $L$ are represented by polynomials over
-$\mathbb{F}_p=\mathbb{Z}/p\mathbb{Z}$, so the assumption is not really
+$\K = \mathbb{F}_p=\mathbb{Z}/p\mathbb{Z}$, the assumption is not really
 hard to meet. Let
 \[
   a_K = \alpha_K^n
@@ -305,8 +309,8 @@ this can be used to compute an isomorphism between $K$ and $L$.
 \begin{proof}
   Let $\phi:K\to L$ be a $\K$-isomorphism between $K$ and $L$. We have
   \begin{align*}
-    \sigma(\phi(\alpha_K)) &= \phi(\alpha_K)^q\\
-    &= \phi(\alpha_K^q)\\
+    \sigma(\phi(\alpha_K)) &= \phi(\alpha_K)^p\\
+    &= \phi(\alpha_K^p)\\
     &= \phi(\sigma(\alpha_K))\\
     &= \phi(\zeta\alpha_K)\\
     &= \zeta\phi(\alpha_K)
@@ -340,8 +344,131 @@ this can be used to compute an isomorphism between $K$ and $L$.
   minimal polynomial as $\alpha_K$ because $\phi$ is an isomorphism, so by
   Proposition~\ref{prop:description}, the map sending $\alpha_K$ to $c\alpha_L$ is an
   isomorphism from $K$ to $L$.
-  
 \end{proof}
+In this simpler case ($n$ divides $p-1$), Lenstra-Allombert algorithm consists
+in
+\begin{enumerate}
+  \item finding $\alpha_K\in K$ and $\alpha_L\in L$ with
+    $\sigma(\alpha_K)=\zeta\alpha_K$ and $\sigma(\alpha_L)=\zeta\alpha_L$;
+  \item computing a $n$-th $c$ root of $\alpha_K^n/\alpha_L^n$;
+  \item returning the embedding described by $\alpha_K\mapsto c\alpha_L$.
+\end{enumerate}
+
+\paragraph{General case.} When $n\nmid p-1$, which is always
+the case asymptotically since $n>p-1$ at some point, there are no $n$-th roots
+of unity in $\K$, and the strategy of Section~\ref{sec:preliminaries} cannot be
+applied as if. Nevertheless, it is still possible to apply a similar idea by
+extending the space so that it contains roots of unity.
+
+\subsection{Kummer algebras}
+\label{sec:kummer-algebras}
+
+% TODO
+% ====
+%
+% Fix the definitions by saying something about where do we pick the roots of
+% unity from. Algebraic closure ? Doesn't that make some of the results trivial or
+% something? 
+
+Instead of ``just'' working in $\mathbb{F}_{p^n}$, we work in
+\[
+  A_n = \mathbb{F}_{p^n}\otimes \mathbb{F}_p(\zeta),
+\]
+where $\zeta$ is a primitive $n$-th root of unity, and where $\otimes$ is the tensor
+product over $\K=\mathbb{F}_p$. We thus extend the scalars and force the existence of
+suitable roots of unity. The $\K$-algebra $A_n$, that we call \emph{Kummer
+algebra}, can now be used instead of
+$\mathbb{F}_{p^n}$ in Lenstra-Allombert algorithm.
+
+\begin{defi}[Kummer algebra]
+ We call the $\K$-algebra
+ \[
+   A_n = \mathbb{F}_{p^n}\otimes\mathbb{F}_{p}(\zeta)
+ \]
+ a \emph{Kummer algebra of degree $n$}.
+\end{defi}
+\begin{defi}[Field of scalars]
+  Let $A_n$ be a Kummer algebra of degree $n$. Then we define
+  $\mathbb{F}_{p}(\zeta)$ as the \emph{field of scalars} of $A_n$, and we
+  define the \emph{level} $\nu(n)$ of $A_n$ as
+  \[
+    \nu(n) = \mathrm{ord}_{(\mathbb{Z}/n\mathbb{Z})^\times}(p) = \left[
+      \mathbb{F}_{p}(\zeta):\K \right],
+  \]
+  that is the degree of its field of scalars.
+\end{defi}
+Let $\sigma:x\mapsto x^p$ be the Frobenius automorphism of the extension
+\[
+  \mathbb{F}_{p^n}/\K,
+\]
+we extend it to $A_n$ by defining the linear map
+\[
+  \begin{array}{cccc}
+    \sigma\otimes 1: & A_n & \to & A_n\\
+    & \sum_j x_j\otimes y_j & \mapsto & \sum_j \sigma(x_j) \otimes y_j.
+  \end{array}
+\]
+The map $\sigma\otimes 1$ will play the role of $\sigma$ in the simpler case.
+\begin{lm}
+  The map $\sigma\otimes1$ is a $1\otimes\mathbb{F}_{p}(\zeta)$-linear
+  endomorphism with $n$ distinct eigenvalues, that are the powers of
+  $1\otimes\zeta$.
+\end{lm}
+\begin{proof}
+  Because of the linear independance of characters~\cite[Chapter VI,
+  §4]{Lang04}, we know that the automorphisms
+  \[
+    \Id, \sigma, \sigma^2, \dots, \sigma^{n-1}
+  \]
+  are independant. We also know that 
+  \[
+    \sigma^n = \Id,
+  \]
+  therefore the minimal polynomial of the $\K$-linear endomorphism $\sigma$ is
+  \[
+    X^n-1.
+  \]
+  By the Cayley-Hamilton theorem, we deduce that the characteristic
+  polynomial of $\sigma$ is also $X^n-1$. Now let $\B=\left\{ b_1, \dots, b_n \right\}$ be a basis of
+  $\mathbb{F}_{p^n}/\K$ and let $M$ be the matrix of $\sigma$ in this basis.
+  Then the matrix of the $1\otimes\mathbb{F}(\zeta)$-linear endomorphism
+  $\sigma\otimes1$ in the basis
+  \[
+    \B\otimes 1 =\left\{ b_1\otimes1, \dots, b_n\otimes1 \right\}
+  \]
+  is also $M$. Thus, the characteristic polynomial of $\sigma\otimes1$ is again
+  $X^n-1$, that splits completely in 
+  \[
+    1\otimes\mathbb{F}_{p}(\zeta)\cong \mathbb{F}_{p}(\zeta),
+  \]
+  the roots being the elements
+  \[
+    1\otimes\zeta^j
+  \]
+  for $0\leq j\leq n-1$. Finally, the eigenvalues are the roots of the
+  characteristic polynomial so this concludes the proof.
+\end{proof}
+Since there are exactly $n$ distinct eigenvalues, we know that the
+corresponding eigenspaces are all one-dimensional
+$1\otimes\mathbb{F}_{p}(\zeta)$-vector spaces, and the eigenspace corresponding
+to the eigenvalue $\zeta$ is described by the equation
+ \begin{equation}
+   \tag{H90}
+   (\sigma\otimes1)(x) = (1\otimes\zeta) x
+   \label{eq:h90-kummer}
+ \end{equation}
+ that we again denote by~\eqref{eq:h90-kummer}.
+ \begin{lm}
+   Let $\alpha$ be a nonzero solution of~\eqref{eq:h90-kummer} for the root
+   $\zeta$. Then 
+   \[
+     \alpha^n\in 1\otimes\mathbb{F}_{p}(\zeta)
+   \]
+   and $\alpha$ is a generating element for $A_n$ as an algebra over
+   $1\otimes\mathbb{F}_{p}(\zeta)$.
+ \end{lm}
+
+
 \section{The embedding evaluation problem}
 \label{sec:evaluation}
 
