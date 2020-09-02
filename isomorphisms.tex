@@ -457,7 +457,48 @@ to the eigenvalue $\zeta$ is described by the equation
    (\sigma\otimes1)(x) = (1\otimes\zeta) x
    \label{eq:h90-kummer}
  \end{equation}
- that we again denote by~\eqref{eq:h90-kummer}.
+ that we again denote by~\eqref{eq:h90-kummer}. The field of scalar of $A_n$ now
+ plays the role of the base field $\K$ in the simpler case and the solutions
+ of~\eqref{eq:h90-kummer} have similar properties.
+ \begin{lm}
+   \label{lm:fixed-elems}
+   The set of elements in $A_n$ fixed by $\sigma\otimes1$ is
+   \[
+     1\otimes\mathbb{F}_{p}(\zeta)\cong \mathbb{F}_{p}(\zeta),
+   \]
+   a subfield isomorphic to the field of scalars of $A_n$.
+ \end{lm}
+ \begin{proof}
+   Let 
+   \[
+     \B = \left\{ b_1, \dots, b_a \right\}
+   \]
+   be a basis of
+   \[
+     \mathbb{F}_p(\zeta)/\K.
+   \]
+   Then, every element $\alpha$ in $A_n$ can be uniquely written in the form
+   \[
+     \alpha = \sum_{j=1}^a x_j\otimes b_j
+   \]
+   where for all $1\leq j\leq a$, $x_j\in\mathbb{F}_{p^n}$. If 
+   \begin{align*}
+     \sum_{j=1}^a\sigma(x_j)\otimes b_j &= (\sigma\otimes1)(\alpha)\\
+     &= \alpha
+   \end{align*}
+ it follows that for all $1\leq j\leq a$, we have
+   \[
+     \sigma(x_j) = x_j
+   \]
+   and thus we have $x_j\in\K$. Consequently, the element $\alpha$ belongs to
+   the set
+   \[
+     \K\otimes\mathbb{F}_{p}(\zeta) =
+     1\otimes\mathbb{F}_p(\zeta)\cong\mathbb{F}_p(\zeta).
+   \]
+   Conversely, if an element $\alpha$ is in $1\otimes\mathbb{F}_{p}(\zeta)$,
+   then it is fixed by $\sigma\otimes1$.
+ \end{proof}
  \begin{lm}
    Let $\alpha$ be a nonzero solution of~\eqref{eq:h90-kummer} for the root
    $\zeta$. Then 
@@ -465,9 +506,73 @@ to the eigenvalue $\zeta$ is described by the equation
      \alpha^n\in 1\otimes\mathbb{F}_{p}(\zeta)
    \]
    and $\alpha$ is a generating element for $A_n$ as an algebra over
-   $1\otimes\mathbb{F}_{p}(\zeta)$.
+   $1\otimes\mathbb{F}_{p}(\zeta)$ that is also invertible.
  \end{lm}
-
+ \begin{proof}
+  We have
+  \begin{align*}
+    (\sigma\otimes1)(\alpha^n) &= (\sigma\otimes1)(\alpha)^n\\
+    &= ((1\otimes\zeta)\alpha)^n\\
+    &= (1\otimes\zeta^n)\alpha^n\\
+    &= \alpha^n,
+  \end{align*}
+  thus $\alpha^n\in1\otimes\mathbb{F}_p(\zeta)$ by Lemma~\ref{lm:fixed-elems}.
+  Since $\alpha$ is a solution of~\eqref{eq:h90-kummer} for $\zeta$, then
+  for every $1\leq j\leq n-1$, $\alpha^j$ is a solution for $\zeta^j$, indeed
+  \begin{align*}
+    (\sigma\otimes 1)(\alpha^j) &= ( (\sigma\otimes1)(\alpha))^j\\
+    &= (1\otimes\zeta^j)\alpha^j.
+  \end{align*}
+  Then, the elements $1, \alpha, \dots, \alpha^{n-1}$ are eigenvectors for
+  distinct eigenvalues of $\sigma\otimes1$ and thus form a basis of $A_n$ over
+  $1\otimes \mathbb{F}_{p}(\zeta)$. Assume that $\alpha^n=1\otimes c$ for some
+  $c\in\mathbb{F}_{p}(\zeta)$. There are no nonzero nilpotent elements in $A_n$;
+  one way of seeing it is to say that
+  \[
+    A_n \cong \mathbb{F}_{p}(\zeta)[T]/(h(T))
+  \]
+  where $h$ is the irreducible polynomial defining
+  \[
+    \mathbb{F}_{p^n} = \K[X]/(h(X)).
+  \]
+  Since the degree $n$ of
+  $h$ is not a multiple of $p$, the polynomial $h$ is separable and 
+  \[
+    \mathbb{F}_{p^n}[T]/(h(T))
+  \]
+  has no nonzero elements. Then $\alpha^n$ is nonzero thus
+  $c\in\mathbb{F}_p(\zeta)$ is also nonzero. It follows that $\alpha$ is
+  invertible, indeed
+  \[
+    \alpha^{-1} = (1\otimes c^{-1})\alpha^{n-1}.
+  \]
+ \end{proof}
+ One key property of the solutions of~\eqref{eq:h90-kummer} is still missing,
+ and we need a new notation to express it. Let $K$ and $L$ two finite field
+ extensions of $\K$ and let $\mu\in L$ an element of degree $d$ over $\K$. As
+ used several times already, we know that an element 
+ \[
+   \beta\in K\otimes \K(\mu)\subset K\otimes L 
+ \]
+   can be uniquely written as
+ \[
+   \beta=\sum_{j=0}^{d-1}x_j\otimes\mu^j,
+ \]
+ and we set
+ \[
+   \first{\beta}{\mu} = x_0.
+ \]
+ \begin{prop}[{\cite[Proposition 3.6]{Allombert02}}]
+   Let $\alpha$ be a nonzero solution of~\eqref{eq:h90-kummer} for the root
+   $\zeta$, then
+   \[
+     \first{\alpha}{\zeta}
+   \]
+   is a generating element of the extension
+   \[
+     \mathbb{F}_{p^n}/\K.
+   \]
+ \end{prop}
 
 \section{The embedding evaluation problem}
 \label{sec:evaluation}
