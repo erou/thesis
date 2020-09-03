@@ -296,6 +296,7 @@ and
 By Proposition~\ref{prop:h90}, we know that $a_K$ and $a_L$ are both in $\K$ and
 this can be used to compute an isomorphism between $K$ and $L$.
 \begin{prop}[Allombert~{\cite{Allombert02}}]
+  \label{prop:allombert-simple}
  The quotient
  \[
    a_K/a_L
@@ -351,7 +352,7 @@ in
   \item finding $\alpha_K\in K$ and $\alpha_L\in L$ with
     $\sigma(\alpha_K)=\zeta\alpha_K$ and $\sigma(\alpha_L)=\zeta\alpha_L$;
   \item computing a $n$-th $c$ root of $\alpha_K^n/\alpha_L^n$;
-  \item returning the embedding described by $\alpha_K\mapsto c\alpha_L$.
+  \item returning the isomorphism described by $\alpha_K\mapsto c\alpha_L$.
 \end{enumerate}
 
 \paragraph{General case.} When $n\nmid p-1$, which is always
@@ -376,9 +377,9 @@ Instead of ``just'' working in $\mathbb{F}_{p^n}$, we work in
 \]
 where $\zeta$ is a primitive $n$-th root of unity, and where $\otimes$ is the tensor
 product over $\K=\mathbb{F}_p$. We thus extend the scalars and force the existence of
-suitable roots of unity. The $\K$-algebra $A_n$, that we call \emph{Kummer
-algebra}, can now be used instead of
-$\mathbb{F}_{p^n}$ in Lenstra-Allombert algorithm.
+suitable roots of unity. The $\K$-algebra $A_n$ can now be used instead of
+$\mathbb{F}_{p^n}$ in Lenstra-Allombert algorithm. Following the terminology
+of~\cite{DRR19}, we call these algebras \emph{Kummer algebras}.
 
 \begin{defi}[Kummer algebra]
  We call the $\K$-algebra
@@ -547,6 +548,14 @@ to the eigenvalue $\zeta$ is described by the equation
     \alpha^{-1} = (1\otimes c^{-1})\alpha^{n-1}.
   \]
  \end{proof}
+ \begin{defi}[Kummer constant]
+   Let $\alpha\in A_n$ be a nonzero solution of~\eqref{eq:h90-kummer} for the
+   root $\zeta$. The constant $c\in\mathbb{F}_p(\zeta)$ such
+   \[
+     \alpha^n = 1\otimes c
+   \]
+   is called the \emph{Kummer constant} of $\alpha$.
+ \end{defi}
  One key property of the solutions of~\eqref{eq:h90-kummer} is still missing,
  and we need a new notation to express it. Let $K$ and $L$ two finite field
  extensions of $\K$ and let $\mu\in L$ an element of degree $d$ over $\K$. As
@@ -563,6 +572,7 @@ to the eigenvalue $\zeta$ is described by the equation
    \first{\beta}{\mu} = x_0.
  \]
  \begin{prop}[{\cite[Proposition 3.6]{Allombert02}}]
+   \label{prop:generate}
    Let $\alpha$ be a nonzero solution of~\eqref{eq:h90-kummer} for the root
    $\zeta$, then
    \[
@@ -573,6 +583,211 @@ to the eigenvalue $\zeta$ is described by the equation
      \mathbb{F}_{p^n}/\K.
    \]
  \end{prop}
+ \begin{proof}
+   Let $r=\left[ \mathbb{F}_{p}(\zeta):\K \right]$ and
+   \[
+     P = X^r + \sum_{j=0}^{r-1}z_j X^j
+   \]
+   the minimal polynomial of $\zeta$ over $\K$. Let also
+   \[
+     \alpha = \sum_{j=0}^{r-1}a_j\otimes\zeta^j.
+   \]
+   It follows that 
+   \begin{align*}
+     \sum_{j=0}^{r-1}\sigma(a_j)\otimes\zeta^j &=(\sigma\otimes1)(\alpha)\\
+     &= (1\otimes\zeta)\alpha\\
+     &= \sum_{j=0}^{r-1}a_j\otimes\zeta^{j+1}\\
+     &= \sum_{j=0}^{r-2}a_j\otimes\zeta^{j+1} +
+     a_{r-1}\otimes(\sum_{i=0}^{r-1}z_i\zeta^i)\\
+     &= a_{r-1}z_0\otimes 1 +
+     \sum_{j=1}^{r-1}(a_{j-1}+a_{r-1}z_j)\otimes\zeta^j,
+   \end{align*}
+   we thus have
+   \[
+   \left\{ 
+     \begin{array}{l}
+       \sigma(a_0) = a_{r-1}z_0 \\
+       \sigma(a_j) = a_{j-1}+a_{r-1}z_j\text{ for all }1\leq j\leq r-1.
+     \end{array}
+   \right.
+ \]
+ With these equations, we will prove that
+ \[
+   \mathbb{F}_p(a_0) = \mathbb{F}_{p^n},
+ \]
+ thus concluding the proof. We have $\sigma(a_0)\in\mathbb{F}_p(a_0)$ and
+ $z_0\in\K$. Since $z_0$ is nonzero, we have that
+ \[
+   a_{r-1} = \sigma(a_0)z_0^{-1}\in\mathbb{F}_p(a_0).
+ \]
+ Going from $j=r-1$ down to $1$, it also follows that
+ $a_{j-1}\in\mathbb{F}_{p}(a_0)$. Now assume that $e\in\mathbb{N}$ is an integer
+ such that
+ \[
+   \sigma^e(x) = x
+ \]
+ for all $x\in\mathbb{F}_p(a_0)$, and such that $e<n$, \ie
+ \[
+   \mathbb{F}_p(a_0)\subsetneq \mathbb{F}_{p^n}.
+ \]
+ Since all the $a_j$ are in $\mathbb{F}_{p}(a_0)$, we also have
+ \begin{align*}
+  (1\otimes\zeta^e)\alpha &= (\sigma\otimes1)^e(\alpha)\\
+  &= (\sigma^e\otimes1)(\alpha)\\
+  &= \alpha
+ \end{align*}
+ and thus $\zeta^e=1$, which is a contradiction since $\zeta$ is a primitive
+ $n$-th root of unity and $e<n$. Therefore we must have $e=n$ and
+ $\mathbb{F}_p(a_0) = \mathbb{F}_{p^n}$.
+ \end{proof}
+Similarly to the case where $n\mid p-1$, where the solutions
+$\alpha\in\mathbb{F}_{p^n}$ of~\eqref{eq:h90} directly generate $\mathbb{F}_{p^n}$, we now know
+that the solutions $\alpha\in A_n$ of~\eqref{eq:h90-kummer} in the general case
+can also be used to generate $\mathbb{F}_{p^n}$ through $\first{\alpha}{\zeta}$.
+We can study these solutions a bit further: in fact the element
+$\first{\alpha}{\zeta}$ does not depend on $\alpha$, but only on $\alpha^n$.
+\begin{prop}
+  \label{prop:kummer-constant}
+  Let
+  \[
+    \alpha=\sum_{j=0}^{r-1}a_j\otimes\zeta^j\in A_n
+  \]
+  be a nonzero solution of~\eqref{eq:h90-kummer} for $\zeta$ and
+  let $\alpha^n = 1\otimes c$. There are exactly $n$ elements $x\in A_n$ that
+  are solutions of~\eqref{eq:h90-kummer} for $\zeta$ and such that
+  \[
+    x^n = 1\otimes c.
+  \]
+  These elements are the
+  \[
+    (1\otimes\zeta^u)\alpha = (\sigma^u\otimes1)(\alpha)
+  \]
+  for $0\leq u\leq n-1$. The corresponding generating elements of
+  $\mathbb{F}_{p^n}/\K$ are the
+  \[
+    \first{(\sigma^u\otimes1)(\alpha)}{\zeta} = \sigma^u(a_0);
+  \]
+  they all have the same minimal polynomial, which is an irreducible polynomial
+  defining $\mathbb{F}_{p^n}/\K$ that only depends on the Kummer constant
+  $c\in\mathbb{F}_{p}(\zeta)$.
+\end{prop}
+\begin{proof}
+  The solutions of~\eqref{eq:h90-kummer} form a one-dimensional
+  $1\otimes\mathbb{F}_p(\zeta)$-vector space, so all solutions are of the form
+  \[
+    x = (1\otimes\lambda)\alpha
+  \]
+  with $\lambda\in\mathbb{F}_p(\zeta)$.
+  Since we also ask for $x^n = \alpha^n$, we must have $\lambda^n = 1$ and thus 
+  \[
+    \lambda = \zeta^u
+  \]
+  for some $0\leq u\leq r-1$. Conversely all the solutions of the form
+  $x=(1\otimes\zeta^u)$ verify $x^n=\alpha^n$. Therefore, if $x$ is such an
+  element, we have
+  \begin{align*}
+    x &= (\sigma^u\otimes1)(\alpha)\\
+    &= \sum_{j=0}^{r-1}\sigma^u(a_j)\otimes\zeta^j,
+  \end{align*}
+  thus
+  \[
+    \first{x}{\zeta} = \sigma^u(a_0).
+  \]
+  All these elements are conjugates, thus share the same minimal polynomial,
+  that is known to define $\mathbb{F}_{p^n}/\K$ by
+  Proposition~\ref{prop:generate} and that depends only on the constant
+  $c\in\mathbb{F}_p(\zeta)$.
+\end{proof}
+
+\subsection{The isomorphism algorithm}
+
+Let $p\in\mathbb{N}$ a prime number and $n\in\mathbb{N}$ be an integer such that
+$\gcd(n, p)=1$. Let $K$ and $L$ be two finite fields of cardinality $p^n$, such
+that
+\[
+  K\cong L\cong \mathbb{F}_{p^n}.
+\]
+Let $\zeta$ be a primitive $n$-th root of unity. In this section, we show how to
+construct a single isomorphism between $K$ and $L$, using the results of
+Section~\ref{sec:kummer-algebras}. How to construct embeddings
+between extensions of different degrees, and how to deal with a lattice of
+embeddings, is discussed in~Chapter~\ref{chap:standard}, together with
+additionnal results on Kummer algebras. We let
+\[
+  A_K = K\otimes\mathbb{F}_p(\zeta)
+\]
+and
+\[
+  A_L = L\otimes\mathbb{F}_{p}(\zeta)
+\]
+be the two Kummer algebras constructed with $K$ and $L$ and with the same field of
+scalars $\mathbb{F}_{p}(\zeta)$. The next proposition is the generalization of
+Proposition~\ref{prop:allombert-simple}.
+\begin{prop}
+ Let $\alpha_K\in A_K$ (respectively $\alpha_L\in A_L$) be a nonzero solution
+ of~\eqref{eq:h90-kummer} for the root $\zeta$ in the Kummer algebra $A_K$
+ (resp. $A_L$) and let $c_K\in\mathbb{F}_{p}(\zeta)$ (resp.
+ $c_L\in\mathbb{F}_p(\zeta)$) the Kummer constant of $\alpha_K$
+ (resp. $\alpha_L$). The quotient
+ \[
+   c_K/c_L
+ \]
+ is a $n$-th power in $\mathbb{F}_p(\zeta)$, and if
+ \[
+   \kappa^n = c_K/c_L
+ \]
+ then the map sending $\first{\alpha_K}{\zeta}$ to
+ $\first{(1\otimes\kappa)\alpha_L}{\zeta}$ is an isomorphism from $K$ to $L$.
+\end{prop}
+\begin{proof}
+  The proof is very similar to the one of
+  Proposition~\ref{prop:allombert-simple}. Let
+  \[
+    \phi:K\to L
+  \]
+  be an isomorphism from $K$ to $L$, then $\phi\otimes1$ is a morphism of
+  algebra from $A_K$ to $A_L$ and
+  \[
+    (\phi\otimes1)(\alpha_K)
+  \]
+  is a solution of~\eqref{eq:h90-kummer} for $\zeta$ in $A_L$. Therefore
+  there exist $\lambda\in\mathbb{F}_p(\zeta)$ such that
+  \[
+    (\phi\otimes1)(\alpha_K) = \lambda\alpha_L.
+  \]
+  The Kummer constant of $(\phi\otimes1)(\alpha_K)$ is still $c_K$, and we have
+  \[
+    c_K/c_L = \lambda^n.
+  \]
+  Hence, if $\kappa$ is an $n$-th root of $c_K/c_L$, we have
+  \[
+    ((1\otimes\kappa)\alpha_L)^n = c_K,
+  \]
+  \ie the elements $\alpha_K$ and $(1\otimes\kappa)\alpha_L$ share the same
+  Kummer constant. By Proposition~\ref{prop:kummer-constant}, the elements
+  $\first{\alpha_K}{\zeta}$ and $\first{(1\otimes\kappa)\alpha_L}{\zeta}$ have
+  the same minimal polynomial and thus describe an isomorphism from $K$ to $L$
+  by Proposition~\ref{prop:description}.
+\end{proof}
+Finally, Lenstra-Allombert algorithm, in the general case, consists in
+\begin{enumerate}
+  \item finding $\alpha_K\in K\otimes\mathbb{F}_p(\zeta)$ such that
+    \[
+      (\sigma\otimes1)(\alpha_K)=(1\otimes\zeta)\alpha_K
+    \]
+    and $\alpha_L\in L\otimes\mathbb{F}_p(\zeta)$ such that
+    \[
+      (\sigma\otimes1)(\alpha_L)=(1\otimes\zeta)\alpha_L;
+    \]
+  \item computing an $n$-th root $\kappa\in\mathbb{F}_p(\zeta)$ of the quotient
+    $\alpha_K^n/\alpha_L^n$;
+  \item returning the isomorphism described by
+    $\first{\alpha_K}{\zeta}\mapsto\first{(1\otimes\kappa)\alpha_L}{\zeta}$.
+\end{enumerate}
+The computational cost of Lenstra-Allombert algorithm reside in the computation
+of~\eqref{eq:h90-kummer} solutions, \ie Step $1$ of the previous list.
+
+\subsection{Computing~\eqref{h90-kummer} solutions}
 
 \section{The embedding evaluation problem}
 \label{sec:evaluation}
