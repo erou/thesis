@@ -586,7 +586,7 @@ to the eigenvalue $\zeta$ is described by the equation
  \begin{proof}
    Let $r=\left[ \mathbb{F}_{p}(\zeta):\K \right]$ and
    \[
-     P = X^r + \sum_{j=0}^{r-1}z_j X^j
+     P = X^r - \sum_{j=0}^{r-1}z_j X^j
    \]
    the minimal polynomial of $\zeta$ over $\K$. Let also
    \[
@@ -787,8 +787,145 @@ Finally, Lenstra-Allombert algorithm, in the general case, consists in
 The computational cost of Lenstra-Allombert algorithm reside in the computation
 of~\eqref{eq:h90-kummer} solutions, \ie Step $1$ of the previous list.
 
-\subsection{Computing~\eqref{h90-kummer} solutions}
+\subsection{Computing~\eqref{eq:h90-kummer} solutions}
+
+In this section, we briefly present the different known solutions to
+compute~\eqref{eq:h90-kummer} solutions, details can be found in~\cite{BDDFS17}.
+Allombert first proposed to use linear
+algebra. The idea is to compute the matrix $M$ of the Frobenius automorphism
+$\sigma$ of $\mathbb{F}_{p^n}/\K$, that is the same as the matrix of
+$\sigma\otimes1$, and then to compute an eigenvector of $M$ over
+\[
+  1\otimes\mathbb{F}_{p}(\zeta) \cong \mathbb{F}_{p}(\zeta)
+\]
+for the eigenvalue
+\[
+  1\otimes\zeta\cong\zeta.
+\]
+Allombert later revised his algorithm: instead of directly using linear algebra over
+$\mathbb{F}_{p}(\zeta)$, we can use the factorization
+\[
+  P(X) = (X-\zeta)b(X)
+\]
+where $P$ is the minimal polynomial of $\zeta$ over $\K$. If we note
+\[
+  P = X^r + \sum_{j=0}^{r-1}z_jX^j,
+\]
+we can check that
+\[
+  b(X) = \sum_{j=0}^{r-1}b_j(X)\zeta^j,\text{ where}
+  \left\{ 
+    \begin{array}{l}
+      b_{r-1}(X) = 1,\\
+      b_{j-1}(X) = b_j(X) X + z_j\text{ for all } 0\leq j\leq r-1.
+    \end{array}
+  \right.
+\]
+Indeed, direct computation shows that
+\[
+  (X-\zeta)b(X) = b_0(X)X+z_0  = b_{-1}(X)
+\]
+and Horner 's rule also shows that
+\[
+  b_{-1}(X) = P(X).
+\]
+We then get a solution of~\eqref{eq:h90-kummer} by evaluating $b(X)$ at an
+element in the kernel of 
+\[
+  P(\sigma)=(\sigma-\zeta\Id)\circ b(\sigma),
+\]
+hence we still use linear algebra, but
+over $\K=\mathbb{F}_p$ instead of $\mathbb{F}_{p}(\zeta)$ this time. A different
+strategy follows from the fact that if $x\in\mathbb{F}_{p^n}$, then
+\[
+  \alpha_x=\sum_{j=0}^{n-1}\sigma^j(x)\otimes\zeta^{-j-1}
+\]
+verifies
+\[
+  (\sigma\otimes1)(\alpha_x) = (1\otimes\zeta)\alpha_x.
+\]
+This is also a consequence of the factorization
+\begin{align*}
+  X^n-1 &= (X-\zeta)\sum_{j=0}^{n-1}\zeta^{-j-1}X^j\\
+  &= (X-\zeta)\Theta(X).
+\end{align*}
+The question is now whether the solution $\alpha_x$ is nonzero. By the theorem
+on character independence~\cite[Chapter VI, §4]{Lang04} the maps
+$1, \sigma, \sigma^2, \dots, \sigma^{n-1}$, all distinct, are independant.
+Therefore, the $\K$-linear map
+\[
+  x\mapsto\alpha_x
+\]
+cannot be indentically zero on $\mathbb{F}_{p^n}$ and has rank at least $1$. A
+random $\alpha_x$ thus have a probability of being zero less than $1/p$, so we
+need $O(1)$ trials to find a nonzero $\alpha_x$ at random. Depending on the
+relative size of $p$, $n$, and $s=\left[ \mathbb{F}_p(\zeta):\K \right]$, the
+computational cost of finding a nonzero $\alpha_x$ is discussed in details
+in~\cite{BDDFS17}. If $\omega=3$, where $\omega$ is the exponent of matrix
+multiplication, then the cost is at best quadratic in $n$.
 
 \section{The embedding evaluation problem}
 \label{sec:evaluation}
 
+Let us first recall the problem. Let $\K=\mathbb{F}_p$ the prime field with $p$
+elements, where $p\in\mathbb{N}$ is a prime number, and let $K$ and $L$ be
+two finite extensisons of $\K$. Let $m=\left[ K:\K \right]$ and $n = \left[ L:\K
+\right]$ be the respective degrees of the extensions $K/\K$ and $L/\K$ and
+assume that
+\[
+  m\mid n.
+\]
+Let $\alpha\in K$ and $\beta\in L$ be two elements such that the $\K$-linear map
+\[
+  \phi:\alpha\mapsto\beta
+\]
+sending $\alpha$ to $\beta$ describes an embedding from $K$ to $L$. The
+\emph{embedding evaluation problem} consists in three sub-goals: given $\alpha$
+and $\beta$ defined above and elements $\gamma\in K$, $\delta\in L$:
+\begin{itemize}
+  \item compute $\phi(\gamma)\in L$;
+  \item test if $\delta\in\phi(K)$;
+  \item if $\delta\in\phi(K)$, then compute $\phi^{-1}(\delta)\in K$.
+\end{itemize}
+In this section too, we follow the presentation of~\cite{BDDFS17} and we develop
+three solutions constructed on top of each other.
+
+\subsection{Linear algebra}
+
+Until the end of the section, we assume that the elements in $K$ are represented
+on the monomial basis
+\[
+  (1, X, \dots, X^{m-1})
+\]
+and the elements in $L$ are represented on the monomial basis
+\[
+  (1, Y, \dots, Y^{n-1}).
+\]
+We are particularly interested in the $\K$-vector space structure of $K$ and
+$L$ and in order to emphasize which bases is used, we let
+\[
+  V_X
+\]
+be the vector space $K$ equipped with the basis $(1, X, \dots, X^{m-1})$ and
+\[
+  V_Y
+\]
+be the vector space $L$ equipped with the basis $(1, Y, \dots, Y^{n-1})$.
+Similarly, we let 
+\[
+  V_\alpha
+\]
+be the vector space $K$ equipped with the basis $(1, \alpha, \dots,
+\alpha^{m-1})$ and
+\[
+  V_\beta
+\]
+the subspace $V_\beta\subset L$ equipped with the basis $(1, \beta, \dots,
+\beta^{n-1})$ that is isomorphic to $V_\alpha$.
+Since the map $\phi$ is $\K$-linear, we can store the $n\times m$ matrix representing $\phi$
+in the monomial bases and evaluate $\phi$ via a matrix-vector product. We know
+that $\phi$ maps $\alpha$ to $\beta$, 
+
+\subsection{Inverse maps and duality}
+\subsection{Modular composition}
+%
