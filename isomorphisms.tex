@@ -902,7 +902,7 @@ and the elements in $L$ are represented on the monomial basis
   (1, Y, \dots, Y^{n-1}).
 \]
 We are particularly interested in the $\K$-vector space structure of $K$ and
-$L$ and in order to emphasize which bases is used, we let
+$L$ and in order to emphasize which basis is used, we let
 \[
   V_X
 \]
@@ -920,11 +920,34 @@ be the vector space $K$ equipped with the basis $(1, \alpha, \dots,
 \[
   V_\beta
 \]
-the subspace $V_\beta\subset L$ equipped with the basis $(1, \beta, \dots,
-\beta^{n-1})$ that is isomorphic to $V_\alpha$.
+be the subspace $V_\beta\subset L$ equipped with the basis $(1, \beta, \dots,
+\beta^{m-1})$, that is isomorphic to $V_\alpha$.
 Since the map $\phi$ is $\K$-linear, we can store the $n\times m$ matrix representing $\phi$
 in the monomial bases and evaluate $\phi$ via a matrix-vector product. We know
-that $\phi$ maps $\alpha$ to $\beta$, 
+that $\phi$ maps $\alpha$ to $\beta$, hence we write $\phi$ as the composition
+of three maps
+\[
+  V_X \overset{\sim}{\longrightarrow} V_\alpha \overset{\sim}{\longrightarrow}
+  V_\beta \longhookrightarrow V_Y.
+\]
+First, we apply a change of basis from $V_X$ to $V_\alpha$. Then we apply the
+isomorphism from $V_\alpha$ to $V_\beta$, that is represented by the
+identity matrix. Finally we write the obtained element, expressed in $(1,
+\beta, \dots, \beta^{m-1})$, in the
+monomial basis of $L$, \ie we embed $V_\beta$ in $V_Y$. The map
+$V_\beta\hookrightarrow V_Y$ is represented by an $n\times m$ matrix whose
+columns are the vectors $(\beta^j)_{0\leq j\leq m-1}$ expressed in the monomial
+basis of $L$. The inverse of this map is obtained by solving a linear system.
+Similarly, the map $V_X\overset{\sim}{\to}V_\alpha$ is represented
+by the $m\times m$ matrix whose columns are the vectors $(X^j)_{0\leq j\leq
+m-1}$ expressed in the basis $(1, \alpha, \dots, \alpha^{m-1})$, that is also
+the inverse of the matrix whose columns are the vectors $(\alpha^j)_{0\leq j\leq
+m-1}$ expressed in the monomial basis of $K$. The cost of the evaluation of
+$\phi$ and its inverse is thus dominated by the solving of the linear system,
+that is $O(m^{\omega-1}n)$. This cost can be be reduced to $O(mn)$ with some
+precomputation, \eg an LU decomposition, but the biggest drawback of the linear
+algebra approach is the memory complexity rather than the time complexity.
+Indeed, storing the matrices requires $O(mn)$ elements in $\K$.
 
 \subsection{Inverse maps and duality}
 \subsection{Modular composition}

@@ -9,7 +9,110 @@ call \emph{standard lattice of compatibly embedded finite fields}.
 \clearpage
 The two methods of Chapter~\ref{chap:lattice} both have their drawbacks: Conway
 polynomials are expensive to compute and thus need to be precomputed, making
-thme inefficient for large extensions, while Bosma-Canon-Steel needs more
-computation each time an embedding is added in the lattice.
+them inefficient for large extensions, while Bosma-Canon-Steel needs more
+computation each time an embedding is added in the lattice. % Not precise enough/!\
+Our starting point in order to propose an alternative framework for lattices of
+compatibly embedded finite fields is Lenstra-Allombert algorithm and the study
+of Kummer algebras done in Section~\ref{sec:kummer-algebras}. In all this
+chapter, $\K=\mathbb{F}_p$ is a prime field of cardinality $p$, where
+$p\in\mathbb{N}$ is a prime number.
+
+\section{Lenstra-Allombert algorithm and lattices of embeddings}
+
+Let us first recall Lenstra-Allombert \emph{isomorphism} algorithm. We keep the
+notations of Section~\ref{sec:allombert}, where the details can be found. Let $K$ and
+$L$ be two finite fields with $p^n$ elements, where $\gcd(p, n) = 1$, \ie
+\[
+  p\nmid n.
+\]
+We know that $K$ and $L$ are isomorphic and, if $\zeta$ is a primitive $n$-th
+root of unity taken in the algebraic closure $\bar{\mathbb{F}}_p$ of $\K$, we know
+we can find an isomorphism by
+finding two solutions $\alpha_K$ and $\alpha_L$ to the equation~\eqref{eq:h90-kummer}
+\[
+  (\sigma\otimes1)(\alpha) = (1\otimes\zeta)\alpha,
+\]
+respectively in $K\otimes\mathbb{F}_p(\zeta)$ and $L\otimes\mathbb{F}_p(\zeta)$.
+We then compute $\kappa\in\mathbb{F}_p(\zeta)$ such that
+\[
+  1\otimes\kappa^n = \alpha_K^n/\alpha_L^n
+\]
+and the map
+\[
+  \phi:\first{\alpha_K}{\zeta}\mapsto\first{(1\otimes\kappa)\alpha_L}{\zeta}
+\]
+is then an isomorphism from $K$ to $L$. A key part of the algorithm is that the
+root $\zeta$ must be the same in the two Kummer algebras
+$K\otimes\mathbb{F}_p(\zeta)$ and $L\otimes\mathbb{F}_p(\zeta)$. In practice, it
+means that we need to use elements that have the same minimal polynomial to
+define $\zeta$ in both algebras. This constraint might seem easy to fulfill in
+this case, but it becomes harder in the case of a \emph{compatible embedding}
+computation. Assume that $m, n\in\mathbb{N}$ are two integers such that
+\[
+  m\mid n
+\]
+and $\gcd(p, m)=\gcd(p, n)=1$. Let $K$ be a finite field with $p^m$ elements and
+$L$ a finite fields with $p^n$ elements. We know that $K$ is isomorphic to a
+subfield of $L$, \ie we have an embedding
+\[
+  K\emb L.
+\]
+To compute an embedding, one solution is to compute the algebras
+$K\otimes\mathbb{F}_p(\zeta_m)$ and
+$L\otimes\mathbb{F}_p(\zeta_m)$, where $\zeta_m$ is a primitive $m$-th root of
+unity, as done in the isomorphism case, then compute solutions
+$\alpha_{K, m}, \alpha_{L, m}$ of~\eqref{eq:h90-kummer} and the constant
+$\kappa=\kappa_{K\emb L}$. This solution is satisfying as long as we only want
+to compute a \emph{single} embedding in $L$. Indeed, assume we also have an
+integer $l\in\mathbb{N}$ that divides $n$, such that $\gcd(p, l)=1$, and a
+finite field $H$ of cardinality $p^l$. Then there is an embedding
+\[
+  H\emb L,
+\]
+and in order to compute it we must find a primitive $l$-th root of unity
+$\zeta_l$, compute $L\otimes\mathbb{F}_p(\zeta_l)$, compute a new solution
+$\alpha_{L, l}$ of~\eqref{eq:h90-kummer} for $\zeta_l$ and the associated
+constant $\kappa_{H\emb L}$. Therefore, each new embedding comes with the
+computation of a new Kummer algebra, solution of~\eqref{eq:h90-kummer}, and an
+element $\kappa$. We must also store the elements $\kappa$ and the elements
+defining the embeddings. Now, recall that if we want to use Bosma-Canon-Steel
+framework in order to compatibly embed $K$ in $L$, we must reccursively embed
+the intersections $K\cap M$ of each already embedded subfield $M$ of $L$ with $K$ in both $K$
+and $L$.
+\begin{center}
+  \begin{tikzpicture}
+    \node (K) at (0, 2) {$K$};
+    \node (L) at (2, 4) {$L$};
+    \node (M) at (4, 2) {$M$};
+    \node (I) at (2, 0) {$K\cap M$};
+    \node (?) at (1, 1) {\textbf{?}};
+    \node (??) at (3, 1) {\textbf{?}};
+
+    \draw[dashed-arrow] (K) to (L);
+    \draw[arrow] (M) to (L);
+    \draw[possible-arrow] (I) to (K);
+    \draw[possible-arrow] (I) to (M);
+  \end{tikzpicture}
+\end{center}
+This yields a quadratic memory complexity in the number of extensions in the
+lattice and their degrees, as well as a quadratic number of new embedding
+computations, \ie computations of Kummer algebras and solutions
+of~\eqref{eq:h90-kummer}. It motivates a new solution with only one computation
+of Kummer algebra and~\eqref{eq:h90-kummer} solution per extension in the lattice,
+independently of the number of embedded subfields. Assume we have $\zeta_m$ and
+$\zeta_n$ respectively two $m$-th and $n$-th primitive roots
+of unity that are \emph{compatible}, \ie such that
+\[
+  (\zeta_n)^{n/m} = \zeta_m.
+\]
+We compute the Kummer algebras $K\otimes\mathbb{F}_{p}(\zeta_m)$ and
+$L\otimes\mathbb{F}_p(\zeta_n)$, $\alpha_K$ a solution of~\eqref{eq:h90-kummer}
+for the root $\zeta_m$ and $\alpha_L$ a solution of~\eqref{eq:h90-kummer} for
+the root $\zeta_n$. In that case, the element
+\[
+  (\alpha_L)^{n/m}\in L\otimes\mathbb{F}_p(\zeta_n)
+\]
+is a solution of~\eqref{eq:h90-kummer} for the root $(\zeta_n)^{n/m}=\zeta_m$.
+
 \section{Standard solution of Hilbert $90$}
 \section{Standard embeddings}
