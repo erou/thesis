@@ -950,5 +950,36 @@ algebra approach is the memory complexity rather than the time complexity.
 Indeed, storing the matrices requires $O(mn)$ elements in $\K$.
 
 \subsection{Inverse maps and duality}
+
+The first improvement to the linear algebra method consists in replacing the
+linear system solving used in the computation of the inverse of
+\[
+  V_\beta\emb V_Y
+\]
+by simpler operations, such as matrix-vector product, in order to reduce the
+overall complexity. We first recall facts about bilinear forms and duality, the
+presentation follows the one in~\cite{BDDFS17} and~\cite{DDS14}, and a standard
+presentation is also available in~\cite{Lang04}. Recall that
+\[
+  K\cong\mathbb{F}_{p^m}
+\]
+admits a monomial basis $(1, X, \dots, X^{m-1})$ and that
+\[
+  L\cong\mathbb{F}_{p^n}
+\]
+admits a monomial basis $(1, Y, \dots, Y^{n-1})$. The trace $\tr_{K/\K}$ from $K$ to
+$\K$ defines a non-degenerate bilinear form denoted by
+\[
+  \ps{x}{y}_K = \tr_{K/\K}(xy).
+\]
+Therefore, we can define a \emph{dual basis} $(X_0^*, X_1^*, \dots, X_{m-1}^*)$
+to $(1, X, \dots, X^{m-1})$, characterized by
+\[
+  \ps{X^j}{X_i^*}=\left\{\begin{array}{l}
+    1\text{ if }i=j\\
+    0\text{ otherwise.}
+  \end{array}\right.
+\]
+
 \subsection{Modular composition}
 %

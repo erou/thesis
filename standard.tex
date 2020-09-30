@@ -112,7 +112,33 @@ the root $\zeta_n$. In that case, the element
 \[
   (\alpha_L)^{n/m}\in L\otimes\mathbb{F}_p(\zeta_n)
 \]
-is a solution of~\eqref{eq:h90-kummer} for the root $(\zeta_n)^{n/m}=\zeta_m$.
+is a solution of~\eqref{eq:h90-kummer} for the root $(\zeta_n)^{n/m}=\zeta_m$,
+indeed
+\begin{align*}
+  (\sigma\otimes1)((\alpha_L)^{n/m}) &=
+  ( (\sigma\otimes1)(\alpha_{L}))^{n/m} \\
+  &= ( (1\otimes\zeta_n)\alpha_L)^{n/m}\\
+  &= (1\otimes (\zeta_n)^{n/m})(\alpha_L)^{n/m}.
+\end{align*}
+The embedding $K\emb L$ is then discribed by
+\[
+  \first{\alpha_K}{\zeta_m}\mapsto\first{(1\otimes\kappa_{K\emb
+  L})(\alpha_L)^{n/m}}{(\zeta_n)^{n/m}},
+\]
+where $\kappa_{K\emb L}\in\mathbb{F}_p(\zeta_n)$ is a $m$-th root of
+$\alpha_L^n/\alpha_K^m$. There are still two issues with such a solution. First,
+it is still necessary to store the constants $\kappa_{K\emb L}$ for each
+embedding
+\[
+  K\emb L
+\]
+in the lattice. We would like these constants $\kappa$ to be equal to $1$, or
+maybe that a close formula exists for these constants, by choosing special
+solutions $\alpha$ of~\eqref{eq:h90-kummer}. We achieve the latter % TODO: check latter
+by constructing \emph{standard} solutions of~\eqref{eq:h90-kummer} in
+Section~\ref{sec:standard-solution}. The second, and most important, issue is the compatibility
+condition between the roots of unity $\zeta$.
 
 \section{Standard solution of Hilbert $90$}
+\label{sec:standard-solution}
 \section{Standard embeddings}
