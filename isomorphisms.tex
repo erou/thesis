@@ -980,6 +980,88 @@ to $(1, X, \dots, X^{m-1})$, characterized by
     0\text{ otherwise.}
   \end{array}\right.
 \]
+Similarly, we can define a non-degenerate bilinear form from $L$ to $\K$ by
+\[
+  \ps{x}{y}_L = \tr_{L/\K}(xy),
+\]
+and a dual basis $(Y_0^*, \dots, Y_{n-1}^*)$ to $(1, \dots, Y^{n-1})$
+corresponding to this bilinear form. Now, let
+\[
+  \phi:K\emb L
+\]
+be an embedding. It is a $\K$-linear map and thus there exists a unique
+\emph{dual map} $\phi^t$, such that
+\[
+  \ps{\phi(x)}{y}_L = \ps{x}{\phi^t(y)}_K
+\]
+for all $x\in K$ and $y\in L$. Furthermore, if $M$ is the matrix representing
+$\phi$ in the monomial bases of $K$ and $L$, then its transposed matrix $M^t$
+represents the map $\phi^t$ in the \emph{dual bases}. This allows to efficiently compute
+$\phi^t$, because the conversions from the monomial basis to the dual basis of
+$\mathbb{F}_{p^m}$ can be done at a cost of $O(M(m)\log(m))$ operations in $\K$,
+as explained in~\cite{DDS14}. Fortunately, the map $\phi^t$, that is easy to
+compute, is closely related to $\phi^{-1}$, the map that we want. In particular, if
+$K\cong L$ and $\phi$ is an isomorphism of fields, we have that $\phi^t$ is
+exaclty $\phi^{-1}$. Indeed, in that case, the map $\phi$ preserves the bilinear
+form, \ie for all $x, y\in K$, we have
+\[
+  \ps{\phi(x)}{\phi(y)}_L = \ps{x}{y}_K.
+\]
+We thus have
+\[
+  \ps{x}{(\phi^t\circ\phi)(y)}_K = \ps{x}{y}_K,
+\]
+and it follows that $\phi^t\circ\phi$ is the identity map, because the bilinear
+form is non-degenerate. Now if $K$ and $L$ are not isomorphic, \ie $m<n$, we can
+still use $\phi^t$ to recover $\phi^{-1}$. Let 
+\[
+  d = [L:K] = \frac{n}{m}
+\]
+and
+\[
+  x\in \phi(K)\subsetneq L,
+\]
+we have
+\begin{align*}
+  \tr_{L/\K}(x) &= \sum_{j=0}^{n-1}\sigma^i(x) \\
+  &= \sum_{i=0}^{d-1}\sum_{j=0}^{m-1}\sigma^{im+j}(x)\\
+  &= \sum_{i=0}^{d-1}\sum_{j=0}^{m-1}\sigma^{j}(x)\\
+  &= \sum_{i=0}^{d-1}\tr_{\phi(K)/\K}(x)
+\end{align*}
+and thus it follows that
+\[
+  \tr_{L/\K}(x) = d\tr_{\phi(K)/\K}(x).
+\]
+Hence, in that case, the map $\phi$ does not preserve the bilinear form, but we
+still have
+\[
+  \ps{\phi(x)}{\phi(y)}_L = d\ps{x}{y}_K
+\]
+for all $x, y\in K$. If $d$ is not a multiple of the characteristic $p$, then
+the map $d^{-1}\phi^t$ is the inverse of $\phi$, by the same argument as before.
+Otherwise, let $x\in\phi(K)\subsetneq L$ and let $u\in L$ an element such that
+\[
+  \tr_{L/\phi(K)}(u)=1.
+\]
+Then, by transitivity of the trace, and by
+$\phi(K)$-linearity of the trace $\tr_{L/\phi(K)}$, it follows that
+\begin{align*}
+  \tr_{L/\K}(ux) &= \tr_{\phi(K)/\K}(\tr_{L/\phi(K)}(ux)) \\
+  &= \tr_{\phi(K)/\K}(x\tr_{L/\phi(K)}(u)) \\
+  &= \tr_{\phi(K)/\K}(x).
+\end{align*}
+Therefore we have
+\begin{align*}
+  \ps{x}{y}_K &= \tr_{K/\K}(xy) \\
+  &= \tr_{\phi(K)/\K}(\phi(x)\phi(y)) \\
+  &= \tr_{L/\K}(u\phi(x)\phi(y))\\
+  &= \ps{\phi(x)}{u\phi(y)}_L,
+\end{align*}
+and if we let $U$ the map defined by $z\mapsto uz$, we conclude that
+\[
+  \phi^t\circ U\circ\phi=\phi^t\circ U^t\circ\phi
+\]
+is the identity map, and we can once again compute $\phi^{-1}$.
 
 \subsection{Modular composition}
 %

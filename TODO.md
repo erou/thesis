@@ -30,7 +30,8 @@ Chapter 5
 =========
 
 - Add a discussion on how to compute H90 solutions
-- Write Section 5.3
+- Finish Section 5.3.2
+- Write Section 5.3.3
 
 Chapter 6
 =========
@@ -40,4 +41,4 @@ Chapter 6
 Chapter 7
 =========
 
-- Nothing done yet
+- Write Sections 7.2 and 7.3 (core of the theory)
