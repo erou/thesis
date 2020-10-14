@@ -891,6 +891,7 @@ In this section too, we follow the presentation of~\cite{BDDFS17} and we develop
 three solutions constructed on top of each other.
 
 \subsection{Linear algebra}
+\label{sec:linalg}
 
 Until the end of the section, we assume that the elements in $K$ are represented
 on the monomial basis
@@ -944,7 +945,7 @@ m-1}$ expressed in the basis $(1, \alpha, \dots, \alpha^{m-1})$, that is also
 the inverse of the matrix whose columns are the vectors $(\alpha^j)_{0\leq j\leq
 m-1}$ expressed in the monomial basis of $K$. The cost of the evaluation of
 $\phi$ and its inverse is thus dominated by the solving of the linear system,
-that is $O(m^{\omega-1}n)$. This cost can be be reduced to $O(mn)$ with some
+that is $O(m^{\omega-1}n)$. This cost can be reduced to $O(mn)$ with some
 precomputation, \eg an LU decomposition, but the biggest drawback of the linear
 algebra approach is the memory complexity rather than the time complexity.
 Indeed, storing the matrices requires $O(mn)$ elements in $\K$.
@@ -987,81 +988,112 @@ Similarly, we can define a non-degenerate bilinear form from $L$ to $\K$ by
 and a dual basis $(Y_0^*, \dots, Y_{n-1}^*)$ to $(1, \dots, Y^{n-1})$
 corresponding to this bilinear form. Now, let
 \[
-  \phi:K\emb L
+  \psi:K\emb L
 \]
 be an embedding. It is a $\K$-linear map and thus there exists a unique
-\emph{dual map} $\phi^t$, such that
+\emph{dual map} $\psi^t$, such that
 \[
-  \ps{\phi(x)}{y}_L = \ps{x}{\phi^t(y)}_K
+  \ps{\psi(x)}{y}_L = \ps{x}{\psi^t(y)}_K
 \]
 for all $x\in K$ and $y\in L$. Furthermore, if $M$ is the matrix representing
-$\phi$ in the monomial bases of $K$ and $L$, then its transposed matrix $M^t$
-represents the map $\phi^t$ in the \emph{dual bases}. This allows to efficiently compute
-$\phi^t$, because the conversions from the monomial basis to the dual basis of
+$\psi$ in the monomial bases of $K$ and $L$, then its transposed matrix $M^t$
+represents the map $\psi^t$ in the \emph{dual bases}. This allows to efficiently compute
+$\psi^t$, because the conversions from the monomial basis to the dual basis of
 $\mathbb{F}_{p^m}$ can be done at a cost of $O(M(m)\log(m))$ operations in $\K$,
-as explained in~\cite{DDS14}. Fortunately, the map $\phi^t$, that is easy to
-compute, is closely related to $\phi^{-1}$, the map that we want. In particular, if
-$K\cong L$ and $\phi$ is an isomorphism of fields, we have that $\phi^t$ is
-exaclty $\phi^{-1}$. Indeed, in that case, the map $\phi$ preserves the bilinear
+as explained in~\cite{DDS14}. Fortunately, the map $\psi^t$, that is easy to
+compute, is closely related to $\psi^{-1}$, the map that we want. In particular, if
+$K\cong L$ and $\psi$ is an isomorphism of fields, we have that $\psi^t$ is
+exaclty $\psi^{-1}$. Indeed, in that case, the map $\psi$ preserves the bilinear
 form, \ie for all $x, y\in K$, we have
 \[
-  \ps{\phi(x)}{\phi(y)}_L = \ps{x}{y}_K.
+  \ps{\psi(x)}{\psi(y)}_L = \ps{x}{y}_K.
 \]
 We thus have
 \[
-  \ps{x}{(\phi^t\circ\phi)(y)}_K = \ps{x}{y}_K,
+  \ps{x}{(\psi^t\circ\psi)(y)}_K = \ps{x}{y}_K,
 \]
-and it follows that $\phi^t\circ\phi$ is the identity map, because the bilinear
+and it follows that $\psi^t\circ\psi$ is the identity map, because the bilinear
 form is non-degenerate. Now if $K$ and $L$ are not isomorphic, \ie $m<n$, we can
-still use $\phi^t$ to recover $\phi^{-1}$. Let 
+still use $\psi^t$ to recover $\psi^{-1}$. Let 
 \[
   d = [L:K] = \frac{n}{m}
 \]
 and
 \[
-  x\in \phi(K)\subsetneq L,
+  x\in \psi(K)\subsetneq L,
 \]
 we have
 \begin{align*}
   \tr_{L/\K}(x) &= \sum_{j=0}^{n-1}\sigma^i(x) \\
   &= \sum_{i=0}^{d-1}\sum_{j=0}^{m-1}\sigma^{im+j}(x)\\
   &= \sum_{i=0}^{d-1}\sum_{j=0}^{m-1}\sigma^{j}(x)\\
-  &= \sum_{i=0}^{d-1}\tr_{\phi(K)/\K}(x)
+  &= \sum_{i=0}^{d-1}\tr_{\psi(K)/\K}(x)
 \end{align*}
 and thus it follows that
 \[
-  \tr_{L/\K}(x) = d\tr_{\phi(K)/\K}(x).
+  \tr_{L/\K}(x) = d\tr_{\psi(K)/\K}(x).
 \]
-Hence, in that case, the map $\phi$ does not preserve the bilinear form, but we
+Hence, in that case, the map $\psi$ does not preserve the bilinear form, but we
 still have
 \[
-  \ps{\phi(x)}{\phi(y)}_L = d\ps{x}{y}_K
+  \ps{\psi(x)}{\psi(y)}_L = d\ps{x}{y}_K
 \]
 for all $x, y\in K$. If $d$ is not a multiple of the characteristic $p$, then
-the map $d^{-1}\phi^t$ is the inverse of $\phi$, by the same argument as before.
-Otherwise, let $x\in\phi(K)\subsetneq L$ and let $u\in L$ an element such that
+the map $d^{-1}\psi^t$ is the inverse of $\psi$, by the same argument as before.
+Otherwise, let $x\in\psi(K)\subsetneq L$ and let $u\in L$ an element such that
 \[
-  \tr_{L/\phi(K)}(u)=1.
+  \tr_{L/\psi(K)}(u)=1.
 \]
 Then, by transitivity of the trace, and by
-$\phi(K)$-linearity of the trace $\tr_{L/\phi(K)}$, it follows that
+$\psi(K)$-linearity of the trace $\tr_{L/\psi(K)}$, it follows that
 \begin{align*}
-  \tr_{L/\K}(ux) &= \tr_{\phi(K)/\K}(\tr_{L/\phi(K)}(ux)) \\
-  &= \tr_{\phi(K)/\K}(x\tr_{L/\phi(K)}(u)) \\
-  &= \tr_{\phi(K)/\K}(x).
+  \tr_{L/\K}(ux) &= \tr_{\psi(K)/\K}(\tr_{L/\psi(K)}(ux)) \\
+  &= \tr_{\psi(K)/\K}(x\tr_{L/\psi(K)}(u)) \\
+  &= \tr_{\psi(K)/\K}(x).
 \end{align*}
 Therefore we have
 \begin{align*}
   \ps{x}{y}_K &= \tr_{K/\K}(xy) \\
-  &= \tr_{\phi(K)/\K}(\phi(x)\phi(y)) \\
-  &= \tr_{L/\K}(u\phi(x)\phi(y))\\
-  &= \ps{\phi(x)}{u\phi(y)}_L,
+  &= \tr_{\psi(K)/\K}(\psi(x)\psi(y)) \\
+  &= \tr_{L/\K}(u\psi(x)\psi(y))\\
+  &= \ps{\psi(x)}{u\psi(y)}_L,
 \end{align*}
 and if we let $U$ the map defined by $z\mapsto uz$, we conclude that
 \[
-  \phi^t\circ U\circ\phi=\phi^t\circ U^t\circ\phi
+  \psi^t\circ U\circ\psi=\psi^t\circ U^t\circ\psi
 \]
-is the identity map, and we can once again compute $\phi^{-1}$.
-
+is the identity map, and we can once again compute $\psi^{-1}$. Let us go back
+to our original problem: we want to compute the embedding
+\[
+  \phi:K\to L
+\]
+that is described by $\phi(\alpha) = \beta$. Recall that we can decompose $\phi$
+into three maps
+\[
+  V_X \overset{\sim}{\longrightarrow} V_\alpha \overset{\sim}{\longrightarrow}
+  V_\beta \longhookrightarrow V_Y,
+\]
+and that we want to be able to compute both $\phi$ and its inverse
+$\phi^{-1}$.
+% Nope, I don't think so! Easier to compute V_alpha to V_X and take the inverse,
+% usually, I guess.
+The map $V_\alpha\overset{\sim}{\to}V_\beta$ is represented by the identity
+matrix, thus is straighforward to compute. The map
+$V_\alpha\overset{\sim}{\to}V_X$ (the inverse of
+$V_X\overset{\sim}{\to}V_\alpha$) is represented, in the monomial bases of
+$V_\alpha$ and $V_X$, by the matrix whose columns are the vectors
+$(\alpha^j)_{0\leq j \leq m-1}$ in the monomial basis of $K$. The map
+$V_\beta\emb V_Y$ is similarly represented by the vectors
+$(\beta^{j})_{1\leq j\leq m-1}$ in the monomial basis of $L$. Both these
+maps are actually embeddings, thus we can compute their inverse using duality
+theory instead of solving linear systems like described in
+Section~\ref{sec:linalg}. The inverse of $V_\beta\emb V_Y$ is evaluated by
+multiplying by a fixed element $u$ that has a trace equal to $1$, then the
+result is converted in the dual basis of $V_Y$, a matrix-vector product with the
+transposed matrix of $V_\beta\emb V_Y$ is computed, and the product is then
+converted back to the monomial basis of $V_Y$. The inverse of the embedding
+$V_\alpha\overset{\sim}{\to}V_X$ is obtained similarly, but without the need to
+multiply by an element $u$, because the embedding is actually an isomorphism in
+that case.
 \subsection{Modular composition}
 %

@@ -242,8 +242,6 @@ TSWLatexianTemp*
 # generated if using elsarticle.cls
 *.spl
 
-thesis.pdf
-
 # emacs backups
 *~
 
@@ -254,3 +252,5 @@ thesis.pdf
 # ??
 *.mtc
 *.swp
+
+thesis.pdf
