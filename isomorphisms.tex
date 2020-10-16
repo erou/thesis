@@ -1074,11 +1074,8 @@ into three maps
   V_\beta \longhookrightarrow V_Y,
 \]
 and that we want to be able to compute both $\phi$ and its inverse
-$\phi^{-1}$.
-% Nope, I don't think so! Easier to compute V_alpha to V_X and take the inverse,
-% usually, I guess.
-The map $V_\alpha\overset{\sim}{\to}V_\beta$ is represented by the identity
-matrix, thus is straighforward to compute. The map
+$\phi^{-1}$. The map $V_\alpha\overset{\sim}{\to}V_\beta$ is represented by the
+identity matrix, thus is straighforward to compute. The map
 $V_\alpha\overset{\sim}{\to}V_X$ (the inverse of
 $V_X\overset{\sim}{\to}V_\alpha$) is represented, in the monomial bases of
 $V_\alpha$ and $V_X$, by the matrix whose columns are the vectors
@@ -1095,5 +1092,47 @@ converted back to the monomial basis of $V_Y$. The inverse of the embedding
 $V_\alpha\overset{\sim}{\to}V_X$ is obtained similarly, but without the need to
 multiply by an element $u$, because the embedding is actually an isomorphism in
 that case.
+
+It is possible to apply these steps on every element in $V_Y$, although
+$\phi^{-1}$ is defined only on the image of $\phi$, \ie the subfield
+\[
+  \phi(K)\subset L.
+\]
+It the element we apply our steps to is not in $\phi(K)$, we just obtain an
+arbitrary projection in $K$. Indeed, if $x\in K$ and $y\in L$, we can decompose
+$y$ as
+\begin{align*}
+  y &= y - \tr_{L/K}(uy) + \tr_{L/K}(uy)\\
+  &= y' + \tr_{L/K}(uy),
+\end{align*}
+where $u\in L$ is an element such that $\tr_{L/K}(u)=1$ and
+$y'=y-\tr_{L/K}(uy)$. Then we have
+\begin{align*}
+  \ps{\phi(x)}{uy'}_L &= \tr_{L/\K}(\phi(x)uy')\\
+  &= \tr_{K/\K}(\tr_{L/K}(\phi(x)uy'))\\
+  &= \tr_{K/\K}(\tr_{L/K}(\phi(x)u(y-\tr_{L/K}(uy))))\\
+  &=
+  \tr_{K/\K}(\tr_{L/K}(\phi(x)uy))-\tr_{K/\K}(\tr_{L/K}(\phi(x)u\tr_{L/K}(uy)))\\
+  &= \tr_{K/\K}(x\tr_{L/K}(uy))-\tr_{K/\K}(x\tr_{L/K}(uy)\tr_{L/K}(u))\\
+  &= \tr_{K/\K}(x\tr_{L/K}(uy))-\tr_{K/\K}(x\tr_{L/K}(uy))\\
+  &= 0,
+\end{align*}
+therefore
+\begin{align*}
+  \ps{\phi(x)}{uy}_L &= \ps{\phi(x)}{uy'}_L+\ps{\phi(x)}{u\tr_{L/K}(uy)}_L\\
+  &= \ps{\phi(x)}{u\tr_{L/K}(uy)}_L\\
+  &= \ps{x}{\tr_{L/K}(uy)}_K,
+\end{align*}
+that means that applying our solution on $y$ results in the element
+$\tr_{L/K}(uy)$ in $V_\beta$, which coincides with $y$ if $y$ is in the subfield
+$\phi(K)\subset L$. In order to test if an element $y$ is in $\phi(K)$, the best
+way is then to project $y$ to $z = \tr_{L/K}(uy)$, and then check that
+\[
+  \phi(z) = y.
+\]
+After precomputation of the matrices, the most expensive operation is the
+matrix-vector product, that costs $O(mn)$ operations in $\K$. It is thus better
+than the cost of solving a linear system. Nevertheless, the problem of the memory
+complexity remains.
 \subsection{Modular composition}
 %
