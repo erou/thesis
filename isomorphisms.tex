@@ -951,6 +951,7 @@ algebra approach is the memory complexity rather than the time complexity.
 Indeed, storing the matrices requires $O(mn)$ elements in $\K$.
 
 \subsection{Inverse maps and duality}
+\label{sec:duality}
 
 The first improvement to the linear algebra method consists in replacing the
 linear system solving used in the computation of the inverse of
@@ -1082,7 +1083,7 @@ $V_\alpha$ and $V_X$, by the matrix whose columns are the vectors
 $(\alpha^j)_{0\leq j \leq m-1}$ in the monomial basis of $K$. The map
 $V_\beta\emb V_Y$ is similarly represented by the vectors
 $(\beta^{j})_{1\leq j\leq m-1}$ in the monomial basis of $L$. Both these
-maps are actually embeddings, thus we can compute their inverse using duality
+maps are embeddings, thus we can compute their inverse using duality
 theory instead of solving linear systems like described in
 Section~\ref{sec:linalg}. The inverse of $V_\beta\emb V_Y$ is evaluated by
 multiplying by a fixed element $u$ that has a trace equal to $1$, then the
@@ -1134,5 +1135,114 @@ After precomputation of the matrices, the most expensive operation is the
 matrix-vector product, that costs $O(mn)$ operations in $\K$. It is thus better
 than the cost of solving a linear system. Nevertheless, the problem of the memory
 complexity remains.
+
 \subsection{Modular composition}
+\label{sec:modular-composition}
+
+In order to tackle the memory complexity problem, we can replace the matrix
+computations by modular compositions, a technique initiated by
+Shoup~\cite{Shoup94, Shoup95, Shoup99}. Indeed, the computation of the embedding
+\[
+  V_\beta\emb V_Y
+\]
+is precisely a modular composition computation: we want to express a polynomial
+\[
+  \gamma = \sum_{j=0}^{m-1}c_j\beta^j,
+\]
+representing an element in $V_\beta$, into the monomial basis $(1, \dots,
+Y^{n-1})$, given the polynomial expression of $\beta$ in $V_Y$
+\[
+  \beta = \sum_{j=0}^{n-1}b_j Y_j.
+\]
+If $R$ is the polynomial defining $L$ over $\K$, \ie
+\[
+  L \cong \K[Y]/(R(Y)),
+\]
+then the computation of $V_\beta\emb V_Y$ is exactly the modular composition
+\[
+  \gamma(\beta(Y))\mod R(Y),
+\]
+and this can be done efficiently by a dedicated algorithm~\cite{KU08}.
+%TODO: ref to Section 1 also?
+In order to compute the inverse of $V_\beta\emb V_Y$, we cannot use the same
+algorithm, since this is not a modular composition problem, but we use a
+generalization of the duality results of Section~\ref{sec:duality} called the
+\emph{transposition principle}. This technique, also known as \emph{Tellengen's
+principle}~\cite{BLS03, DeFeo10, DS10}, allows one to \emph{transpose} an
+algorithm used to compute a linear map into a new algorithm that computes the
+transposed linear map, without changing the complexity of the algorithm. We can
+use the transposition principle with the modular composition, since the map
+\[
+  \gamma\to\gamma(\beta)\mod R
+\]
+is linear. The dual problem to modular composition was called \emph{power
+projection} by Shoup, who introduced the transposition principle. It takes as
+inputs the polynomials $\beta,R\in\K[Y]$, and an element $\gamma^\vee$ in
+$\K[Y]^\vee$, the dual space of $\K[Y]$, \ie the space of linear forms on
+$\K[Y]$. Its output is the list of elements
+\[
+  \gamma^\vee(1),\gamma^\vee(\beta),\gamma^\vee(\beta^2), \dots, \gamma^\vee(\beta^{n-1})
+\]
+in $\K$. Thanks to the transposition, the power projection problem can be solved
+within the same complexity bound as modular composition. Finally, the inverse of
+the embedding $\phi:V_\beta\emb V_Y$ is computed by
+Algorithm~\ref{algo:inverse-embedding}.
+\begin{algorithm}
+  \caption{Inverse embedding}
+  \label{algo:inverse-embedding}
+  \begin{algorithmic}[1]
+    \Require{An element $y\in L$, and two precomputed values: an element
+      $\beta\in L$ generating a subfield isomorphic to $K$ and an element $u\in
+      L$ such that $\tr_{L/K}(u)=1$.}
+    \Ensure{The element $\tr_{L/K}(uy)$ written in the basis $(1, \beta, \dots,
+    \beta^{m-1})$.}
+    \State\label{line:minpoly} Compute the minimal polynomial of $\beta$ over $\K$;
+    \State compute $y'=uy$;
+    \State convert $y'$ to the dual basis $(Y_0^*, \dots, Y_{n-1}^*)$;
+    \State compute $z = \tr_{L/K}(y')$ using \emph{power projections};
+    \State convert $z$ to the monomial basis $(1, \beta, \dots, \beta^{m-1})$;
+    \State \Return $z$.
+  \end{algorithmic}
+\end{algorithm}
+This algorithm takes $y\in L$ and computes
+$\tr_{L/K}(uy)$, where $u$ is still an element of relative trace equal to one:
+\[
+  \tr_{L/K}(u)=1.
+\]
+As discussed in Section~\ref{sec:duality}, this is also the result of applying
+\[
+  \phi^t\circ U = \phi^{-1}
+\]
+to $y$, where $U:y\to uy$ is the multiplication-by-$u$ map. When $y$ is in the
+subfield $\phi(K)\subsetneq L$, we obtain the element
+\[
+  \tr_{L/K}(uy) = y
+\]
+expressed in the basis $(1, \dots, \beta^{m-1})$. Since the trace is computed
+using power projection, rather than by a transposed matrix-vector product, this
+solves the quadratic memory complexity issue. The minimal polynomial of $\beta$,
+computed in Line~\ref{line:minpoly}, is required to perform conversions
+between the monomial and the dual basis generated by $\beta$. It is computed
+with $O(M(n)\log(n))$ operations, using the Berlekamp-Massey algorithm.
+Conversions are then also computed with $O(M(n)\log(n))$ operations with the
+algorithms in~\cite{DDS14}. Finally, the power projection costs $O(n^{(\omega
++1)/2})$ operations with the one of the algorithms in~\cite{Shoup95, KU08}, thus
+the total complexity of Algorithm~\ref{algo:inverse-embedding} is
+$O(n^{(\omega+1)/2})$. We have yet to see how to compute the element $u\in L$.
+If
+\[
+  d = [L:K]
+\]
+is not divisible by the characteristic $p$ of $\K$, then $d$ is such an element.
+Otherwise we can take any element whose trace is nonzero and divide it by its
+trace to have an element whose trace is exactly equal to $1$. To obtain an
+element whose trace is nonzero, we take random elements and compute
+their trace: a number of $O(1)$ trials is expected until a suitable element is
+found. Computing one trace can be done using
+$O(n^{(\omega+1)/2}\log(n)+M(n)\log(p))$ operations, thus the computation of $u$ has
+a cost of $O(n^{(\omega+1)/2}\log(n)+M(n)\log(p))$. To conclude, after this
+precomputation, all the sub-problems of the \emph{embedding evaluation problem}
+can be solved using $O(n^{(\omega+1)/2})$ operations in $\K$.
+% TODO: Ref to preliminaries?
+
 %
