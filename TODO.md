@@ -29,10 +29,6 @@ Chapter 4
 Chapter 5
 =========
 
-- Add a discussion on how to compute H90 solutions
-- Finish Section 5.3.2
-- Write Section 5.3.3
-
 Chapter 6
 =========
 

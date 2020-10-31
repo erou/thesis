@@ -30,7 +30,8 @@ the same as computing an isomorphism
 \]
 where $K\cong K'$ is isomorphic to a subfield $K'\subset L$ of $L$. The
 isomorphism $\phi'$ is just the embedding $\phi$ with its codomain being
-restricted to $K'$.
+restricted to $K'$. That is why in the following of this chapter, we present
+\emph{isomorphism} algorithms, rather than embeddings algorithms.
 
 \subsection{Description of the problem}
 
@@ -74,12 +75,12 @@ is split in two sub-parts.
     \]
     and such that there exists an embedding $\phi$ mapping $\alpha$ to $\beta$.
   \item[Embedding evaluation problem.] Given elements $\alpha$ and $\beta$
-    defined above, and elements $\gamma\in K$, $\delta\in L$, solve the
+    defined above, and elements $x\in K$, $y\in L$, solve the
     following problems:
     \begin{itemize}
-      \item compute $\phi(\gamma)\in L$;
-      \item test if $\delta\in\phi(K)$;
-      \item if $\delta\in\phi(K)$, then compute $\phi^{-1}(\delta)\in K$.
+      \item compute $\phi(x)\in L$;
+      \item test if $y\in\phi(K)$;
+      \item if $y\in\phi(K)$, then compute $\phi^{-1}(y)\in K$.
     \end{itemize}
 \end{description}
 As the name suggests, the \emph{embedding description problem} focuses on
@@ -177,13 +178,14 @@ Chapter~\ref{chap:standard} too. The techniques based on Kummer theories work
 for extensions of degree $n$ coprime to the characteristic $p$. In order to have
 an algorithm working for any type of extension, the solution is to deal with the
 part of the extension which degree is divisible by $p$ separately using
-Artin-Shreier theory and to glue the results together in the end.
+Artin-Shreier theory and to glue the results together in the end, more details
+can be found in~\cite[Section 3.2]{BDDFS17}.
 
 % TODO
 % ====
 %
-% Add a part on Artin-Shreier?
-
+% Add an entire part on Artin-Shreier instead? Probably not, since it will not
+% be used at all in the rest of the thesis.
 
 \subsection{Preliminaries}
 \label{sec:preliminaries}
@@ -246,7 +248,7 @@ If $\alpha$ is also nonzero, then it is a generator of $K$ over $\K$.
   \[
     \lambda y
   \]
-  with $\lambda\in\K$ are also solution of~\eqref{eq:h90} since
+  with $\lambda\in\K$ are also solutions of~\eqref{eq:h90} since
   \[
     \sigma(\lambda y) = \lambda\sigma(y) = \zeta\lambda y,
   \]
@@ -557,8 +559,8 @@ to the eigenvalue $\zeta$ is described by the equation
    is called the \emph{Kummer constant} of $\alpha$.
  \end{defi}
  One key property of the solutions of~\eqref{eq:h90-kummer} is still missing,
- and we need a new notation to express it. Let $K$ and $L$ two finite field
- extensions of $\K$ and let $\mu\in L$ an element of degree $d$ over $\K$. As
+ and we need a new notation to express it. Let $K$ and $L$ be two finite field
+ extensions of $\K$ and let $\mu\in L$ be an element of degree $d$ over $\K$. As
  used several times already, we know that an element 
  \[
    \beta\in K\otimes \K(\mu)\subset K\otimes L 
@@ -1154,13 +1156,13 @@ Y^{n-1})$, given the polynomial expression of $\beta$ in $V_Y$
 \[
   \beta = \sum_{j=0}^{n-1}b_j Y_j.
 \]
-If $R$ is the polynomial defining $L$ over $\K$, \ie
+If $g$ is the polynomial defining $L$ over $\K$, \ie
 \[
-  L \cong \K[Y]/(R(Y)),
+  L \cong \K[Y]/(g(Y)),
 \]
 then the computation of $V_\beta\emb V_Y$ is exactly the modular composition
 \[
-  \gamma(\beta(Y))\mod R(Y),
+  \gamma(\beta(Y))\mod g(Y),
 \]
 and this can be done efficiently by a dedicated algorithm~\cite{KU08}.
 %TODO: ref to Section 1 also?
@@ -1173,11 +1175,11 @@ algorithm used to compute a linear map into a new algorithm that computes the
 transposed linear map, without changing the complexity of the algorithm. We can
 use the transposition principle with the modular composition, since the map
 \[
-  \gamma\to\gamma(\beta)\mod R
+  \gamma\to\gamma(\beta)\mod g
 \]
 is linear. The dual problem to modular composition was called \emph{power
 projection} by Shoup, who introduced the transposition principle. It takes as
-inputs the polynomials $\beta,R\in\K[Y]$, and an element $\gamma^\vee$ in
+inputs the polynomials $\beta,g\in\K[Y]$, and an element $\gamma^\vee$ in
 $\K[Y]^\vee$, the dual space of $\K[Y]$, \ie the space of linear forms on
 $\K[Y]$. Its output is the list of elements
 \[
@@ -1233,7 +1235,7 @@ If
 \[
   d = [L:K]
 \]
-is not divisible by the characteristic $p$ of $\K$, then $d$ is such an element.
+is not divisible by the characteristic $p$ of $\K$, then $d^{-1}$ is such an element.
 Otherwise we can take any element whose trace is nonzero and divide it by its
 trace to have an element whose trace is exactly equal to $1$. To obtain an
 element whose trace is nonzero, we take random elements and compute
