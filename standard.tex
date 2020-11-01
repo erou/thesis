@@ -7,6 +7,9 @@ call \emph{standard lattice of compatibly embedded finite fields}.
 % TODO: Figure
 
 \clearpage
+
+\section{Lenstra-Allombert algorithm and lattices of embeddings}
+
 The two methods of Chapter~\ref{chap:lattice} both have their drawbacks: Conway
 polynomials are expensive to compute and thus need to be precomputed, making
 them inefficient for large extensions, while Bosma-Canon-Steel needs more
@@ -17,7 +20,7 @@ of Kummer algebras done in Section~\ref{sec:kummer-algebras}. In all this
 chapter, $\K=\mathbb{F}_p$ is a prime field of cardinality $p$, where
 $p\in\mathbb{N}$ is a prime number.
 
-\section{Lenstra-Allombert algorithm and lattices of embeddings}
+\subsection{From isomorphism to embedding}
 
 Let us first recall Lenstra-Allombert \emph{isomorphism} algorithm. We keep the
 notations of Section~\ref{sec:allombert}, where the details can be found. Let $K$ and
@@ -27,6 +30,12 @@ $L$ be two finite fields with $p^n$ elements, where $\gcd(p, n) = 1$, \ie
 \]
 We know that $K$ and $L$ are isomorphic and, if $\zeta$ is a primitive $n$-th
 root of unity taken in the algebraic closure $\bar{\mathbb{F}}_p$ of $\K$, we know
+% Note:
+% =====
+%
+% We did not speak about algebraic closure in Chapter 5, where we introduce the
+% notions of isomorphisms and algorithms to compute them. It is probably wise
+% not to introduce that here only.
 we can find an isomorphism by
 finding two solutions $\alpha_K$ and $\alpha_L$ to the equation~\eqref{eq:h90-kummer}
 \[
@@ -73,8 +82,8 @@ and in order to compute it we must find a primitive $l$-th root of unity
 $\zeta_l$, compute $L\otimes\mathbb{F}_p(\zeta_l)$, compute a new solution
 $\alpha_{L, l}$ of~\eqref{eq:h90-kummer} for $\zeta_l$ and the associated
 constant $\kappa_{H\emb L}$. Therefore, each new embedding comes with the
-computation of a new Kummer algebra, solution of~\eqref{eq:h90-kummer}, and an
-element $\kappa$. We must also store the elements $\kappa$ and the elements
+computation of a new Kummer algebra, a new solution of~\eqref{eq:h90-kummer}, and a
+new element $\kappa$. We must also store the elements $\kappa$ and the elements
 defining the embeddings. Now, recall that if we want to use Bosma-Canon-Steel
 framework in order to compatibly embed $K$ in $L$, we must reccursively embed
 the intersections $K\cap M$ of each already embedded subfield $M$ of $L$ with $K$ in both $K$
@@ -136,8 +145,115 @@ in the lattice. We would like these constants $\kappa$ to be equal to $1$, or
 maybe that a close formula exists for these constants, by choosing special
 solutions $\alpha$ of~\eqref{eq:h90-kummer}. We achieve the latter % TODO: check latter
 by constructing \emph{standard} solutions of~\eqref{eq:h90-kummer} in
-Section~\ref{sec:standard-solution}. The second, and most important, issue is the compatibility
-condition between the roots of unity $\zeta$.
+Section~\ref{sec:standard-solution}.
+
+\subsection{Cyclotomic lattices}
+
+The second, and most important, issue is the compatibility condition between the
+roots of unity $\zeta$. When we write a compatibility condition like
+\[
+  \zeta_m = (\zeta_n)^{n/m},
+\]
+we implicitly states that there is a natural inclusion 
+\[
+  \mathbb{F}_p(\zeta_m)\subset\mathbb{F}_p(\zeta_n)
+\]
+that makes the embedding from $\mathbb{F}_{p}(\zeta_m)$ to
+$\mathbb{F}_{p}(\zeta_n)$ trivial, \ie the embedding is the identity in that
+case. In practice, this is not always the situation at hand. For example,
+if for some reason the root $\zeta_m$ already exists in some field
+$\mathbb{F}_{p^a}$ in the current state of our computer algebra system, and if the
+root $\zeta_n$ lives in a strictly bigger field
+$\mathbb{F}_{p^b}=\mathbb{F}_p(\zeta_n)$ that we have to compute, then the field
+$\mathbb{F}_{p^a}$ is not be included in the fied $\mathbb{F}_{p^b}$, and the
+embedding
+\[
+  \mathbb{F}_{p^a}\emb \mathbb{F}_{p^b}
+\]
+is not trivial. In the general case, if we want to use Lenstra-Allombert
+embedding algorithm, what we need is a \emph{cyclotomic
+lattice}, given by Definition~\ref{defi:cyclotomic-lattice}.
+\begin{defi}[Cyclotomic lattice]
+  \label{defi:cyclotomic-lattice}
+  A \emph{cyclotomic lattice} is composed of two things:
+  \begin{itemize}
+    \item a collection
+  \[
+    \mathcal S^I = \left\{ (K_m, \zeta_m) \right\}_{m\in I}
+  \]
+  over some support set $I\subset \mathbb{N}\setminus p\mathbb{N}$. The element
+  $K_m$ is an explicitly represented finite extension of $\K=\mathbb{F}_p$, and
+  the element $\zeta_m\in K_m$ is a generating element of $K_m$ that is also a
+  primitive $m$-th root of unity, \ie we have
+  \[
+  K_m = \mathbb{F}_{p}(\zeta_m)
+  \]
+  and
+  \[
+  (\zeta_m)^m=1.
+  \]
+    \item explicit embeddings
+      \[
+        \begin{array}{llll}
+          \iota_{m, n}: & K_m & \emb & K_n\\
+          & \zeta_m & \mapsto & (\zeta_n)^{n/m}
+        \end{array}
+      \]
+      whenever $(m, n)\in I^2$ are such that $m\mid n$.
+  \end{itemize}
+\end{defi}
+
+Again, there is no problem if we know beforehand all the degrees of the
+extensions in the lattice that we will use, \ie if the support set $I$ is
+finite. Indeed, in that case there is an efficient randomised algorithm to
+compute the cyclotomic lattice: consider
+\[
+  N = \lcm_{m\in I}(m)
+\]
+and construct the smallest finite field $\mathbb{F}_{p^a}$ such that $N$ divides
+$p^a-1$, \ie the smallest finite field containing an $N$-th primitive root of
+unity. Then take $x\in\mathbb{F}_{p^a}$ at random, compute 
+\[
+  y=x^{(p^a-1)/N}
+\]
+and check that the multiplicative order of $y$ is $N$. If it is, we can
+construct all roots $\zeta_m$ as powers of this element:
+\[
+  \zeta_m = y^{N/m}
+\]
+for all $m\in I$, and we can set
+\[
+  K_m = \mathbb{F}_p(\zeta_m)\subset \mathbb{F}_{p^a}
+\]
+and let the embeddings $\iota_{m, n}$ be natural inclusions. But once again,
+this methode does not produce an imcremental lattice, thus it is not really user
+friendly: one would like to have a lattice where new elements can be added on
+the fly. Conway polynomials, that were introduced in
+Section~\ref{sec:conway} in order to construct a lattice of
+compatibly embedded finite fields, offer an other example of cyclotomic lattice. In
+fact, a cyclotomic lattice is always a lattice of compatibly embedded finite
+fields, because each time we have $l, m, n\in I$ with
+\[
+  l\mid n\mid n,
+\]
+we have
+\[
+  (\zeta_n)^{n/l} = ((\zeta_n)^{m/l})^{n/m}
+\]
+and it follows that
+\[
+  \iota_{l, n} = \iota_{m, n}\circ\iota_{l, m}.
+\]
+One can thus wonder why we need a structure than can be used to represent a
+lattice of compatibly embedded finite fields, precisely to construct a lattice
+of compatibly embedded finite fields. In fact, we will see in the next sections
+that with a fairly small cyclotomic lattice, we are able to construct a much larger
+lattice of compatibly embedded finite fields, thus making the whole construction
+interesting, above all if the cyclotomic lattice is incrementable, like with
+Conway polynomials. In the next sections, we consider that we have an abstract
+cyclotomic lattice, without precising any particular construction. We only
+assume that we have a collection $\mathcal S^I$ satisfying the conditions of
+Definition~\ref{defi:cyclotomic-lattice}.
 
 \section{Standard solution of Hilbert $90$}
 \label{sec:standard-solution}
