@@ -502,6 +502,12 @@ to the eigenvalue $\zeta$ is described by the equation
    Conversely, if an element $\alpha$ is in $1\otimes\mathbb{F}_{p}(\zeta)$,
    then it is fixed by $\sigma\otimes1$.
  \end{proof}
+ \begin{rem}
+   \label{rem:fixed-elems}
+   We can use the proof of Lemma~\ref{lm:fixed-elems} (modulo appropriate
+   changes) in order to prove that the set of elements in $A_n$ fixed by
+   $1\otimes\sigma$ is $\mathbb{F}_{p^n}\otimes1.$
+ \end{rem}
  \begin{lm}
    Let $\alpha$ be a nonzero solution of~\eqref{eq:h90-kummer} for the root
    $\zeta$. Then 
@@ -702,6 +708,7 @@ $\first{\alpha}{\zeta}$ does not depend on $\alpha$, but only on $\alpha^n$.
 \end{proof}
 
 \subsection{The isomorphism algorithm}
+\label{sec:lenstra-allombert-isomorphism}
 
 Let $p\in\mathbb{N}$ a prime number and $n\in\mathbb{N}$ be an integer such that
 $\gcd(n, p)=1$. Let $K$ and $L$ be two finite fields of cardinality $p^n$, such

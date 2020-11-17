@@ -21,6 +21,7 @@ chapter, $\K=\mathbb{F}_p$ is a prime field of cardinality $p$, where
 $p\in\mathbb{N}$ is a prime number.
 
 \subsection{From isomorphism to embedding}
+\label{sec:iso-to-emb}
 
 Let us first recall Lenstra-Allombert \emph{isomorphism} algorithm. We keep the
 notations of Section~\ref{sec:allombert}, where the details can be found. Let $K$ and
@@ -129,7 +130,7 @@ indeed
   &= ( (1\otimes\zeta_n)\alpha_L)^{n/m}\\
   &= (1\otimes (\zeta_n)^{n/m})(\alpha_L)^{n/m}.
 \end{align*}
-The embedding $K\emb L$ is then discribed by
+The embedding $K\emb L$ is then described by
 \[
   \first{\alpha_K}{\zeta_m}\mapsto\first{(1\otimes\kappa_{K\emb
   L})(\alpha_L)^{n/m}}{(\zeta_n)^{n/m}},
@@ -143,7 +144,7 @@ embedding
 \]
 in the lattice. We would like these constants $\kappa$ to be equal to $1$, or
 maybe that a close formula exists for these constants, by choosing special
-solutions $\alpha$ of~\eqref{eq:h90-kummer}. We achieve the latter % TODO: check latter
+solutions $\alpha$ of~\eqref{eq:h90-kummer}. We achieve the latter
 by constructing \emph{standard} solutions of~\eqref{eq:h90-kummer} in
 Section~\ref{sec:standard-solution}.
 
@@ -165,7 +166,7 @@ if for some reason the root $\zeta_m$ already exists in some field
 $\mathbb{F}_{p^a}$ in the current state of our computer algebra system, and if the
 root $\zeta_n$ lives in a strictly bigger field
 $\mathbb{F}_{p^b}=\mathbb{F}_p(\zeta_n)$ that we have to compute, then the field
-$\mathbb{F}_{p^a}$ is not be included in the fied $\mathbb{F}_{p^b}$, and the
+$\mathbb{F}_{p^a}$ is not included in the field $\mathbb{F}_{p^b}$, and the
 embedding
 \[
   \mathbb{F}_{p^a}\emb \mathbb{F}_{p^b}
@@ -226,7 +227,7 @@ for all $m\in I$, and we can set
   K_m = \mathbb{F}_p(\zeta_m)\subset \mathbb{F}_{p^a}
 \]
 and let the embeddings $\iota_{m, n}$ be natural inclusions. But once again,
-this methode does not produce an imcremental lattice, thus it is not really user
+this methode does not produce an incremental lattice, thus it is not really user
 friendly: one would like to have a lattice where new elements can be added on
 the fly. Conway polynomials, that were introduced in
 Section~\ref{sec:conway} in order to construct a lattice of
@@ -255,6 +256,151 @@ cyclotomic lattice, without precising any particular construction. We only
 assume that we have a collection $\mathcal S^I$ satisfying the conditions of
 Definition~\ref{defi:cyclotomic-lattice}.
 
+\subsection{Kummer embeddings}
+
+As we have seen in the last sections, asking for a compatibility condition
+\[
+  \zeta_m = (\zeta_n)^{n/m}
+\]
+each time we want to use Lenstra-Allombert embedding algorithm to embed
+$\mathbb{F}_{p^m}$ in $\mathbb{F}_{p^n}$, in a compatible way, is not trivial:
+it requires the availability of a cyclotomic lattice. Moreover, this equation
+implies that there is a natural inclusion
+\[
+  \mathbb{F}_{p}(\zeta_m)\subset\mathbb{F}_{p}(\zeta_n),
+\]
+which is not the case in general. In order to be as thorough as possible, we
+will thus write
+\[
+  \iota_{m, n}(\zeta_m) = (\zeta_{n})^{n/m}
+\]
+and generalize the discussion of Section~\ref{sec:iso-to-emb} and the results of
+Section~\ref{sec:lenstra-allombert-isomorphism} in this setting. We keep the
+``Kummer algebra'' terminology, already used in
+Section~\ref{sec:kummer-algebras}, that is based on~\cite{DRR19}. We know assume
+that a cyclotomic lattice $\mathcal S^I$ is available. Let
+\[
+  m\mid n
+\]
+be two integers prime to $p$, we then have an embedding
+\[
+\begin{array}{cccc}
+  \iota_{m, n}: & \mathbb{F}_{p}(\zeta_m)& \emb &\mathbb{F}_{p}(\zeta_n)\\
+  & \zeta_m & \mapsto & (\zeta_n)^{n/m}.
+\end{array}
+\]
+We also let
+\[
+  A_m=\mathbb{F}_{p^m}\otimes\mathbb{F}_{p}(\zeta_m)
+\]
+and
+\[
+  A_n=\mathbb{F}_{p^n}\otimes\mathbb{F}_{p}(\zeta_n)
+\]
+two Kummer algebras. As was the case for
+Lenstra-Allombert \emph{isomorphism} algorithm, we want to deduce a field
+embedding from an algebra embedding between $A_m$ and $A_n$, using the
+properties of the solutions of~\eqref{eq:h90-kummer}. We are thus
+interested in a special class of morphisms that are closely linked with
+these solutions.
+\begin{defi}[Kummer embedding]
+  A \emph{Kummer embedding} of $A_m$ into $A_n$ is an injective
+  $\K$-algebra morphism
+  \[
+    \Phi:A_m\emb A_n
+  \]
+  such that:
+  \begin{itemize}
+    \item the morphism $\Phi$ extends the scalar embedding
+      $1\otimes\iota_{m,n}$;
+    \item the morphism $\Phi$ commutes with $\sigma\otimes1$.
+  \end{itemize}
+\end{defi}
+We can in fact give a simpler characterization of Kummer embeddings, and see that
+they are of the form $\Phi=\phi\otimes\iota$, where $\iota$ is the embedding
+described by the cyclotomic lattice $\mathcal S^I$. The embedding $\phi$ is then the one for
+which we will try to obtain a description, using the properties of the solutions
+of~\eqref{eq:h90-kummer}.
+\begin{prop}
+  There is a $1$-to-$1$ correspondence between Kummer embeddings
+  \[
+    \Phi:A_m\emb A_n
+  \]
+  and embeddings of finite fields
+  \[
+    \phi:\mathbb{F}_{p^m}\emb\mathbb{F}_{p^n},
+  \]
+  given by:
+  \begin{itemize}
+    \item if $\Phi$ is a Kummer embedding, then $\Phi$ maps
+      $\mathbb{F}_{p^m}\otimes1$ into $\mathbb{F}_{p^n}\otimes1$. Thus the
+      restriction of $\Phi$ to $\mathbb{F}_{p^m}$ is of the form $\phi\otimes1$
+      for some embedding $\phi:\mathbb{F}_{p^m}\emb\mathbb{F}_{p^n}$;
+    \item conversely, if $\phi:\mathbb{F}_{p^m}\emb\mathbb{F}_{p^n}$ is an
+      embedding of finite fields, then $\Phi=\phi\otimes\iota_{m, n}$ is a
+      Kummer embedding.
+  \end{itemize}
+\end{prop}
+\begin{proof}
+ Let $\Phi:A_m\emb A_n$ be a Kummer embedding. Since $\Phi$ is an algebra
+ morphism, we have 
+ \[
+   \Phi(\beta^p) = \Phi(\beta)^p
+ \]
+for all $\beta\in A_m$. Since $(\sigma\otimes\sigma)(\beta) = \beta^p$, this
+proves that $\Phi$ commutes with $\sigma\otimes\sigma$. It also
+commutes with $\sigma\otimes1$, and thus with its inverse $\sigma^{-1}\otimes1$.
+In then also commutes with
+\[
+  (\sigma^{-1}\otimes1)\circ(\sigma\otimes\sigma) = 1\otimes\sigma.
+\]
+Now, if $\beta\in\mathbb{F}_{p^m}\otimes1$, we know thanks
+to Remark~\ref{rem:fixed-elems} that it fixed by $1\otimes\sigma$, thus we have that
+\begin{align*}
+ (1\otimes\sigma)\circ\Phi(\beta) &= \Phi\circ(1\otimes\sigma)(\beta)\\
+ &= \Phi(\beta).
+\end{align*}
+Again, using Remark~\ref{rem:fixed-elems}, we then know that
+$\Phi(\beta)\in\mathbb{F}_{p^n}\otimes1$.
+\end{proof}
+\begin{prop}
+  Let $\alpha_m\in A_m$ be a nonzero solution of~\eqref{eq:h90-kummer} for
+  $\zeta_m$, and let $c_m$ be its Kummer constant. Then, there is a $1$-to-$1$
+  correspondence between Kummer embeddings
+  \[
+    \Phi:A_l\emb A_m
+  \]
+  and solutions $\hat\alpha\in A_n$ of~\eqref{eq:h90-kummer} for
+  $(\zeta_n)^{m/n}=\iota_{m, n}(\zeta_m)$ that also satisfy
+  \[
+    \hat\alpha^m = 1\otimes\iota_{m, n}(c_l).
+  \]
+  The correspondance is given by
+  \[
+    \Phi(\alpha_m)\longleftrightarrow \hat\alpha.
+  \]
+\end{prop}
+\begin{proof}
+ E 
+\end{proof}
+
 \section{Standard solution of Hilbert $90$}
 \label{sec:standard-solution}
+
+As stated in Section~\ref{sec:iso-to-emb}, even with the availability of a
+cyclotomic lattice $\mathcal S^I$, \ie compatible roots of unity, an other
+problem remains. Indeed, with each embedding computation
+\[
+  K\emb L
+\]
+comes the computation and the storage of some constant
+\[
+  \kappa_{K\emb L}.
+\]
+In this section and in Section~\ref{sec:standard-embeddings}, we will see how to
+choose special solutions of \eqref{eq:h90-kummer}, in order to manage these
+constants.
+
 \section{Standard embeddings}
+\label{sec:standard-embeddings}
+%

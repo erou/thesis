@@ -13,6 +13,7 @@ Chapter 2
 =========
 
 - Write section 2.2 on algebraic function fields
+- Write another section on useful algorithms and their complexity
 
 Chapter 3
 =========
