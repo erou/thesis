@@ -335,11 +335,16 @@ of~\eqref{eq:h90-kummer}.
     \item if $\Phi$ is a Kummer embedding, then $\Phi$ maps
       $\mathbb{F}_{p^m}\otimes1$ into $\mathbb{F}_{p^n}\otimes1$. Thus the
       restriction of $\Phi$ to $\mathbb{F}_{p^m}$ is of the form $\phi\otimes1$
-      for some embedding $\phi:\mathbb{F}_{p^m}\emb\mathbb{F}_{p^n}$;
+      for some embedding $\phi:\mathbb{F}_{p^m}\emb\mathbb{F}_{p^n}$, and we
+      have $\Phi=\phi\otimes\iota_{m, n}$;
     \item conversely, if $\phi:\mathbb{F}_{p^m}\emb\mathbb{F}_{p^n}$ is an
       embedding of finite fields, then $\Phi=\phi\otimes\iota_{m, n}$ is a
       Kummer embedding.
   \end{itemize}
+  In conclusion, the correspondence is given by
+  \[
+    \Phi=\phi\otimes\iota_{m, n}\longleftrightarrow \phi.
+  \]
 \end{prop}
 \begin{proof}
  Let $\Phi:A_m\emb A_n$ be a Kummer embedding. Since $\Phi$ is an algebra
@@ -355,13 +360,56 @@ In then also commutes with
   (\sigma^{-1}\otimes1)\circ(\sigma\otimes\sigma) = 1\otimes\sigma.
 \]
 Now, if $\beta\in\mathbb{F}_{p^m}\otimes1$, we know thanks
-to Remark~\ref{rem:fixed-elems} that it fixed by $1\otimes\sigma$, thus we have that
+to Remark~\ref{rem:fixed-elems} that it is fixed by $1\otimes\sigma$, thus we have that
 \begin{align*}
  (1\otimes\sigma)\circ\Phi(\beta) &= \Phi\circ(1\otimes\sigma)(\beta)\\
  &= \Phi(\beta).
 \end{align*}
 Again, using Remark~\ref{rem:fixed-elems}, we then know that
-$\Phi(\beta)\in\mathbb{F}_{p^n}\otimes1$.
+$\Phi(\beta)\in\mathbb{F}_{p^n}\otimes1$. This proves that
+$\mathbb{F}_{p^m}\otimes1$ is mapped into $\mathbb{F}_{p^n}\otimes1$. Now, it
+means that every element of the form $x\otimes1$ with $x\in\mathbb{F}_{p^m}$ is
+mapped to an element of the form $\Phi(x\otimes1)=y\otimes1$ with $y\in\mathbb{F}_{p^m}$.
+Because $\Phi$ is a morphism of algebras, if we
+let $\phi(x)=y$, we can check that
+\[
+  \phi:\mathbb{F}_{p^m}\to\mathbb{F}_{p^n}
+\]
+is also a morphism. Therefore, the restriction of $\Phi$ on
+$\mathbb{F}_{p^m}$ is of the form $\phi\otimes1$, where
+$\phi:\mathbb{F}_{p^m}\emb\mathbb{F}_{p^n}$ is an embedding
+of finite fields. We conclude that $\Phi=\phi\otimes\iota_{m, n}$. Indeed, if 
+\[
+  \beta=\sum_{j}x_j\otimes y_j
+\]
+is an element of the Kummer algebra $A_m$, we then have
+\begin{align*}
+  \Phi(\beta) &= \Phi(\sum_{j}x_j\otimes y_j) \\
+  &= \sum_j\Phi(x_j\otimes y_j)\\
+  &= \sum_j\Phi(x_j\otimes1)\times\Phi(1\otimes y_j)\\
+  &= \sum_j(\phi\otimes1)(x_j\otimes1)\times(1\otimes\iota_{m, n})(1\otimes y_j)\\
+  &= \sum_j (\phi(x_j)\otimes1)\times(1\otimes\iota_{m, n}(y_j))\\
+  &= \sum_j \phi(x_j)\otimes\iota_{m, n}(y_j)\\
+  &= \sum_j (\phi\otimes\iota_{m, n})(x_j\otimes y_j)\\
+  &= (\phi\otimes\iota_{m, n})(\sum_jx_j\otimes y_j),
+\end{align*}
+and thus
+\[
+  \Phi(\beta) = (\phi\otimes\iota_{m, n})(\beta)
+\]
+for every element $\beta\in A_m$.
+
+Conversely, if $\phi:\mathbb{F}_{p^{m}}\emb\mathbb{F}_{p^n}$ is an embedding of
+finite fields and if we define
+\[
+  \Phi = \phi\otimes\iota_{m, n},
+\]
+we see that $\Phi$ is a morphism of $\K$-algebras that extends the scalar embedding
+$\iota_{m, n}$ by definition.
+The embedding $\phi$ is a power of the Frobenius automorphism $\sigma$ and thus
+commutes with $\sigma$, hence $\sigma\otimes1$ commutes with
+$\Phi=\phi\otimes\iota_{m, n}$, and this proves that $\Phi$ is a Kummer
+embedding.
 \end{proof}
 \begin{prop}
   Let $\alpha_m\in A_m$ be a nonzero solution of~\eqref{eq:h90-kummer} for
