@@ -304,6 +304,7 @@ properties of the solutions of~\eqref{eq:h90-kummer}. We are thus
 interested in a special class of morphisms that are closely linked with
 these solutions.
 \begin{defi}[Kummer embedding]
+  \label{defi:kummer-embedding}
   A \emph{Kummer embedding} of $A_m$ into $A_n$ is an injective
   $\K$-algebra morphism
   \[
@@ -322,6 +323,7 @@ described by the cyclotomic lattice $\mathcal S^I$. The embedding $\phi$ is then
 which we will try to obtain a description, using the properties of the solutions
 of~\eqref{eq:h90-kummer}.
 \begin{prop}
+  \label{prop:correspondence-embeddings}
   There is a $1$-to-$1$ correspondence between Kummer embeddings
   \[
     \Phi:A_m\emb A_n
@@ -345,6 +347,7 @@ of~\eqref{eq:h90-kummer}.
   \[
     \Phi=\phi\otimes\iota_{m, n}\longleftrightarrow \phi.
   \]
+  Moreover, this correspondence commutes with composition of embeddings.
 \end{prop}
 \begin{proof}
  Let $\Phi:A_m\emb A_n$ be a Kummer embedding. Since $\Phi$ is an algebra
@@ -410,8 +413,50 @@ The embedding $\phi$ is a power of the Frobenius automorphism $\sigma$ and thus
 commutes with $\sigma$, hence $\sigma\otimes1$ commutes with
 $\Phi=\phi\otimes\iota_{m, n}$, and this proves that $\Phi$ is a Kummer
 embedding.
+
+Now, if we have three Kummer algebras $A_l, A_m, A_n$ such that 
+\[
+  l\mid m\mid n
+\]
+and two Kummer embeddings $\Phi_{l, m}:A_l\emb A_m$ and $\Phi_{m, n}:A_m\emb
+A_n$, we know that there exists $\phi_{l,
+m}:\mathbb{F}_{p^l}\emb\mathbb{F}_{p^m}$ and $\phi_{m,
+n}:\mathbb{F}_{p^{m}}\emb\mathbb{F}_{p^{n}}$ such that we have the following
+diagram.
+\begin{center}
+    \begin{tikzpicture}
+      \node (l) at (0, 0) {$A_l$};
+      \node (m) at (0, 1.5) {$A_m$};
+      \node (n) at (0, 3) {$A_n$};
+
+      \draw[arrow] (l) -- (m);
+      \draw[arrow] (m) -- (n);
+
+      \node (f12) at (2, 0.65)
+      {$\Phi_{l,m}=\phi_{l, m}\otimes\iota_{l, m}$};
+      \node (f13) at (2, 2.15)
+      {$\Phi_{m,n}=\phi_{m, n}\otimes\iota_{m, n}$};
+    \end{tikzpicture}
+\end{center}
+Now the map $\Phi_{m, m}\circ\Phi_{l,m}$ is a Kummer embedding from $A_l$ into
+$A_n$, hence there exist an embedding
+$\phi:\mathbb{F}_{p^{l}}\emb\mathbb{F}_{p^{n}}$ such that 
+\[
+  \Phi_{m, m}\circ\Phi_{l,m}=\phi\otimes\iota_{l, n}.
+\]
+But we also have 
+\[
+  \Phi_{m, m}\circ\Phi_{l,m}=(\phi_{m, n}\circ\phi_{l,
+  m})\otimes(\iota_{m, n}\circ\iota_{l, m}),
+\]
+and since $\iota_{l,n}=\iota_{m, n}\circ\iota_{l, m}$ by definition, we obtain
+\[
+  \phi_{m, n}\circ\phi_{l, m}=\phi,
+\]
+thus the correspondence commutes with compositions of embeddings.
 \end{proof}
 \begin{prop}
+  \label{prop:correspondence-solutions}
   Let $\alpha_m\in A_m$ be a nonzero solution of~\eqref{eq:h90-kummer} for
   $\zeta_m$, and let $c_m$ be its Kummer constant. Then, there is a $1$-to-$1$
   correspondence between Kummer embeddings
@@ -421,16 +466,129 @@ embedding.
   and solutions $\hat\alpha\in A_n$ of~\eqref{eq:h90-kummer} for
   $(\zeta_n)^{m/n}=\iota_{m, n}(\zeta_m)$ that also satisfy
   \[
-    \hat\alpha^m = 1\otimes\iota_{m, n}(c_l).
+    \hat\alpha^m = 1\otimes\iota_{m, n}(c_m).
   \]
-  The correspondance is given by
+  The correspondence is given by
   \[
     \Phi(\alpha_m)\longleftrightarrow \hat\alpha.
   \]
 \end{prop}
 \begin{proof}
- E 
+Let $\Phi:A_m\emb A_n$ be a Kummer embedding. Lemma~\ref{lm:h90-solutions} shows
+that $\alpha_m$ is a generator of $A_m$ as an $1\otimes\mathbb{F}_{p}(\zeta_m)$
+algebra. Thus every element $\beta\in A_m$ can be written in the form
+\[
+  \beta = \sum_{j=0}^{m-1}(1\otimes b_j)(\alpha_m)^j,
+\]
+and we obtain
+\[
+  \Phi(\beta) = \sum_{j=0}^{m-1}(1\otimes\iota_{m, n}(b_j))\Phi(\alpha_m)^j,
+\]
+therefore we see that $\Phi$ is determined by its image $\Phi(\alpha_m)$. Moreover,
+$\hat\alpha=\Phi(\alpha_m)$ is a solution of~\eqref{eq:h90-kummer} for
+$(\zeta_n)^{n/m}=\iota_{m,n}(\zeta_m)$ that satisfies
+$\hat\alpha^m=\iota_{m, n}(c_m)$. Indeed, this is a generalization of the
+computations done in Section~\ref{sec:kummer-algebras} and a consequence of
+Definition~\ref{defi:kummer-embedding}. We have
+\begin{align*}
+ (\sigma\otimes1)(\hat\alpha) &=(\sigma\otimes1)(\Phi(\alpha_m))\\
+ &= \Phi( (\sigma\otimes1)(\alpha_m))\\
+ &= \Phi((1\otimes\zeta_m)\alpha_m)\\
+ &= (1\otimes\iota_{m, n})(\zeta_m)\Phi(\alpha_m)\\
+ &= (1\otimes\iota_{m, n}(\zeta_m))\hat\alpha
+\end{align*}
+and
+\begin{align*}
+ \hat\alpha^m &= \Phi(\alpha_m)^m\\
+ &= \Phi(\alpha_m^m)\\
+ &= \Phi(1\otimes c_m)\\
+ &= 1\otimes\iota_{m, n}(c_m).
+\end{align*}
+
+ Converserly, if $\hat\alpha$ is a solution of~\eqref{eq:h90-kummer} for
+ $\iota_{m, n}(\zeta_m)$ such that $\hat\alpha^m=\iota_{m, n}(c_m)$, we see that
+ \[
+  \Phi(\beta) = \sum_{j=0}^{m-1}(1\otimes\iota_{m, n}(b_j))\hat\alpha^j,
+ \]
+ for any element
+ \[
+  \beta = \sum_{j=0}^{m-1}(1\otimes b_j)(\alpha_m)^j
+ \]
+ gives a well-defined morphism of algebras from  $A_m$ into $A_n$ that satisfies
+ $\Phi(\alpha)=\hat\alpha$ and
+ the conditions in Definition~\ref{defi:kummer-embedding}, \ie it extends
+ $\iota_{m, n}$ and commutes with $\sigma\otimes1$.
 \end{proof}
+With these two correspondences, we can now describe a little more the link
+between solutions of~\eqref{eq:h90-kummer} and the finite field embeddings
+$\phi$ that we compute from them.
+\begin{cor}
+  Let $\alpha_m\in A_m$ be a nonzero solution of~\eqref{eq:h90-kummer} for
+  $\zeta_m$ with Kummer constant $c_m$ and let $\hat\alpha\in A_n$ be a solution
+  of~\eqref{eq:h90-kummer} for $(\zeta_n)^{n/m}$ that satisfies
+  $\hat{\alpha}^m=\iota_{m, n}(c_m)$. Then
+  \begin{itemize}
+    \item the solution $\hat{\alpha}$ belongs to the subset
+      $\mathbb{F}_{p^{l}}\otimes\mathbb{F}_p((\zeta_n)^{n/m})\subset A_n$;
+    \item the assignation
+      $\first{\alpha_m}{\zeta_m}\mapsto\first{\hat\alpha}{(\zeta_n)^{n/m}}$
+      defines an embedding $\phi:\mathbb{F}_{p^{m}}\emb\mathbb{F}_{p^{n}}$;
+    \item the map $\Phi=\phi\otimes\iota_{m, n}$ is the unique Kummer embedding
+      such that $\Phi(\alpha_m)=\hat\alpha$.
+  \end{itemize}
+\end{cor}
+\begin{proof}
+  By Proposition~\ref{prop:correspondence-solutions}, we know that there exists
+  a unique Kummer embedding 
+  \[
+    \Phi:A_m\emb A_n
+  \]
+  such that $\Phi(\alpha_m) =
+  \hat\alpha$. We also know thanks to
+  Proposition~\ref{prop:correspondence-embeddings} that
+  \[
+    \Phi=\phi\otimes\iota_{m, n}
+  \]
+  for some embedding of finite fields
+  $\phi:\mathbb{F}_{p^{m}}\emb\mathbb{F}_{p^{n}}$. If $\alpha_m =
+  \sum_{j=0}^{a-1}x_j\otimes(\zeta_m)^j$, where $a$ is the level of $A_m$, we
+  obtain
+  \[
+    \hat\alpha = \sum_{j=0}^{a-1}\phi(x_j)\otimes(\zeta_n)^{\frac{in}{m}},
+  \]
+  thus we have $\hat\alpha\in\mathbb{F}_{p^{m}}\otimes\mathbb{F}_{p}(
+  (\zeta_n)^{n/m})$. We also see that $x_0=\first{\alpha_m}{\zeta_m}$ is mapped
+  to $\phi(x_0) = \first{\hat\alpha}{(\zeta_n)^{n/m}}$, but
+  $\first{\alpha_m}{\zeta_m}$ is a generating element of
+  $\mathbb{F}_{p^{m}}$ by Proposition~\ref{prop:generate}, hence the assignation
+  \[
+    \first{\alpha_m}{\zeta_m}\mapsto\first{\hat\alpha}{(\zeta_n)^{n/m}}
+  \]
+  defines $\phi$.
+\end{proof}
+With these results we are ready to generalize
+Proposition~\ref{prop:lenstra-allombert-algorithm} to the embedding case, with
+the cyclotomic lattice setting, giving a minor variation of the original
+algorithm of Allombert.
+\begin{algorithm}
+  \caption{(Allombert's algorithm)}
+  \label{algo:allombert}
+  \begin{algorithmic}[1]
+    \Require{$\mathbb{F}_{p^m}, \mathbb{F}_{p^n}$, for $m\mid n$ integers prime to $p$,
+    and a cyclotomic lattice $\mathcal S^{\{l,m\}}$.}
+    \Ensure{$s\in \mathbb{F}_{p^m}, t\in\mathbb{F}_{p^n}$, such that the assignation $s\mapsto t$
+    defines an embedding $\phi:\mathbb{F}_{p^{m}}\emb\mathbb{F}_{p^n}$.}
+  \State Construct the Kummer algebras $A_m$ and $A_n$.
+  \State Find $\alpha_m\in A_m$ and $\alpha_n\in A_n$, nonzero solutions
+  of~\eqref{eq:h90-kummer} for $\zeta_m$
+  and $\zeta_n$ respectively.
+  \State Compute their Kummer constants: $(\alpha_m)^m=1\otimes c_m$ and
+  $(\alpha_n)^n=1\otimes c_n$.
+  \State Compute $\kappa$, a $m$-th root of $\iota_{m, n}(c_m)/c_n$.
+  \State Return $\first{\alpha_{m}}{\zeta_m}$ and
+  $\first{(1\otimes\kappa)(\alpha_n)^{\frac{n}{m}}}{(\zeta_n)^{\frac{n}{m}}}$.
+  \end{algorithmic}
+\end{algorithm}
 
 \section{Standard solution of Hilbert $90$}
 \label{sec:standard-solution}
