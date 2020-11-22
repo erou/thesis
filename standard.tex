@@ -9,6 +9,7 @@ call \emph{standard lattice of compatibly embedded finite fields}.
 \clearpage
 
 \section{Lenstra-Allombert algorithm and lattices of embeddings}
+\label{sec:lenstra-allombert-embeddings}
 
 The two methods of Chapter~\ref{chap:lattice} both have their drawbacks: Conway
 polynomials are expensive to compute and thus need to be precomputed, making
@@ -257,6 +258,7 @@ assume that we have a collection $\mathcal S^I$ satisfying the conditions of
 Definition~\ref{defi:cyclotomic-lattice}.
 
 \subsection{Kummer embeddings}
+\label{sec:kummer-embeddings}
 
 As we have seen in the last sections, asking for a compatibility condition
 \[
@@ -523,6 +525,7 @@ With these two correspondences, we can now describe a little more the link
 between solutions of~\eqref{eq:h90-kummer} and the finite field embeddings
 $\phi$ that we compute from them.
 \begin{cor}
+  \label{cor:link-h90-embedding}
   Let $\alpha_m\in A_m$ be a nonzero solution of~\eqref{eq:h90-kummer} for
   $\zeta_m$ with Kummer constant $c_m$ and let $\hat\alpha\in A_n$ be a solution
   of~\eqref{eq:h90-kummer} for $(\zeta_n)^{n/m}$ that satisfies
@@ -589,13 +592,88 @@ algorithm of Allombert.
   $\first{(1\otimes\kappa)(\alpha_n)^{\frac{n}{m}}}{(\zeta_n)^{\frac{n}{m}}}$.
   \end{algorithmic}
 \end{algorithm}
-
+\begin{prop}
+  \label{prop:allombert-works}
+  Algorithm~\ref{algo:allombert} is correct: it returns elements that define an
+  embedding $\phi:\mathbb{F}_{p^{m}}\emb\mathbb{F}_{p^{n}}$.
+\end{prop}
+\begin{proof}
+  The ideas of the proof are the same as the ones found in the proof of
+  Proposition~\ref{prop:lenstra-allombert-algorithm}, which were already present
+  in the simpler case of Proposition~\ref{prop:allombert-simple}, where all the
+  roots of unity are in $\K$. By
+  Proposition~\ref{prop:correspondence-embeddings}, let 
+  \[
+    \Phi=\phi\otimes\iota_{m, n}
+  \]
+  be a Kummer embedding from $A_m$ into $A_n$. Let $\alpha_m\in A_m$ a solution
+  of~\eqref{eq:h90-kummer} for $\zeta_m$ with Kummer constant $c_m$, and let
+  $\alpha_n\in A_n$ a solution of~\eqref{eq:h90-kummer} for $\zeta_n$ with
+  Kummer constant $c_n$. By
+  Proposition~\ref{prop:correspondence-solutions}, there is a solution $\hat\alpha\in
+  A_n$ of~\eqref{eq:h90-kummer} for $(\zeta_n)^{n/m}$ that satisfies
+  $\hat{\alpha}^m=\iota_{m, n}(c_m)$ and such that $\Phi(\alpha_m)=\hat\alpha$.
+  Now, we also have that $(\alpha_n)^{n/m}$ is a solution
+  of~\eqref{eq:h90-kummer} for $(\zeta_n)^{n/m}$, and the solutions
+  of~\eqref{eq:h90-kummer} for $(\zeta_n)^{n/m}$ form a one-dimensional
+  $1\otimes\mathbb{F}_{p}(\zeta_n)$-vector space, so there exists a constant
+  $\lambda\in\mathbb{F}_{p}(\zeta_n)$ such that
+  \[
+    \hat\alpha = (1\otimes\lambda)(\alpha_n)^{n/m}.
+  \]
+  We conclude that 
+  \[
+    \cfrac{\iota_{m, n}(c_m)}{c_n} = \lambda^m
+  \]
+  is a $m$-th root in $\mathbb{F}_{p}(\zeta_n)$. If we let
+  \[
+    \kappa = (\zeta_n)^{\frac{in}{m}}\lambda,
+  \]
+  for some integer $i$, be a $m$-th root of $\frac{\iota_{m, n}(c_m)}{c_n}$, it
+  follows that
+  \[
+    \tilde\alpha = (1\otimes\kappa)(\alpha_n)^{n/m} =
+    (1\otimes(\zeta_n)^{\frac{in}{m}})\hat\alpha
+  \]
+  is a solution of~\eqref{eq:h90-kummer} for $(\zeta_n)^{n/m}$ that satisfies
+  $\tilde\alpha^m = \iota_{m,n}(c_m)$. By
+  Corollary~\ref{cor:link-h90-embedding}, we know that the assignation
+  \[
+    \first{\alpha_m}{\zeta_m}\mapsto\first{\tilde\alpha}{(\zeta_n)^{n/m}}
+  \]
+  defines an embedding from $\mathbb{F}_{p^m}$ into $\mathbb{F}_{p^{n}}$.
+\end{proof}
+\begin{rem}
+  Taking the same notations as the one in the proof of
+  Proposition~\ref{prop:allombert-works}, we see that the embedding returned by
+  the algorithm is $\sigma^i\circ\phi$. Indeed, we have
+  \begin{align*}
+    \tilde\alpha &= (1\otimes(\zeta_n)^{\frac{in}{m}})\hat\alpha\\
+    &= (\sigma\otimes1)^i(\hat\alpha)\\
+    &= (\sigma^i\otimes1)(\hat\alpha).
+  \end{align*}
+  If we let $x_0=\first{\hat\alpha}{(\zeta_n)^{\frac{n}{m}}}$, we wee that the
+  returned embedding is defined by the assignation
+  \[
+    \first{\alpha_m}{\zeta_m}\mapsto\sigma^i(x_0)
+  \]
+  while $\phi$ is defined by
+  \[
+    \first{\alpha_m}{\zeta_m}\mapsto x_0.
+  \]
+\end{rem}
 \section{Standard solution of Hilbert $90$}
 \label{sec:standard-solution}
 
-As stated in Section~\ref{sec:iso-to-emb}, even with the availability of a
-cyclotomic lattice $\mathcal S^I$, \ie compatible roots of unity, an other
-problem remains. Indeed, with each embedding computation
+We discussed in Section~\ref{sec:iso-to-emb} the fact that there are two main
+obstacles when constructing a lattice of compatibly embedded finite fields using
+Lenstra-Allombert algorithm. The first one is that we need to have compatibility
+between the roots of unity that we use, and that can be hard to obtain in
+practice. We solved that problem by assuming the availability of a
+cyclotomic lattice $\mathcal S^I$, and we proved that all the results concerning
+Lenstra-Allombert can be expressed in that setting in
+Section~\ref{sec:kummer-embeddings}. Still, an other problem remains. Indeed,
+because we use Bosma-Canon-Steel framework, with each embedding computation
 \[
   K\emb L
 \]
