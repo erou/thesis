@@ -466,7 +466,7 @@ thus the correspondence commutes with compositions of embeddings.
     \Phi:A_l\emb A_m
   \]
   and solutions $\hat\alpha\in A_n$ of~\eqref{eq:h90-kummer} for
-  $(\zeta_n)^{m/n}=\iota_{m, n}(\zeta_m)$ that also satisfy
+  $(\zeta_n)^{n/m}=\iota_{m, n}(\zeta_m)$ that also satisfy
   \[
     \hat\alpha^m = 1\otimes\iota_{m, n}(c_m).
   \]
@@ -665,25 +665,226 @@ algorithm of Allombert.
 \section{Standard solution of Hilbert $90$}
 \label{sec:standard-solution}
 
-We discussed in Section~\ref{sec:iso-to-emb} the fact that there are two main
+We discussed in Section~\ref{sec:iso-to-emb} the 
 obstacles when constructing a lattice of compatibly embedded finite fields using
 Lenstra-Allombert algorithm. The first one is that we need to have compatibility
 between the roots of unity that we use, and that can be hard to obtain in
 practice. We solved that problem by assuming the availability of a
 cyclotomic lattice $\mathcal S^I$, and we proved that all the results concerning
 Lenstra-Allombert can be expressed in that setting in
-Section~\ref{sec:kummer-embeddings}. Still, an other problem remains. Indeed,
-because we use Bosma-Canon-Steel framework, with each embedding computation
-\[
-  K\emb L
-\]
-comes the computation and the storage of some constant
-\[
-  \kappa_{K\emb L}.
-\]
+Section~\ref{sec:kummer-embeddings}. Now, we can obtain compatibility by
+replacing the naive embedding algorithm by Lenstra-Allombert algorithm in
+Bosma-Canon-Steel framework. This solutions immediately gives a compatible
+lattice of embedded finite fields. Still, among the sub-goals presented in
+Section~\ref{sec:compatibility-problem} that such a lattice may achieve, there
+are two of them on which we would like to improve.
+\begin{description}
+  \item[\emph{Uniqueness:}] the element $\first{\lambda_m}{\zeta_m}$ is
+    a generator of $\mathbb{F}_{p^{m}}$, or equivalently, it provides an
+    irreducible polynomial in $\K[X]$ of degree $m$. However this polynomials
+    depends on the choice of $\alpha_l$, because it depends on the Kummer constant
+    $c_l$ of $\alpha_l$ by Proposition~\ref{prop:kummer-constant}, thus there is
+    no unicity.
+  \item[\emph{Compatibility:}] the embedding of finite fields
+    $\phi:\mathbb{F}_{p^{m}}\to\mathbb{F}_{p^{n}}$ depends on
+    the choice of the constant $\kappa$, which itself depends on the choice of
+    the solutions $\alpha_m$ and $\alpha_n$ of \eqref{eq:h90-kummer}, and also
+    of the choice of a $m$-th root of unity. In order to achieve compatibility,
+    we must keep track of the constants $\kappa$ for each embedding computation
+    \[
+      \mathbb{F}_{p^{m}}\emb\mathbb{F}_{p^{n}}
+    \]
+    in the
+    lattice, which grow quadratically with the number of fields, because of the
+    common subfield compatibility condition in Bosma-Canon-Steel framework.
+\end{description}
 In this section and in Section~\ref{sec:standard-embeddings}, we will see how to
 choose special solutions of \eqref{eq:h90-kummer}, in order to manage these
-constants.
+constants $\kappa$. Our dream would be to be able to choose the solutions
+of~\eqref{eq:h90-kummer} in a way that makes the constants trivial, \ie 
+\[
+  \kappa_{\mathbb{F}_{p^{m}}\emb \mathbb{F}_{p^{n}}} = 1.
+\]
+From Algorithm~\ref{algo:allombert}, we see that the constant
+$\kappa_{\mathbb{F}_{p^{m}}\emb\mathbb{F}_{p^{n}}}$ is a $m$-th root of the
+quotient
+\[
+  \cfrac{\iota_{m, n}(c_m)}{c_n},
+\]
+thus the condition $\kappa_{\mathbb{F}_{p^{m}}\emb\mathbb{F}_{p^{n}}}=1$ implies
+\[
+  \iota_{m, n}(c_m) = c_n,
+\]
+which in turn implies that $c_n$ belongs to the subset
+\[
+  \mathbb{F}_{p}( (\zeta_n)^{\frac{n}{m}})\subseteq\mathbb{F}_p(\zeta_n).
+\]
+This could possibly fail if the Kummer algebras $A_m$ and $A_n$ are of distinct
+level, \ie if their field of scalars are different. This motivates the study of
+Kummer algebras of a given level, and the introduction of the notion of
+\emph{complete} algebra.
+\begin{defi}[Complete Kummer algebra]
+  A Kummer algebra is \emph{complete} if it is of the largest degree for a given
+  level.
+\end{defi}
+Therefore, the complete Kummer algebra of level $a$ is the Kummer algebra
+\begin{align*}
+  A_{p^a-1} &=
+  \mathbb{F}_{p^{p^a-1}}\otimes\mathbb{F}_p(\zeta_{p^a-1})\\
+  &=\mathbb{F}_{p^{p^a-1}}\otimes\mathbb{F}_{p^{a}}
+\end{align*}
+with field of scalar
+\[
+  \mathbb{F}_{p^{a}}\cong \mathbb{F}_p(\zeta_{p^a-1}).
+\]
+given by the element $\zeta_{p^a-1}$ in the cyclotomic lattice $\mathcal S^I$.
+In fact these algebras have an interesting property.
+\begin{lm}
+  All nonzero solutions $\alpha_{p^a-1}\in A_{p^a-1}$ of~\eqref{eq:h90-kummer}
+  for $\zeta_{p^a-1}$ have the same Kummer constant
+  \[
+    c_{p^a-1} = (\zeta_{p^a-1})^{a}.
+  \]
+\end{lm}
+\begin{proof}
+  \label{lm:complete-algebra-solutions}
+  Let $\alpha_{p^a-1}\in A_{p^a-1}$ a solution of~\eqref{eq:h90-kummer} for
+  $\zeta_{p^a-1}$. For all $\beta\in A_{p^a-1}$, we have $\beta^p = \sigma\otimes\sigma(\beta) =
+  \beta^p$, so we also obtain 
+  \[
+    (\alpha_{p^a-1})^{p^a} = (\sigma^a\otimes\sigma^a)(\alpha_{p^a-1}).
+  \]
+  Now, we know that $\sigma^a$ is the identity on $\mathbb{F}_{p^a}$, hence we
+  have
+  \begin{align*}
+    (\alpha_{p^a-1})^{p^a} &= (\sigma^a\otimes1)(\alpha_{p^a-1}) \\
+    &= (1\otimes\zeta_{p^a-1})^a \alpha_{p^a-1}.
+  \end{align*}
+  Since $\alpha_{p^a-1}$ is invertible by Lemma~\ref{lm:h90-solutions}, we
+  obtain that
+  \[
+    (\alpha_{p^a-1})^{p^a-1} = 1\otimes c_{p^a-1} = (1\otimes \zeta_{p^a-1})^a
+  \]
+  and it follows that
+  \[
+    c_{p^a-1} = (\zeta_{p^a-1})^{a}.
+  \]
+\end{proof}
+Now this result is very important because we know that the degree $p^a-1$
+irreducible polynomial in $\K[X]$ derived from the solution $\alpha_{p^a-1}$,
+\ie the minimal polynomial of the element
+$\first{\alpha_{p^a-1}}{\zeta_{p^a-1}}$,
+only depends on the Kummer constant $c_{p^a-1}$ of $\alpha_{p^a-1}$, thus it
+means that all solutions give the same polynomial. This will be the central idea
+behind the notion of \emph{standard} elements.
+\begin{defi}[Standard Kummer constant]
+  Let $m$ be an integer prime to $p$. We define the \emph{standard Kummer
+  constant} of order $m$ as
+  \[
+    \stdc{m} = (\iota_{m,
+    p^a-1})^{-1}((\zeta_{p^a-1})^a)\in\mathbb{F}_{p}(\zeta_m),
+  \]
+  where $a=\nu(m)$ is the level of the Kummer algebra $A_m$.
+\end{defi}
+\begin{rem}
+ Since $A_m$ is of level $a$, we have
+ \[
+   \mathbb{F}_p(\zeta_m) \cong \mathbb{F}_p(\zeta_{p^a-1}),
+ \]
+ hence the map $\iota_{m, p^a-1}$ is an isomorphism and $\stdc{m}$ is
+ well-defined.
+\end{rem}
+\begin{defi}[Standard solution]
+  Let $m$ be an integer prime to $p$. We say that a solution $\alpha_m\in A_m$
+  is \emph{standard} if its Kummer constant is standard, \ie if we have
+  \[
+    (\alpha_m)^m = 1\otimes\stdc{m}.
+  \]
+\end{defi}
+\begin{defi}[Decorated Kummer algebra]
+  Let $m$ be an integer prime to $p$. We define a \emph{decorated Kummer
+  algebra} as a couple
+  \[
+    (A_m, \alpha_m),
+  \]
+  where $\alpha_m$ is a standard solution of~\eqref{eq:h90-kummer} for
+  $\zeta_m$.
+\end{defi}
+It follows from Lemma~\ref{lm:complete-algebra-solutions} that all nonzero
+solutions of~\eqref{eq:h90-kummer} in a complete algebra are standard. This is
+no longer the case in a non complete Kummer algebra, but we can still find
+standard solutions.
+\begin{prop}
+ Let $m$ an integer prime to $p$. Then $A_m$ can be decorated, \ie it admits a
+ standard solution $\alpha_m$. Moreover, this solution $\alpha_m$ is unique up
+ to a $m$-th root of unity. 
+\end{prop}
+\begin{proof}
+ Let $a=\nu(m)$ be the level of $A_m$ and let $\alpha_m'\in A_m$ be a nonzero solution
+ of~\eqref{eq:h90-kummer} for $\zeta_m$. Let also $\alpha_{p^a-1}$ be a nonzero
+ solution of~\eqref{eq:h90-kummer} for $\zeta_{p^a-1}$, then it is standard by
+ Lemma~\ref{lm:complete-algebra-solutions}. The element 
+ \[
+   (\alpha_{p^a-1})^{\frac{p^a-1}{m}}
+ \]
+ is a solution of~\eqref{eq:h90-kummer} for
+ \[
+   \iota_{m, p^a-1}(\zeta_m) = (\zeta_{p^a-1})^{\frac{p^a-1}{m}}.
+ \]
+ Now let
+ \[
+   \Phi:A_m\emb A_{p^a-1}
+ \]
+ be a Kummer embedding and let
+ \[
+   \hat\alpha = \Phi(\alpha_m'),
+ \]
+ then $\hat\alpha$ is also a solution of~\eqref{eq:h90-kummer} for
+ $\iota_{m, p^a-1}(\zeta_m)$ and thus there exists a scalar
+ $\lambda\in\mathbb{F}_p(\zeta_{p^a-1})$ such that
+ \[
+   (\alpha_{p^a-1})^{\frac{p^a-1}{m}} = (1\otimes\lambda)\hat{\alpha} .
+ \]
+ If we let
+ \[
+   \tilde\lambda = \iota_{m, p^a-1}^{-1}(\lambda),
+ \]
+ we obtain
+ \begin{align*}
+   (\alpha_{p^a-1})^{\frac{p^a-1}{m}} &= (1\otimes\lambda)\Phi(\alpha_m') \\
+   &= \Phi( (1\otimes\tilde\lambda)\alpha_m').
+ \end{align*}
+If we set 
+\[
+  \alpha_m = (1\otimes\tilde\lambda)\alpha_m',
+\]
+it follows that
+\begin{align*}
+  \Phi((\alpha_m)^m) &= (\alpha_{p^a-1})^{p^a-1} \\
+  &= 1\otimes(\zeta_{p^a-1})^a,
+\end{align*}
+therefore
+\begin{align*}
+  (\alpha_m)^m &= 1\otimes\iota_{m, p^a-1}^{-1}( (\zeta_{p^a-1})^a) \\
+  &= 1 \otimes \stdc{m}
+\end{align*}
+and $\alpha_m$ is standard. If $\beta\in A_m$ is another solution
+of~\eqref{eq:h90-kummer} for $\zeta_m$, then there exists a scalar
+$\mu\in\mathbb{F}_p(\zeta_m)$ such that
+\[
+  \alpha_m= (1\otimes\mu)\beta,
+\]
+but then we obtain
+\[
+  (\alpha_m)^m = (1\otimes\mu^m)\beta^m.
+\]
+As a consequence, $\beta$ is standard if and only if $\mu^m = 1$ and the
+standards solutions are the
+\[
+  (1\otimes\zeta_m^u)\alpha_m
+\]
+for $0\leq u\leq m-1$.
+\end{proof}
 
 \section{Standard embeddings}
 \label{sec:standard-embeddings}
