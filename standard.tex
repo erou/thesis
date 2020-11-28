@@ -665,6 +665,9 @@ algorithm of Allombert.
 \section{Standard solution of Hilbert $90$}
 \label{sec:standard-solution}
 
+\subsection{Complete algebras and standardization}
+\label{sec:standardization}
+
 We discussed in Section~\ref{sec:iso-to-emb} the 
 obstacles when constructing a lattice of compatibly embedded finite fields using
 Lenstra-Allombert algorithm. The first one is that we need to have compatibility
@@ -815,6 +818,7 @@ solutions of~\eqref{eq:h90-kummer} in a complete algebra are standard. This is
 no longer the case in a non complete Kummer algebra, but we can still find
 standard solutions.
 \begin{prop}
+  \label{prop:decoration}
  Let $m$ an integer prime to $p$. Then $A_m$ can be decorated, \ie it admits a
  standard solution $\alpha_m$. Moreover, this solution $\alpha_m$ is unique up
  to a $m$-th root of unity. 
@@ -885,6 +889,198 @@ standards solutions are the
 \]
 for $0\leq u\leq m-1$.
 \end{proof}
+From Proposition~\ref{prop:decoration}, it follows that for any integer $m$
+prime to $p$, we can define $\mathbb{F}_{p^{m}}$ in a standard way.
+\begin{defi}[Standard generating element]
+  A generating element $x\in\mathbb{F}_{p^{m}}$ is called \emph{standard} if it
+  is of the form
+  \[
+    x = \first{\alpha_m}{\zeta_m}
+  \]
+  for $\alpha_m\in A_m$ a standard solution of~\eqref{eq:h90-kummer}.
+\end{defi}
+\begin{defi}[Standard defining polynomial]
+  The \emph{standard defining polynomial} $P_m$ for $\mathbb{F}_{p^{m}}$ is the
+  minimal polynomial over $\K$ of a standard generating element of
+  $\mathbb{F}_{p^{m}}$.
+\end{defi}
+By Proposition~\ref{prop:kummer-constant}, we know that $P_m$ is entirely 
+determined by $\stdc{m}$, and thus by the cyclotomic lattice $\mathcal S^I$ up
+to order $p^a-1$, with $a=\nu(m)$ the level of $m$. This helps to achieve the
+\emph{uniqueness} sub-goal of our lattice, because once the cyclotomic lattice
+has been chosen, the standard defining polynomials are unique. As an example, we
+give in Table~\ref{tab:std-polys} the first ten standard defining polynomials
+induced by the cyclotomic lattice given by the Conway polynomials with $p=2$.
+\begin{table}
+  \centering
+  \begin{tabular}{l}
+    $x+1$ \\
+    $x^3+x+1$ \\
+    $x^5+x^3+1$ \\
+    $x^7+x+1$ \\
+    $x^9+x^7+x^4+x^2+1$\\
+    $x^{11}+x^8+x^7+x^6+x^2+x+1$\\
+    $x^{13}+x^{10}+x^5+x^3+1$\\
+    $x^{15}+x+1$ \\
+    $x^{17}+x^{11}+x^{10}+x^8+ x^7+x^6+x^4+x^3+x^2+x+1$ \\
+    $x^{19}+x^{17}+x^{16}+x^{15}+x^{14}+x^{13}+x^{12}+x^8+x^7+x^6+x^5+x^3+1$
+  \end{tabular}
+  \caption{The first ten standard polynomials derived from Conway
+    polynomials for $p=2$.}
+  \label{tab:std-polys}
+\end{table}
+A small variation of Lenstra-Allombert algorithm, given by
+Algorithm~\ref{algo:decoration}, allows us to compute all these standard
+elements.
+\begin{algorithm}
+  \caption{(Decoration -- Standardization)}
+  \label{algo:decoration}
+  \begin{algorithmic}[1]
+    \Require {$\mathbb{F}_{p^m}$, for $m$ prime to $p$, and $\mathcal{S}^I$ a cyclotomic lattice.}
+    \Ensure {$(A_m,\alpha_m)$ decorated, $P_m$ standard irreducible polynomial of degree $m$,
+      and $s\in\mathbb{F}_{p^m}$ standard generating element inducing $\mathbb{F}_{p^m}\simeq\mathbb{F}_{p}[T]/(P_m)$.}
+  \State Compute the Kummer algebra $A_m$.
+  \State Compute $\stdc{m}=(\iota_{m, p^a-1})^{-1}((\zeta_{p^a-1})^a)\in\mathbb{F}_p(\zeta_m)$.
+  \State Find $\alpha'_m\in A_m$ a nonzero solution of~\eqref{eq:h90-kummer} for $\zeta_m$.
+  \State Compute its Kummer constant: $(\alpha'_m)^m=1\otimes c'_m$.
+  \State Compute $\kappa$ a $m$-th root of $\stdc{m}/ c'_m$.
+  \State Set $\alpha_{m}=(1\otimes\kappa)\alpha'_m$.
+  \State Compute $P_m$ the minimal polynomial of $\first{\alpha_{m}}{\zeta_m}$
+  over $\K$.
+  \State Return $(A_m,\alpha_m)$, $P_m$, and $\first{\alpha_m}{\zeta_m}$.
+  \end{algorithmic}
+\end{algorithm}
+\begin{prop}
+  Algorithm~\ref{algo:decoration} is correct, \ie the computed element
+  $\alpha_m$ is indeed standard. 
+\end{prop}
+\begin{proof}
+  By Proposition~\ref{prop:decoration}, we know that there exists a standard
+  solution of~\eqref{eq:h90-kummer} for $\zeta_m$, let $\pmb{\alpha}\in A_m$ be such a
+  solution. Let $\alpha_m'\in A_m$ be any nonzero solution
+  of~\eqref{eq:h90-kummer} for $\zeta_m$ and let $c_m'$ be its Kummer constant.
+  Then we know that there exists $\lambda\in\mathbb{F}_p(\zeta_m)$ a scalar such that
+  \[
+    \pmb\alpha = (1\otimes\lambda)\alpha_m.
+  \]
+  It follows that 
+  \[
+    \stdc{m} = \lambda^m c_m',
+  \]
+  thus 
+  \[
+    \stdc{m}/c_m'
+  \]
+  is indeed a $m$-th power. If we let $\kappa$ be a $m$-th root of
+  $\stdc{m}/c_m'$ and if we set 
+  \[
+    \alpha_m = (1\otimes\kappa)\alpha_m',
+  \]
+  we obtain
+  \[
+    (\alpha_m)^m = 1\otimes\stdc{m}.
+  \]
+  We have thus proven that $\alpha_m$ is a standard solution
+  of~\eqref{eq:h90-kummer} for $\zeta_m$. By definition,
+  $\first{\alpha_m}{\zeta_m}$ is then a standard generating element of
+  $\mathbb{F}_{p^{m}}$ and its minimal polynomial $P_m$ is a standard defining
+  polynomial.
+\end{proof}
+
+\subsection{Towards standard embeddings}
+\label{sec:towards-standard-embeddings}
+
+Now that we have found a way to compute standard solutions
+of~\eqref{eq:h90-kummer}, and to deduce standard generating elements to define
+our finite fields, it is natural to work towards the definition of compatible
+embeddings between these finite fields that are also standard. Our goal is also
+to simplify the storage of the constants $\kappa$ involved in the computation of
+such embeddings.
+\begin{prop}
+  \label{prop:power-compatibility}
+  Let $m\mid n$ be two integers prime to $p$ and such that 
+  \[
+    \nu(m) = \nu(n),
+  \]
+  \ie the (decorated) Kummer algebras $(A_m, \alpha_m)$ and $(A_n, \alpha_n)$
+  have the same level. Then there is a unique Kummer embedding
+  \[
+    \stdemb{m}{n}:A_m\emb A_n
+  \]
+  such that
+  \[
+    \stdemb{m}{n}(\alpha_m) = (\alpha_n)^{\frac{n}{m}}.
+  \]
+\end{prop}
+\begin{proof}
+  The element $\hat\alpha = (\alpha_n)^{\frac{n}{m}}$ is a solution
+  of~\eqref{eq:h90-kummer} for $(\zeta_n)^{\frac{n}{m}}=\iota_{m, n}(\zeta_m)$.
+  We also know that the Kummer constant of $\alpha_m$ is
+  \[
+    \stdc{m} = \iota_{m, p^a-1}^{-1}((\zeta_{p^a-1})^a)
+  \]
+  and the Kummer constant of $\alpha_n$ is 
+  \[
+    \stdc{n} = \iota_{n, p^a-1}^{-1}((\zeta_{p^a-1})^a).
+  \]
+  The embeddings $\iota$ are compatible by definition, thus we have
+  \[
+    \iota_{m, p^a-1} = \iota_{n, p^a-1}\circ\iota_{m, n}
+  \]
+  and
+  \[
+    \iota_{n, p^a-1}^{-1} = \iota_{m, n}\circ\iota_{m, p^a-1}^{-1}.
+  \]
+  It follows that
+  \[
+    \stdc{n} = \iota_{m, n}(\stdc{m}).
+  \]
+  By Proposition~\ref{prop:correspondence-solutions}, there exists a unique
+  Kummer embedding $\stdemb{m}{n}$ such that
+  \[
+    \stdemb{m}{n}(\alpha_m) = \hat\alpha = (\alpha_n)^{\frac{n}{m}}.
+  \]
+\end{proof}
+Proposition~\ref{prop:power-compatibility} guarantees that decorated Kummer
+algebras $(A_m, \alpha_m), (A_n, \alpha_n)$ of the same level are
+\emph{power-compatible}, \ie we can describe a unique Kummer embedding by
+\[
+  \alpha_m\mapsto (\alpha_n)^{\frac{n}{m}}.
+\]
+Therefore, there is no constant $\kappa$ to store in this case because we are in
+the trivial case $\kappa=1$, which was our
+goal. However, we see that power compatibility implies
+\[
+  \stdc{n} = \iota_{m, n}(\stdc{m}),
+\]
+hence implies that the decorated Kummer algebras share the same level. If the
+Kummer algebras do not share the same level, we can ask for
+\emph{norm-compatibility} instead of power-compatibility, at least between two
+\emph{complete} decorated Kummer algebras. %The intuition behind this idea is the
+%fact that the norm has the same effec
+Let $A_n$ be a Kummer algebra of level $\nu(n) = b$, so that
+\[
+  A_n = \mathbb{F}_{p^{n}}\otimes\mathbb{F}_{p^{b}}\cong
+  \mathbb{F}_{p^{n}}\otimes\mathbb{F}_{p}(\zeta_{p^b-1}),
+\]
+where the isomorphism is given by $1\otimes\iota_{n, p^b-1}$. Then, if $a\mid b$
+is another integer, the subalgebra of $A_n$ invariant under $1\otimes\sigma^a$
+is identified (by the same isomorphism) with
+\[
+  A_n^{1\otimes\sigma^a} \cong \mathbb{F}_{p^{n}}\otimes\mathbb{F}_p(
+  (\zeta_{p^b-1})^{\frac{p^b-1}{p^a-1}})
+\]
+where
+\[
+  (\zeta_{p^b-1})^{\frac{p^b-1}{p^a-1}} =
+  N_{\mathbb{F}_{p^{n}}/\mathbb{F}_{p^{a}}}(\zeta_{p^b-1}) = \iota_{p^a-1,
+  p^b-1}(\zeta_{p^a-1})
+\]
+and where $N_{\mathbb{F}_{p^{n}}/\mathbb{F}_{p^{a}}}$ is the relative norm of
+the finite field extension
+\[
+  \mathbb{F}_{p^{b}}/\mathbb{F}_{p^{a}}.
+\]
 
 \section{Standard embeddings}
 \label{sec:standard-embeddings}
