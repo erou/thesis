@@ -1056,8 +1056,8 @@ goal. However, we see that power compatibility implies
 hence implies that the decorated Kummer algebras share the same level. If the
 Kummer algebras do not share the same level, we can ask for
 \emph{norm-compatibility} instead of power-compatibility, at least between two
-\emph{complete} decorated Kummer algebras. %The intuition behind this idea is the
-%fact that the norm has the same effec
+\emph{complete} decorated Kummer algebras. 
+Let us first describe what ``norm'' we will be using.
 Let $A_n$ be a Kummer algebra of level $\nu(n) = b$, so that
 \[
   A_n = \mathbb{F}_{p^{n}}\otimes\mathbb{F}_{p^{b}}\cong
@@ -1067,7 +1067,7 @@ where the isomorphism is given by $1\otimes\iota_{n, p^b-1}$. Then, if $a\mid b$
 is another integer, the subalgebra of $A_n$ invariant under $1\otimes\sigma^a$
 is identified (by the same isomorphism) with
 \[
-  A_n^{1\otimes\sigma^a} \cong \mathbb{F}_{p^{n}}\otimes\mathbb{F}_p(
+  (A_n)^{1\otimes\sigma^a} \cong \mathbb{F}_{p^{n}}\otimes\mathbb{F}_p(
   (\zeta_{p^b-1})^{\frac{p^b-1}{p^a-1}})
 \]
 where
@@ -1081,7 +1081,145 @@ the finite field extension
 \[
   \mathbb{F}_{p^{b}}/\mathbb{F}_{p^{a}}.
 \]
+\begin{defi}[Scalar norm operator]
+  Let $n$ an integer prime to $p$ and $A_n$ a Kummer algebra of level
+  $\nu(n)=c$. Let $a,b$ two integers such that $a\mid b \mid c$,
+  then we define the \emph{scalar norm operator} as
+  \[
+    \begin{array}{cccc}
+      \mathcal N_{b/a,\, A_n}: & (A_n)^{1\otimes\sigma^b} & \to &
+      (A_n)^{1\otimes\sigma^a}\\
+      & \gamma & \mapsto & \prod_{0\leq j\leq
+        \frac{a}{b}}(1\otimes\alpha^{ja})(\gamma)
+    \end{array}
+  \]
+\end{defi}
+This operator is well-defined, as the elements in the image of $\mathcal
+N_{b/a,\, A_n}$ are indeed invariant under $1\otimes\sigma^a$. We often 
+omit $A_n$ and only write $\N_{b/a}$, as the ambient space $A_n$ is
+implicit. By construction, $\N_{b/a}$ acts on the scalar field
+$1\otimes\mathbb{F}_{p^b}^\times$ as the usual norm $1\otimes
+N_{\mathbb{F}_{p^{b}}/\mathbb{F}_{p^{a}}}$. Scalar norms are
+\emph{multiplicative}, \ie for any $\gamma, \gamma'\in A_n$, we have
+\[
+  \N_{b/a}(\gamma\gamma') = \N_{b/a}(\gamma)\N_{b/a}(\gamma'),
+\]
+they are \emph{transitive}, \ie for any $a\mid b\mid c$, we have
+\[
+  \N_{c/a} = \N_{b/a}\circ\N_{c/b},
+\]
+and they commute with $\sigma\otimes1$. All these nice properties make the
+scalar norm an excellent candidate to generalize the powering used to define
+standard embeddings between decorated Kummer algebras of same level.
+\begin{prop}
+  \label{prop:norm-compatibility}
+  Let $a\mid b$ be two integers prime to $p$ and let $(A_{p^a-1},
+  \alpha_{p^a-1})$, $(A_{p^b-1}, \alpha_{p^b-1})$ two decorated complete
+  Kummer algebras of levels $a$ and $b$ respectively. Then there is a unique
+  Kummer embedding (that we again call \emph{standard})
+  \[
+    \stdemb{p^a-1}{p^b-1}:A_{p^a-1}\emb A_{p^b-1}
+  \]
+  such that
+  \[
+    \stdemb{p^a-1}{p^b-1}(\alpha_{p^a-1}) = \N_{b/a}(\alpha_{p^b-1}).
+  \]
+\end{prop}
+\begin{proof}
+  Let $\hat\alpha = \N_{b/a}(\alpha_{p^b-1})$, by the properties of the scalar
+  norm, we have
+  \begin{align*}
+    (\sigma\otimes1)(\hat\alpha) &=
+    (\sigma\otimes1)(\N_{b/a}(\alpha_{p^b-1}))\\
+    &= \N_{b/a}( (\sigma\otimes1)(\alpha_{p^b-1}))\\
+    &= \N_{b/a}( (1\otimes\zeta_{p^b-1})\alpha_{p^b-1})\\
+    &= (1\otimes(\zeta_{p^b-1})^{\frac{p^b-1}{p^a-1}})\N_{b/a}(\alpha_{p^b-1}),
+  \end{align*}
+  therefore $\hat\alpha$ is a solution of~\eqref{eq:h90-kummer} for
+  $(\zeta_{p^b-1})^{\frac{p^b-1}{p^a-1}}$.
+  We also have 
+  \begin{align*}
+    \hat\alpha^{p^a} &= (\sigma^a\otimes\sigma^a)(\hat\alpha)\\
+    &= (\sigma^a\otimes\sigma^a)(\N_{b/a}(\alpha_{p^b-1}))\\
+    &= (\sigma^a\otimes1)(\N_{b/a}(\alpha_{p^b-1}))\\
+    &= \N_{b/a}((\sigma^a\otimes1)(\alpha_{p^b-1}))\\
+    &= \N_{b/a}((1\otimes(\zeta_{p^b-1})^a)(\alpha_{p^b-1}))\\
+    &= (1\otimes\iota_{p^a-1,\,p^b-1}(\zeta_{p^a-1})^a)\N_{b/a}(\alpha_{p^b-1}),
+  \end{align*}
+  thus $\hat\alpha$ satisfies
+  \[
+    \hat\alpha^{p^a-1} = 1\otimes\iota_{p^a-1,\,p^b-1}(\stdc{p^a-1}),
+  \]
+  and by Proposition~\ref{prop:correspondence-solutions} there is a unique
+  embedding such that
+  \[
+    \stdemb{p^a-1}{p^b-1}(\alpha_{p^b-1}) = \hat\alpha.
+  \]
+\end{proof}
 
 \section{Standard embeddings}
 \label{sec:standard-embeddings}
+
+From Proposition~\ref{prop:power-compatibility}, we learned how to construct a
+standard Kummer embedding between two decorated Kummer algebras sharing the same
+level, using power compatibility. From Proposition~\ref{prop:norm-compatibility}
+we learned how to construct a standard Kummer embedding between two decorated
+complete Kummer algebras, using norm compatibility. Our goal is
+now to use both results together in order to construct a standard Kummer
+embedding between any two decorated Kummer algebras. Consider the general
+case where we have two integers
+$m\mid n$ not divisible by $p$, set $a=\nu(m)$, $b=\nu(n)$, and consider
+the diagram
+\begin{equation*}
+\label{3cotes}
+\begin{CD}
+(A_{p^a-1},\alpha_{p^a-1}) @>{\stdemb{p^a-1}{p^b-1}}>> (A_{p^b-1},\alpha_{p^b-1}) \\
+@A{\stdemb{m}{p^a-1}}AA @AA{\stdemb{n}{p^b-1}}A\\
+(A_m,\alpha_m) @. (A_n,\alpha_n)
+\end{CD}
+\end{equation*}
+of standard embeddings of decorated algebras.
+\begin{lm}
+  \label{lm:existence-embedding}
+  In this setting, there exists unique Kummer embedding
+  \[
+    \stdemb{m}{n}:A_m\emb A_n
+  \]
+  that makes the diagram commute.
+\end{lm}
+\begin{proof}
+  Let
+  \[
+    \tilde\alpha = \stdemb{p^a-1}{p^b-1}(\stdemb{m}{p^a-1}(\alpha_l))\in
+    A_{p^b-1}.
+  \]
+  The element $\tilde\alpha$ is fixed by both $\sigma^m\otimes1$ and
+  $1\otimes\sigma^a$, because $\alpha_m$ is, and Kummer embeddings commute with both
+  $\sigma\otimes1$ and $1\otimes\sigma$. Therefore, $\tilde\alpha$ is also fixed
+  by $\sigma^n\otimes1$ and $1\otimes\sigma^b$, and thus is in the image of
+  $A_n$ by $\stdemb{n}{p^b-1}$. We then let
+  \[
+    \hat\alpha = (\stdemb{n}{p^b-1})^{-1}(\tilde\alpha)\in A_n.
+  \]
+  It follows from the diagram that $\hat\alpha$ is a solution
+  of~\eqref{eq:h90-kummer} for $(\zeta_n)^{\frac{n}{m}}$ that also satisfies 
+  \[
+    \hat\alpha^m = 1\otimes\iota_{m,n}(\zeta_m).
+  \]
+  By Proposition~\ref{prop:correspondence-solutions}, we then have a unique
+  Kummer embedding such that
+  \[
+    \stdemb{m}{n}(\alpha_m) = \hat\alpha,
+  \]
+  and that concludes the proof.
+\end{proof}
+The existence result of Lemma~\ref{lm:existence-embedding} is 
+``constructive'', but requires to compute the complete Kummer algebra
+$A_{p^a-1}$, that can be very large, thus it is impractical. However, one should
+be able to write 
+\[
+  \hat\alpha = (1\otimes\kappa)(\alpha_n)^{\frac{n}{m}}
+\]
+since both $\hat\alpha$ and $(\alpha_n)^{\frac{n}{m}}$ are solutions
+of~\eqref{eq:h90-kummer} for $(\zeta_n)^\frac{n}{m}$.
 %
