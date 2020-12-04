@@ -1181,7 +1181,7 @@ the diagram
 of standard embeddings of decorated algebras.
 \begin{lm}
   \label{lm:existence-embedding}
-  In this setting, there exists unique Kummer embedding
+  In this setting, there exists a unique Kummer embedding
   \[
     \stdemb{m}{n}:A_m\emb A_n
   \]
@@ -1201,10 +1201,24 @@ of standard embeddings of decorated algebras.
   \[
     \hat\alpha = (\stdemb{n}{p^b-1})^{-1}(\tilde\alpha)\in A_n.
   \]
-  It follows from the diagram that $\hat\alpha$ is a solution
-  of~\eqref{eq:h90-kummer} for $(\zeta_n)^{\frac{n}{m}}$ that also satisfies 
+  By construction, the element $\tilde\alpha$ is a solution
+  of~\eqref{eq:h90-kummer} for
   \[
-    \hat\alpha^m = 1\otimes\iota_{m,n}(\zeta_m).
+    \iota_{m,\,p^b-1}(\zeta_m) = (\zeta_{p^b-1})^{\frac{p^b-1}{m}}
+  \]
+  that satisfies
+  \[
+    \tilde\alpha^m = 1\otimes\iota_{m,\,p^b-1}(\stdc{m})
+  \]
+  It thus follows that $\hat\alpha$ is a solution
+  of~\eqref{eq:h90-kummer} for 
+  \[
+    \iota_{n,\,p^b-1}^{-1}(\iota_{m,\,p^b-1}(\zeta_m)) =
+    \iota_{m\,n}(\zeta_m)=(\zeta_n)^{\frac{n}{m}}
+  \]
+  that also satisfies 
+  \[
+    \hat\alpha^m = 1\otimes\iota_{m,n}(\stdc{m}).
   \]
   By Proposition~\ref{prop:correspondence-solutions}, we then have a unique
   Kummer embedding such that
@@ -1220,6 +1234,107 @@ be able to write
 \[
   \hat\alpha = (1\otimes\kappa)(\alpha_n)^{\frac{n}{m}}
 \]
+for some constant $\kappa\in\mathbb{F}_p(\zeta_n)$,
 since both $\hat\alpha$ and $(\alpha_n)^{\frac{n}{m}}$ are solutions
-of~\eqref{eq:h90-kummer} for $(\zeta_n)^\frac{n}{m}$.
+of~\eqref{eq:h90-kummer} for $(\zeta_n)^\frac{n}{m}$. We proved in
+Lemma~\ref{lm:existence-embedding} that there was a unique, \emph{standard},
+Kummer embedding corresponding to this solution $\hat\alpha$, thus there should
+also be a unique constant $\kappa$ corresponding to this embedding. Our aim is
+now to give an explicit expression of $\kappa$, so that we do not have to
+compute the complete algebra $A_{p^b-1}$ to obtain the Kummer embedding
+\[
+  \stdemb{m}{n}.
+\]
+We start with the simpler case of complete algebras nonetheless, \ie we study
+the constant $\kappa$ when $m=p^a-1$ and $n=p^b-1$.
+\begin{prop}
+  \label{prop:link-norm-power}
+In the complete algebra $A_{p^b-1}$ we have
+\[
+(\alpha_{p^b-1})^{\frac{p^b-1}{p^a-1}}=(1\otimes\zeta_{p^b-1})^{\frac{(b-a)
+  p^{b+a}-bp^b+ap^a}{(p^a-1)^2}}\norm_{b/a}(\alpha_{p^b-1}).
+\]
+\end{prop}
+\begin{proof}
+  Using the fact that $(\sigma\otimes\sigma)(\beta) = \beta^p$ for any $\beta\in
+  A_{p^b-1}$, and then~\eqref{eq:h90-kummer}, we get:
+  \begin{align*}
+\frac{(\alpha_{p^b-1})^{\frac{p^b-1}{p^a-1}}}{\norm_{b/a}(\alpha_{p^b-1})}
+&=\prod_{0\leq j<\frac{b}{a}}\frac{(\sigma^{ja}\otimes\sigma^{ja})(\alpha_{
+p^b-1})}{(1\otimes\sigma^{ja})(\alpha_{p^b-1})}\\
+&=\prod_{0\leq j<\frac{b}{a}}(1\otimes\sigma^{ja})\left(\frac{(\sigma^{ja}
+\otimes 1)(\alpha_{p^b-1})}{\alpha_{p^b-1}}\right)\\
+&=\prod_{0\leq j<\frac{b}{a}}(1\otimes\sigma^{ja})(1\otimes\zeta_{p^b-1})
+^{ja}\\
+&=(1\otimes\zeta_{p^b-1})^{\sum_{0\leq j<\frac{b}{a}}jap^{ja}}.
+  \end{align*}
+We conclude thanks to the identity
+\[
+\sum_{0\leq j<n}jT^j=T\frac{d}{dT}\!\left(\frac{T^n-1}{T-1}\right)=
+\frac{(n-1)T^{n+1}-nT^n+T}{(T-1)^2}.
+\]
+\end{proof}
+From Proposition~\ref{prop:link-norm-power}, we can deduce the constant $\kappa$
+involved in the computation of $\stdemb{p^a-1}{p^b-1}$. The results also extends
+to non complete algebras.
+\begin{cor}
+  \label{cor:link-norm-power}
+  Let $(A_m, \alpha_n)$ and $(A_n, \alpha_n)$ be two decorated Kummer algebras
+  of respective degrees $m\mid n$ prime to $p$ and respective levels $a$ and
+  $b$. Then the standard embedding
+  \[
+    \stdemb{m}{n}:A_m\emb A_n
+  \]
+  is defined by the assignation
+  \[
+    \alpha_m\mapsto (1\otimes\kappa_{m, n})(\alpha_n)^{\frac{n}{m}},
+  \]
+  where 
+  \[
+    \kappa_{m, n} = \iota_{n,
+    p^b-1}^{-1}(\zeta_{p^b-1})^{-\frac{(b-a)p^{b+a}-bp^b+ap^a}{(p^a-1)m}}).
+  \]
+\end{cor}
+\begin{proof}
+  Recall that $\stdemb{m}{n}$ is, by construction, the unique Kummer embedding
+  that makes the following diagram commute.
+\begin{equation*}
+\begin{CD}
+(A_{p^a-1},\alpha_{p^a-1}) @>{\stdemb{p^a-1}{p^b-1}}>> (A_{p^b-1},\alpha_{p^b-1}) \\
+@A{\stdemb{m}{p^a-1}}AA @AA{\stdemb{n}{p^b-1}}A\\
+(A_m,\alpha_m) @. (A_n,\alpha_n)
+\end{CD}
+\end{equation*}
+Therefore, if we set
+\[
+  \hat\alpha = (1\otimes\kappa_{m, n})(\alpha_n)^{\frac{n}{m}},
+\]
+it is sufficient to prove that 
+\[
+  \stdemb{p^a-1}{p^b-1}(\stdemb{m}{p^b-1})(\alpha_m) =
+  \stdemb{n}{p^b-1}(\hat\alpha).
+\]
+However, using Proposition~\ref{prop:norm-compatibility} and
+Proposition~\ref{prop:power-compatibility}, we know that
+\[
+  \stdemb{p^a-1}{p^b-1}(\stdemb{m}{p^b-1})(\alpha_m) =
+  \norm_{b/a}(\alpha_{p^b-1})^{\frac{p^a-1}{m}},
+\]
+and we also know that
+\[
+  \stdemb{n}{p^b-1}( (\alpha_m)^{\frac{n}{m}}) =
+  (\alpha_{p^b-1})^{\frac{p^b-1}{m}}.
+\]
+Therefore, using Proposition~\ref{prop:link-norm-power}, we obtain
+\begin{align*}
+  \stdemb{n}{p^b-1}(\hat\alpha) &=   (\zeta_{p^b-1})^{-\frac{(b-a)p^{b+a}
+-bp^b+ap^a}{(p^a-1)m}}(\alpha_{p^b-1})^{\frac{p^b-1}{m}}\\
+&=( (\zeta_{p^b-1})^{-\frac{(b-a)p^{b+a}
+-bp^b+ap^a}{(p^a-1)^2}}(\alpha_{p^b-1})^{\frac{p^b-1}{p^a-1}})^{\frac{p^a-1}{m}}\\
+&= \norm_{b/a}(\alpha_{p^b-1})^{\frac{p^a-1}{m}}\\
+&= \stdemb{p^a-1}{p^b-1}(\stdemb{m}{p^b-1})(\alpha_m),
+\end{align*}
+which completes the proof.
+\end{proof}
+
 %

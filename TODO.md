@@ -38,4 +38,9 @@ Chapter 6
 Chapter 7
 =========
 
-- Write Sections 7.2 and 7.3 (core of the theory)
+- Write Section 7.3 
+
+Overall
+=======
+
+- More references, more drawings, more perspectives.
