@@ -904,6 +904,17 @@ prime to $p$, we can define $\mathbb{F}_{p^{m}}$ in a standard way.
   minimal polynomial over $\K$ of a standard generating element of
   $\mathbb{F}_{p^{m}}$.
 \end{defi}
+\begin{defi}[Decorated finite field]
+  Let $m\in\mathbb{N}$ an integer prime to $p$. A \emph{decorated finite field}
+  is a couple $(\mathbb{F}_{p^{m}}, s_m)$ where $s_m\in\mathbb{F}_{p^{m}}$ is a
+  standard generating element.
+\end{defi}
+\begin{rem}
+  By Remark~\ref{rem:recover-alpha}, we can recover $\alpha_m$ the standard
+  solution of~\eqref{eq:h90-kummer} from the standard generating element $s_m$,
+  thus decorated Kummer algebras can be recovered from
+  decorated finite fields.
+\end{rem}
 By Proposition~\ref{prop:kummer-constant}, we know that $P_m$ is entirely 
 determined by $\stdc{m}$, and thus by the cyclotomic lattice $\mathcal S^I$ up
 to order $p^a-1$, with $a=\nu(m)$ the level of $m$. This helps to achieve the
@@ -1185,7 +1196,8 @@ of standard embeddings of decorated algebras.
   \[
     \stdemb{m}{n}:A_m\emb A_n
   \]
-  that makes the diagram commute.
+  that makes the diagram commute. We call this embedding the \emph{standard
+  Kummer embedding} from $A_m$ to $A_n$.
 \end{lm}
 \begin{proof}
   Let
@@ -1227,6 +1239,20 @@ of standard embeddings of decorated algebras.
   \]
   and that concludes the proof.
 \end{proof}
+\begin{defi}[Standard embedding]
+  Let $m\mid n$ two integers prime to $p$. By
+  Proposition~\ref{prop:correspondence-embeddings}, there exists a unique finite
+  field embedding 
+  \[
+    \stdembff{m}{n}:\mathbb{F}_{p^{m}}\emb\mathbb{F}_{p^{n}}
+  \]
+  such that the standard Kummer embedding $\stdemb{m}{n}$ satisfies
+  \[
+    \stdemb{m}{n}=\stdembff{m}{n}\otimes\iota_{m,n}.
+  \]
+  This finite field embedding $\phi$ is called the \emph{standard embedding}
+  from $\mathbb{F}_{p^{m}}$ to $\mathbb{F}_{p^{n}}$.
+\end{defi}
 The existence result of Lemma~\ref{lm:existence-embedding} is 
 ``constructive'', but requires to compute the complete Kummer algebra
 $A_{p^a-1}$, that can be very large, thus it is impractical. However, one should
@@ -1309,7 +1335,7 @@ Therefore, if we set
 \[
   \hat\alpha = (1\otimes\kappa_{m, n})(\alpha_n)^{\frac{n}{m}},
 \]
-it is sufficient to prove that 
+it is sufficient, by Lemma~\ref{lm:existence-embedding}, to prove that 
 \[
   \stdemb{p^a-1}{p^b-1}(\stdemb{m}{p^b-1})(\alpha_m) =
   \stdemb{n}{p^b-1}(\hat\alpha).
@@ -1336,5 +1362,97 @@ Therefore, using Proposition~\ref{prop:link-norm-power}, we obtain
 \end{align*}
 which completes the proof.
 \end{proof}
+\begin{prop}
+  \label{prop:embeddings-compatibility}
+  Standard Kummer embeddings are compatible: let $(A_l, \alpha_l), (A_m,
+  \alpha_m)$ and $(A_n, \alpha_n)$ three decorated Kummer algebras with
+  respective degrees
+  \[
+    l\mid m\mid n,
+  \]
+  then the corresponding standard embeddings satisfy
+  \[
+    \stdemb{l}{n} = \stdemb{m}{n}\circ\stdemb{l}{m}.
+  \]
+\end{prop}
+\begin{proof}
+  Corollary~\ref{cor:link-norm-power} gives us explicit formulas for the
+  standard Kummer embeddings, thus we can check by direct computation that the
+  embeddings are compatible. Let
+  \[
+    a = \nu(l)\quad b =\nu(m)\quad c = \nu(n)
+  \]
+  the respective levels of $A_l, A_m$ and $A_n$. Then we have the corresponding
+  commutative diagram where the arrows represent the Kummer standard embeddings.
+ \begin{equation*}
+\begin{CD}
+A_{p^a-1} @>>> A_{p^b-1} @>>> A_{p^c-1} \\
+@AAA @AAA @AAA\\
+A_l @>>> A_m @>>> A_n
+\end{CD}
+\end{equation*} 
+Using Lemma~\ref{lm:existence-embedding}, it is sufficient to show that
+\[
+  \stdemb{l}{n}(\alpha_l)
+\]
+and
+\[
+  (\stdemb{m}{n}\circ\stdemb{l}{m})(\alpha_l)
+\]
+have the same image in $A_{p^c-1}$ under $\stdemb{n}{p^c-1}$. However, it
+follows from the diagram that this common image is 
+\[
+  \norm_{c/a}(\alpha_{p^c-1})^{\frac{p^a-1}{l}}.
+\]
+\end{proof}
+All these results ensure that Algorithm~\ref{algo:std-embed} is correct and
+provides embeddings that are compatible.
+\begin{algorithm}
+  \caption{(Standard compatible embeddings)}
+  \label{algo:std-embed}
+  \begin{algorithmic}[1]
+    \Require {$\mathcal S^I$ a cyclotomic lattice, and
+      $(\mathbb{F}_{p^m},s_m)$, $(\mathbb{F}_{p^n},s_n)$, decorated finite
+    fields, for $m\mid n$ integers prime to $p$.}
+      \Ensure {$t\in\mathbb{F}_{p^n}$, such that the assignation $s_m\mapsto t$
+    defines a standard embedding
+    $\stdembff{m}{n}:\mathbb{F}_{p^m}\hookrightarrow\mathbb{F}_{p^n}$,
+      compatible with composition.}
+  \State Compute the Kummer algebras $A_m$ and $A_n$.
+  \State Recover $\alpha_m$ from $s_m$ and $\alpha_n$ from $s_n$ using
+  Remark~\ref{rem:recover-alpha}.%\vspace{-.7\baselineskip}
+  \State Compute
+  $\kappa_{m,n}=(\iota_{n,p^b-1})^{-1}((\zeta_{p^b-1})^{-\frac{(b-a)p^{b+a}-bp^b+ap^a}{(p^a-1)m}})$
+  where $a=\nu(m)$, $b=\nu(n)$.
+  \State Return
+  $\first{(1\otimes\kappa)(\alpha_n)^{\frac{n}{m}}}{(\zeta_n)^{\frac{n}{m}}}$.
+  \end{algorithmic}
+\end{algorithm}
+\begin{prop}
+\label{prop:ff-embeddings-compatibility}
+Standard finite field embeddings are compatible with composition:
+if $(\mathbb{F}_{p^l},s_l)$, $(\mathbb{F}_{p^m},s_m)$, and
+$(\mathbb{F}_{p^n},s_n)$ are decorated finite fields
+with $l\,|\,m\,|\,n$, the corresponding standard embeddings
+satisfy $\stdembff{l}{n}=\stdembff{m}{n}\circ\stdembff{l}{m}$.
+\end{prop}
+\begin{proof}
+Proposition~\ref{prop:embeddings-compatibility} ensures that standard Kummer
+embedding are compatible, and by Corollary~\ref{cor:link-h90-embedding} this
+also implies the compatibility of the standard embeddings between the finite
+fields.
+\end{proof}
 
+\section{Implementation}
+
+In the preceding sections, we proposed a new method to construct a lattice of
+compatibly embedded finite fields and proved that our method was correct.
+However, the description of Kummer embedding was abstract, and many
+computational details were left unspecified. There are various ways in which the
+algorithms can be implemented, depending on how the finite fields are
+represented and how the cyclotomic lattice $\mathcal S^I$ is constructed. In
+order to demonstrate the praticality of this method, we implemented it in
+Nemo/Flint~\cite{Nemo, Flint}.
+In this section, we present the implementation details, depending on the
+representation we used in our code.
 %
