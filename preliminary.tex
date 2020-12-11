@@ -6,6 +6,26 @@ The reader familiar with the notions of finite
 fields, algebraic function fields, or complexity model may very well skip this
 chapter.
 \minitoc
+
+\begin{figure}
+  \centering
+  \begin{tikzpicture}
+    \foreach \x in {0, 1,...,10} \node (\x) at (32.7*\x:2) {\x};
+    \draw (0) -- (1);
+    \draw (1) -- (2);
+    \draw (2) -- (3);
+    \draw (3) -- (4);
+    \draw (4) -- (5);
+    \draw (5) -- (6);
+    \draw (6) -- (7);
+    \draw (7) -- (8);
+    \draw (8) -- (9);
+    \draw (9) -- (10);
+    \draw (10) -- (0);
+  \end{tikzpicture}
+  \caption{Cyclic group structure of $\mathbb{F}_{11}$.}
+  \label{fig:finite-field}
+\end{figure}
  
 % TODO: picture a prime finite field with the cyclic group structure maybe
 
@@ -20,6 +40,7 @@ chapter.
 %
 % - Finish the different sections
 
+\clearpage
 \section{Finite fields}
 
 Finite fields are ubiquitous in cryptography and coding theory, probably because

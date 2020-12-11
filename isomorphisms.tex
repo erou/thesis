@@ -813,6 +813,7 @@ The computational cost of Lenstra-Allombert algorithm reside in the computation
 of~\eqref{eq:h90-kummer} solutions, \ie Step $1$ of the previous list.
 
 \subsection{Computing~\eqref{eq:h90-kummer} solutions}
+\label{sec:computing-h90}
 
 In this section, we briefly present the different known solutions to
 compute~\eqref{eq:h90-kummer} solutions, details can be found in~\cite{BDDFS17}.
@@ -886,7 +887,8 @@ random $\alpha_x$ thus have a probability of being zero less than $1/p$, so we
 need $O(1)$ trials to find a nonzero $\alpha_x$ at random. Depending on the
 relative size of $p$, $n$, and $s=\left[ \mathbb{F}_p(\zeta):\K \right]$, the
 computational cost of finding a nonzero $\alpha_x$ is discussed in details
-in~\cite{BDDFS17}. If $\omega=3$, where $\omega$ is the exponent of matrix
+in~\cite{BDDFS17} and is bounded by $O(M(n^2)\log(n)+M(n)\log(p))$. If
+$\omega=3$, where $\omega$ is the exponent of matrix
 multiplication, then the cost is at best quadratic in $n$.
 
 \section{The embedding evaluation problem}
