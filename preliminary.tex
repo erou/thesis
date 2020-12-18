@@ -10,25 +10,26 @@ chapter.
 \begin{figure}
   \centering
   \begin{tikzpicture}
-    \foreach \x in {0, 1,...,10} \node (\x) at (32.7*\x:2) {\x};
-    \draw (0) -- (1);
-    \draw (1) -- (2);
-    \draw (2) -- (3);
-    \draw (3) -- (4);
-    \draw (4) -- (5);
-    \draw (5) -- (6);
-    \draw (6) -- (7);
-    \draw (7) -- (8);
-    \draw (8) -- (9);
-    \draw (9) -- (10);
-    \draw (10) -- (0);
+    \foreach \x in {0, 1,...,10} \coordinate (\x) at (32.7*\x:2);
+    \draw[additive-structure] (0,0) circle (2);
+    \draw[multiplicative-structure] (1) to [bend left] (2);
+    \draw[multiplicative-structure] (2) to [bend left] (4);
+    \draw[multiplicative-structure] (4) to [bend left] (8);
+    \draw[multiplicative-structure] (8) to [bend right] (5);
+    \draw[multiplicative-structure] (5) to [bend left] (10);
+    \draw[multiplicative-structure] (10) to [bend right] (9);
+    \draw[multiplicative-structure] (9) to [bend right] (7);
+    \draw[multiplicative-structure] (7) to [bend right] (3);
+    \draw[multiplicative-structure] (3) to [bend left] (6);
+    \draw[multiplicative-structure] (6) to [bend right] (1);
+    \foreach \x in {0, 1,...,10} \draw[fill] (32.7*\x:2) circle (.1);
+    \foreach \x in {0, 1,...,10} \node (p) at (32.7*\x:2.4) {$\x$};
   \end{tikzpicture}
-  \caption{Cyclic group structure of $\mathbb{F}_{11}$.}
+  \caption{Cyclic group structure of $(\mathbb{F}_{11}, +)$ (red) and
+  $(\mathbb{F}_{11}^\times, \times)$ (blue).}
   \label{fig:finite-field}
 \end{figure}
  
-% TODO: picture a prime finite field with the cyclic group structure maybe
-
 % TODO
 % ====
 %

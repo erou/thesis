@@ -1318,7 +1318,7 @@ to non complete algebras.
   where 
   \[
     \kappa_{m, n} = \iota_{n,
-    p^b-1}^{-1}(\zeta_{p^b-1})^{-\frac{(b-a)p^{b+a}-bp^b+ap^a}{(p^a-1)m}}).
+    p^b-1}^{-1}(\zeta_{p^b-1})^{-\frac{(b-a)p^{b+a}-bp^b+ap^a}{(p^a-1)m}}.
   \]
 \end{cor}
 \begin{proof}
@@ -1526,7 +1526,14 @@ of~\eqref{eq:h90-kummer}.
  we only need an irreducible polynomial over $\K$ of degree $m$, since we
  already have the minimal polynomial of $\zeta_m$. Very efficient, quasi-optimal
  algorithms~\cite{BFSS06, CL13, DDS13} exist to compute such polynomials, thus
- the cost is also negligible. With the Kummer algebra constructed, we can
+ the cost is also negligible. We then represent the Kummer algebra as
+ \[
+   \mathbb{F}_{p^{m}}[T]/(h(T))
+ \]
+ where $h$ is the minimal polynomial of $\zeta_m$ over $\K$, and where
+ $\mathbb{F}_{p^{m}}$ is defined with the irreducible polynomial of degree $m$
+ that we found.
+ With the Kummer algebra constructed, we can
  compute a solution $\alpha_m\in A_m$ of~\eqref{eq:h90-kummer} for $\zeta_m$ at
  a cost of 
  \[
@@ -1538,7 +1545,8 @@ of~\eqref{eq:h90-kummer}.
  \[
    c_m' = (\alpha_m')^m
  \]
- with $O(M(m^2)\log(m))$ operations in $\K$, and the $m$-th root extraction of
+ with $O(M(m^2)\log(m))$ operations in $\K$ via Kronecker substituion, and the
+ $m$-th root extraction of
  \[
    \stdc{m}/c_m' = \kappa^m
  \]
@@ -1553,5 +1561,71 @@ of~\eqref{eq:h90-kummer}.
  \[
    O(M(m^2)\log(m)+M(m)\log(m)\log(p)).
  \]
+\end{proof}
+\begin{prop}
+  Under the same assumptions as in Proposition~\ref{prop:complexity-h90} and
+  after the computation of two decorated algebras $(A_m,\alpha_m)$ and $(A_n,\alpha_n)$, a standard
+  embedding of finite fields
+  \[
+    \mathbb{F}_{p^m}\emb\mathbb{F}_{p^{n}}
+  \]
+  can be computed using 
+  \[
+    O(M(n^2)\log(n))
+  \]
+  operations in $\K$.
+\end{prop}
+\begin{proof}
+ The projection
+ \[
+   x_m = \first{\alpha_m}{\zeta_m}
+ \]
+ comes for free because $\alpha_m$ is already represented in the
+ $(\mathbb{F}_{p^{m}}\otimes1)$-basis $(1\otimes(\zeta_m)^j)_j$ of $A_m$, \ie as
+ \[
+   \alpha_m = \sum_{j=0}^{m-1}a_j\otimes(\zeta_m)^j,
+ \]
+ and the minimal polynomial of $x_m$ over $\K$ is computed using
+ $O(m^{\frac{\omega+1}{2}})$ operations. We now need to compute the scalar
+ \[
+    \kappa_{m, n} = \iota_{n,
+    p^b-1}^{-1}(\zeta_{p^b-1})^{-\frac{(b-a)p^{b+a}-bp^b+ap^a}{(p^a-1)m}}.
+ \]
+ which is done using $O(M(n)n)$ operations in $\K$, and the element
+ \[
+   (\alpha_n)^{\frac{n}{m}},
+ \]
+ which is done using $O(M(n^2)\log(n))$ operations. The only remaining step is
+ to compute
+ \[
+   \first{(1\otimes\kappa_{m,\,n})(\alpha_{n})^{\frac{n}{m}}}{(\zeta_n)^{\frac{n}{m}}},
+ \]
+ but it is not free this time, because
+ \[
+   \hat\alpha = (1\otimes\kappa_{m,\,n})(\alpha_{n})^{\frac{n}{m}}
+ \]
+ is represented in the basis $(1\otimes(\zeta_n)^j)_j$, when we need a representation
+ in the basis $(1\otimes(\zeta_n)^{\frac{jn}{m}})_j$. A generic change of basis
+ algorithm would be too expensive because we need to convert $n$ elements from
+ the field of scalar $\mathbb{F}_{p}(\zeta_n)$ to
+ \[
+   \mathbb{F}_p( (\zeta_n)^{\frac{n}{m}}) \cong \mathbb{F}_p(\zeta_m),
+ \]
+ which cost $O(n^{\frac{\omega+3}{2}})$. Instead, we note that we only need
+ \[
+   \first{\hat\alpha}{(\zeta_n)^{\frac{n}{m}}},
+ \]
+ thus we only need one coordinate in the basis
+ $(1\otimes(\zeta_n)^{\frac{jn}{m}})_{0\leq j\leq m-1}$, and we proceed as follows. Let $\tr$ denote
+ the trace map of the extension
+ \[
+   \mathbb{F}_p(\zeta_n) / \mathbb{F}_p( (\zeta_n)^{\frac{n}{m}})
+ \]
+ and let $u\in\mathbb{F}_p(\zeta_n)$ be an element such that $\tr(u)=1$. Then,
+ as explained in Section~\ref{sec:duality}, the map
+ \[
+   x\mapsto\tr(ux)
+ \]
+ sends $(\zeta_n)^{\frac{n}{m}}$ to
 \end{proof}
 %
