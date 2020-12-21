@@ -1682,4 +1682,19 @@ map $\first{\tr(x)}{(\zeta_n)^{\frac{n}{m}}}$ to each coefficient to recover
 $x_n$.
 This costs $O(nM(n))$ operations.
 \end{proof}
+In terms of memory complexity, we remark that storing the standard solution
+of~\eqref{eq:h90-kummer} $\alpha_m$ costs $O(m^2)$ elements in $\K$, but thanks to
+Remark~\ref{rem:recover-alpha}, we only have to store
+\[
+  \first{\alpha_m}{\zeta_m},
+\]
+hence we need only $O(m)$ field elements.
+
+\subsection{Experimental results}
+
+We implemented our lattice of compatibly embedded finite fields in the computer
+algebra system Nemo~\cite{Nemo}, written in the Julia~\cite{Julia} programming
+language, and based on the library Flint~\cite{Flint}, that is written in the C
+programming language. The code is available as a Julia package at
+\url{https://github.com/erou/LatticeGFH90.jl}.
 %
