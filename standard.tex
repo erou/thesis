@@ -1452,8 +1452,8 @@ computational details were left unspecified. There are various ways in which the
 algorithms can be implemented, depending on how the finite fields are
 represented and how the cyclotomic lattice $\mathcal S^I$ is constructed. In
 order to demonstrate the praticality of this method, we implemented it in
-Nemo/Flint~\cite{Nemo, Flint}. In this section, we present the implementation
-details ant the complexity analysis, depending on the representation we used in
+Nemo/Flint~\cite{Nemo, Flint}. In this section, we present the experimental
+results and the complexity analysis, depending on the representation we used in
 our code.
 
 \subsection{Complexity analysis}
@@ -1696,5 +1696,34 @@ We implemented our lattice of compatibly embedded finite fields in the computer
 algebra system Nemo~\cite{Nemo}, written in the Julia~\cite{Julia} programming
 language, and based on the library Flint~\cite{Flint}, that is written in the C
 programming language. The code is available as a Julia package at
-\url{https://github.com/erou/LatticeGFH90.jl}.
+\url{https://github.com/erou/LatticeGFH90.jl}. The package implements
+Algorithms~\ref{algo:decoration} and~\ref{algo:std-embed}. The high level
+manipulations are done directly in Julia while the critical routines are
+performed by the C library \texttt{libembed}. The \texttt{libembed} library is
+part of the Julia package \texttt{LatticeGFH90}, it is based on Flint and is
+compiled against Nemo's version of Flint when \texttt{LatticeGFH90} is built.
+All the tests in this sections were performed on an
+Intel Core i7-7500U CPU clocked at 2.70GHz, using Nemo 0.19.0 running on
+Julia 1.5.3, and Nemo’s corresponding version of Flint. We first measured the
+time needed to compute Kummer algebras and solutions of~\eqref{eq:h90-kummer},
+\ie the time needed to perform Algorithm~\ref{algo:decoration}, with various
+small prime $p$, using the Conway polynomials available in Nemo. It seems that
+the behaviour of Algorithm~\ref{algo:decoration} is essentially the same, no
+matter what prime we use, as shown in Figures~\ref{fig:solve-h90-3}
+and~\ref{fig:solve-h90-11}.
+\begin{figure}
+  \centering
+  \includegraphics{benchmarks/lattice-h90/solve-h90-3.eps}
+  \caption{Timings for computing decorated Kummer algebras $(A_m, \alpha_m)$ (logarithmic scale)
+  with $p=3$.}
+  \label{fig:solve-h90-3}
+\end{figure}
+\begin{figure}
+  \centering
+  \includegraphics{benchmarks/lattice-h90/solve-h90-11.eps}
+  \caption{Timings for computing decorated Kummer algebras $(A_m, \alpha_m)$ (logarithmic scale)
+  with $p=11$.}
+  \label{fig:solve-h90-11}
+\end{figure}
+
 %
