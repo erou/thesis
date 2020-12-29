@@ -1709,8 +1709,14 @@ time needed to compute Kummer algebras and solutions of~\eqref{eq:h90-kummer},
 \ie the time needed to perform Algorithm~\ref{algo:decoration}, with various
 small prime $p$, using the Conway polynomials available in Nemo. It seems that
 the behaviour of Algorithm~\ref{algo:decoration} is essentially the same, no
-matter what prime we use, as shown in Figures~\ref{fig:solve-h90-3}
-and~\ref{fig:solve-h90-11}.
+matter what prime we use, as shown in Figure~\ref{fig:solve-h90-3} ($p=3$)
+and in Figure~\ref{fig:solve-h90-11} ($p=11$). Consequently, we only show the
+experiments made with $p=3$ in the rest of this section.
+Note that in Figures~\ref{fig:solve-h90-3} and~\ref{fig:solve-h90-11}, we
+compute solutions for~\eqref{eq:h90-kummer} with $m\leq1000$, but not all the
+degrees $m$ up to $1000$ are computed: indeed we need that $p\nmid m$, and if
+the level of $A_m$ is $a$, we also need the $a$-th Conway polynomial to be
+available, which is not always the case.
 \begin{figure}
   \centering
   \includegraphics{benchmarks/lattice-h90/solve-h90-3.eps}
@@ -1724,6 +1730,58 @@ and~\ref{fig:solve-h90-11}.
   \caption{Timings for computing decorated Kummer algebras $(A_m, \alpha_m)$ (logarithmic scale)
   with $p=11$.}
   \label{fig:solve-h90-11}
+\end{figure}
+In the complexity analysis of Proposition~\ref{prop:complexity-h90}, the level
+of the algebra $A_m$ was bounded by its degree $m$, leading to a quasi-quadratic
+complexity. However, we see in the timings that this bound is not relevant in
+practice. Indeed, the time results show that the level of the algebra has a
+great impact on the timings: when the level is low, the computations are much
+faster. In Figure~\ref{fig:level-12}, we selected only the computations that
+occured on a fixed level $a=12$, and we see that in that case the time
+complexity seems to be quasi-linear in the degree $m$.
+\begin{figure}
+  \centering
+  \includegraphics{benchmarks/lattice-h90/level-12.eps}
+  \caption{Timings for computing decorated Kummer algebras $(A_m, \alpha_m)$ 
+  with $p=3$ and with a given level $a=12$.}
+  \label{fig:level-12}
+\end{figure}
+We also see that the characteristic $p$ has a small impact on the timings, as shown
+in Figure~\ref{fig:degree-16} where we measure the timings for computing the
+algebra $A_{16}$ and the corresponding solution of~\eqref{eq:h90-kummer}
+$\alpha_{16}$, \ie we work with the fixed degree $m=16$ and we let the
+characteristic a prime number $p$ that grows from $3$ to $10^4$.
+\begin{figure}
+  \centering
+  \includegraphics{benchmarks/lattice-h90/solve-h90-primes-degree-16.eps}
+  \caption{Timings for computing decorated Kummer algebras $(A_{16},
+  \alpha_{16})$ with $3\leq p\leq 10^4$.}
+  \label{fig:degree-16}
+\end{figure}
+The bottleneck of Algorithm~\ref{algo:decoration} appears to be the computation
+of the $m$-th root extraction routine. When the decoration of two Kummer
+algebras $A_m$ and $A_n$, with $m\mid n$, has been done; \ie when
+Algorithm~\ref{algo:decoration} has been performed and solutions $\alpha_m$,
+$\alpha_n$ are available, then the computation of the standard embedding
+\[
+  \mathbb{F}_{p^m}\emb\mathbb{F}_{p^n}
+\]
+is quite fast. In other words, Algorithm~\ref{algo:std-embed} is much faster
+than Algorithm~\ref{algo:decoration}, which is a good thing because we only have
+to call Algorithm~\ref{algo:decoration} once for each degree $m$, while
+Algorithm~\ref{algo:std-embed} is called for each embedding computation, and
+thus can be called several time with the same degree $m$. In
+Figure~\ref{fig:embed-from-2}, we show the timings needed to compute embeddings
+from $\mathbb{F}_{p^2}$ to $\mathbb{F}_{p^m}$, in the case where $p=3$, and for
+every $4\leq m\leq 1000$ such that $p\nmid m$, $2\mid m$, and a suitable Conway
+polynomial is available. Once again, the level of the destination algebra has an
+important impact on the timings.
+\begin{figure}
+  \centering
+  \includegraphics{benchmarks/lattice-h90/embed-from-degree-2.eps}
+  \caption{Timings to compute the standard embedding from $\mathbb{F}_{p^2}$ to
+  $\mathbb{F}_{p^m}$, for $p=3$.}
+  \label{fig:embed-from-2}
 \end{figure}
 
 %
