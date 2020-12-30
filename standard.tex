@@ -1704,7 +1704,13 @@ part of the Julia package \texttt{LatticeGFH90}, it is based on Flint and is
 compiled against Nemo's version of Flint when \texttt{LatticeGFH90} is built.
 All the tests in this sections were performed on an
 Intel Core i7-7500U CPU clocked at 2.70GHz, using Nemo 0.19.0 running on
-Julia 1.5.3, and Nemo’s corresponding version of Flint. We first measured the
+Julia 1.5.3, and Nemo’s corresponding version of Flint. All the figures where
+created using gnuplot version 5.2 pachlevel 8. The benchmark functions are
+available in the file \texttt{benchmarks.jl} of the library
+\texttt{LatticeGFH90}, while the data and the gnuplot files are available in the
+benchmark directory at \url{https://github.com/erou/thesis/}.
+
+We first measured the
 time needed to compute Kummer algebras and solutions of~\eqref{eq:h90-kummer},
 \ie the time needed to perform Algorithm~\ref{algo:decoration}, with various
 small prime $p$, using the Conway polynomials available in Nemo. It seems that
@@ -1770,18 +1776,60 @@ is quite fast. In other words, Algorithm~\ref{algo:std-embed} is much faster
 than Algorithm~\ref{algo:decoration}, which is a good thing because we only have
 to call Algorithm~\ref{algo:decoration} once for each degree $m$, while
 Algorithm~\ref{algo:std-embed} is called for each embedding computation, and
-thus can be called several time with the same degree $m$. In
+thus can be called several times with the same degree $m$. In
 Figure~\ref{fig:embed-from-2}, we show the timings needed to compute embeddings
 from $\mathbb{F}_{p^2}$ to $\mathbb{F}_{p^m}$, in the case where $p=3$, and for
 every $4\leq m\leq 1000$ such that $p\nmid m$, $2\mid m$, and a suitable Conway
 polynomial is available. Once again, the level of the destination algebra has an
-important impact on the timings.
+important impact on the timings. 
 \begin{figure}
   \centering
   \includegraphics{benchmarks/lattice-h90/embed-from-degree-2.eps}
   \caption{Timings to compute the standard embedding from $\mathbb{F}_{p^2}$ to
-  $\mathbb{F}_{p^m}$, for $p=3$.}
+  $\mathbb{F}_{p^m}$ (logarithmic scale), for $p=3$.}
   \label{fig:embed-from-2}
 \end{figure}
+We also measured the time needed to compute embeddings with extensions of a
+fixed degree
+\[
+  \left[ \mathbb{F}_{p^{2m}}:\mathbb{F}_{p^m} \right] = 2
+\]
+in Figure~\ref{fig:embed-factor-2}, and we obtain similar results as in in
+Figure~\ref{fig:embed-from-2} where the degree of the extension was varying but
+the base field was fixed. Thus, it appears that the most important parameter
+is the degree of the destination algebra.
+\begin{figure}
+  \centering
+  \includegraphics{benchmarks/lattice-h90/embed-factor-2.eps}
+  \caption{Timings to compute the standard embedding from $\mathbb{F}_{p^m}$ to
+  $\mathbb{F}_{p^{2m}}$ (logarithmic scale), for $p=3$.}
+  \label{fig:embed-factor-2}
+\end{figure}
+Nevertheless, embedding computations seems to be faster with a small extension
+degree. This is in particular shown in Figure~\ref{fig:embed-to-880}, where we
+plot the timings for computing standard embeddings
+\[
+  \mathbb{F}_{p^d}\emb\mathbb{F}_{p^{880}}
+\]
+with $d\mid880$. The number $880$ was chosen because it is not divisible by
+$p=3$ and because it has 20 different divisors, which is the maximum we can
+obtain for numbers coprime to $3$ and less than $1000$. The number $560$ is
+also suitable and produces similar results. We use logarithmic scale on the
+abcissa axis because there is a greater number of small divisors.
+\begin{figure}
+  \centering
+  \includegraphics{benchmarks/lattice-h90/embed-to-degree-880.eps}
+  \caption{Timings to compute the standard embedding from $\mathbb{F}_{p^d}$ to
+  $\mathbb{F}_{p^{880}}$, for $p=3$ and $d\mid880$.}
+  \label{fig:embed-to-880}
+\end{figure}
+The bottleneck of Algorithm~\ref{algo:std-embed} for computing a standard
+embedding
+\[
+  \mathbb{F}_{p^m}\emb\mathbb{F}_{p^{n}}
+\]
+seems to be the powering $(\alpha_n)^{\frac{n}{m}}$, which explains the fact
+that the algorithm is faster when the extension degree $\frac{n}{m}$ is smaller.
+% TODO: check that!
 
 %
