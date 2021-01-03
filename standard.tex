@@ -1444,6 +1444,7 @@ fields.
 \end{proof}
 
 \section{Implementation}
+\label{sec:implementation-std-lattices}
 
 In the preceding sections, we proposed a new method to construct a lattice of
 compatibly embedded finite fields and proved that our method was correct.
@@ -1761,7 +1762,8 @@ characteristic a prime number $p$ that grows from $3$ to $10^4$.
   \centering
   \includegraphics{benchmarks/lattice-h90/solve-h90-primes-degree-16.eps}
   \caption{Timings for computing decorated Kummer algebras $(A_{16},
-  \alpha_{16})$ with $3\leq p\leq 10^4$.}
+  \alpha_{16})$ in characteristic $p$, with $p$ a prime number satisfying $3\leq
+  p\leq 10^4$.}
   \label{fig:degree-16}
 \end{figure}
 The bottleneck of Algorithm~\ref{algo:decoration} appears to be the computation
@@ -1828,8 +1830,48 @@ embedding
 \[
   \mathbb{F}_{p^m}\emb\mathbb{F}_{p^{n}}
 \]
-seems to be the powering $(\alpha_n)^{\frac{n}{m}}$, which explains the fact
-that the algorithm is faster when the extension degree $\frac{n}{m}$ is smaller.
-% TODO: check that!
+seems to be the powering $(\alpha_n)^{\frac{n}{m}}$ occuring in the destination algebra
+$A_n$, which explains both the fact
+that the algorithm is faster when the extension degree $\frac{n}{m}$ is smaller,
+and the fact that the level of the destination algebra has an important impact
+of the timings.
+Again, we see in Figure~\ref{fig:embed-primes} that the impact of the
+characteristic $p$ on the timings is minimal, compared to the other parameters.
+\begin{figure}
+  \centering
+  \includegraphics{benchmarks/lattice-h90/embed-primes-2-16.eps}
+  \caption{Timings to compute the standard embedding from $\mathbb{F}_{p^2}$ to
+  $\mathbb{F}_{p^{16}}$, for $p$ a prime number satisfying $3\leq p \leq 10^4$.}
+  \label{fig:embed-primes}
+\end{figure}
 
+\section{Conclusion and perspectives}
+
+In this chapter, we introduced a new idea to produce a lattice of compatibly
+embedded finite fields, based on both Conway polynomials and Bosma-Canon-Steel
+framework. Conway polynomials are used in many computer algebra systems, and
+Bosma-Canon-Steel is used in Magma. Our idea exploits new techniques and is thus
+interesting in itself. Furthermore, it also leads to a new family of (standard)
+polynomials that can be used to define finite fields. Nevertheless, this new
+family has no practical impact at the moment. Indeed, we can prove that
+computing these polynomials is essentially equivalent to the computation of
+Conway polynomials. Indeed, with our polynomials, one can recover a standard
+solution $\alpha_m$ of~\eqref{eq:h90-kummer} and deduce the value
+\[
+  (\zeta_{p^a-1})^a.
+\]
+Then, by taking a $a$-th root, which is done in polynomial time in $m$, one can
+find $\zeta_{p^a-1}$ and recover the associated Conway polynomial by computing a
+minimal polynomial. This means that an efficient algorithm to compute our
+standard polynomials would lead to an efficient algorithm to compute Conway
+polynomials, which would be unexpected. We thus do not have great hope to find
+such an algorithm, however the implemention presented in
+Section~\ref{sec:implementation-std-lattices} is not the only possible way to
+exploit our definitions. Indeed, it could be possible to loosen the assumption
+that a cyclotomic lattice exists, and thus find a middle ground between the
+rigidity of Conway polynomials and the flexibility of Bosma-Canon-Steel
+framework, for example by lazily computing the roots of unity only when needed.
+An orthogonal line of work would be to construct a complete lattice of
+compatibly embedded finite fields, \ie working even with degrees that are not
+coprime with the characteristic $p$ of the base field $\K$.
 %
