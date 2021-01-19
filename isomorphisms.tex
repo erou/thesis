@@ -1,15 +1,16 @@
 We studied in Part~\ref{part:single} the arithmetic of a single finite field
 extension. We now study a set of several extensions. The very first step will be
 to understand how to compute an isomorphism (or an embedding) between two finite
-fields: that is the material of this chapter.
+fields: this is the material of this chapter.
 \minitoc
 
 % TODO: figure
 
 \clearpage
 
-Our reference for this chapter is~\cite{BDDFS17}: we cover a subpart of the
-paper because we are interested in the naive isomorphism algorithm (used in
+Our reference for this chapter is~\cite{BDDFS17}: although it provides a variety
+of isomorphism algorithms (and their analysis), we are mainly interested in the
+naive isomorphism algorithm (used in
 Chapter~\ref{chap:lattice}) and Allombert's algorithm (used in
 Chapter~\ref{chap:standard}). We thus do not cover all the isomorphism
 algorithms, the reader interested in Rains' algorithm and its elliptic variant
@@ -26,19 +27,20 @@ with $K$ and $L$ finite fields, we often refer to the algorithms as
 \emph{isomorphism} algorithms. Indeed, computing the embedding $\phi$ is
 the same as computing an isomorphism
 \[
-  \phi':K\to K'
+  \phi':K\overset{\sim}{\to} K'
 \]
-where $K\cong K'$ is isomorphic to a subfield $K'\subset L$ of $L$. The
+of $K$ with a subfield $K'\subset L$ of $L$. The
 isomorphism $\phi'$ is just the embedding $\phi$ with its codomain being
 restricted to $K'$. That is why in the following of this chapter, we present
-\emph{isomorphism} algorithms, rather than embeddings algorithms.
+\emph{isomorphism} algorithms, rather than embedding algorithms.
 
 \subsection{Description of the problem}
 
 We let $p$ be a prime number, $\K = \mathbb{F}_p$ be the field with $p$ elements,
-and $f, g\in\K[X]$ two irreducible polynomials with
+and $f, g\in\K[X]$ two irreducible polynomials of degree $m=\deg(f)$ and
+$n=\deg(g)$, with
 \[
-  m=\deg f\mid\deg g=n.
+  m\mid n.
 \]
 Let
 \[
@@ -56,7 +58,7 @@ unique up to $\K$-automorphism of $K$, \ie there are
 \[
   \Card\Gal(K/\K)=m
 \]
-different embeddings from $K$ to $L$, than can be described as
+different embeddings from $K$ to $L$, that can be described as
 \[
   \phi\circ\sigma
 \]
@@ -66,7 +68,7 @@ for $\sigma\in\Gal(K/\K)$. Equivalently, they can also be described as
 \]
 with $\sigma'\in\Gal(\phi(K)/\K)$. The \emph{embedding problem} is then to
 efficiently find, represent and evaluate one such embedding $\phi$. The problem
-is split in two sub-parts.
+is split in two parts.
 \begin{description}
   \item[Embedding description problem.] Compute elements $\alpha\in K$ and
     $\beta\in L$ such that 
@@ -78,7 +80,7 @@ is split in two sub-parts.
     defined above, and elements $x\in K$, $y\in L$, solve the
     following problems:
     \begin{itemize}
-      \item compute $\phi(x)\in L$;
+      \item compute $\phi(x)\in L$, rather than on $\alpha$;
       \item test if $y\in\phi(K)$;
       \item if $y\in\phi(K)$, then compute $\phi^{-1}(y)\in K$.
     \end{itemize}
@@ -101,7 +103,8 @@ defined by
 \begin{prop}
   \label{prop:description}
  The elements $\alpha$ and $\beta$
- describe an embedding if and only if they have the same minimal polynomial. 
+ describe an embedding if and only if they have the same minimal polynomial over
+ $\K$. 
 \end{prop}
 \begin{proof}
   Let $\phi:K\to L$ be an embedding mapping $\alpha$ to $\beta$ and let 
@@ -136,11 +139,12 @@ Section~\ref{sec:evaluation}.
 Until the end of this section and in Section~\ref{sec:allombert}, we deal with
 the \emph{embedding description problem}, although we only review a subpart of
 the existing algorithms (see~\cite{BDDFS17} for other algorithms). As above, let
-$f$ and $g$ two irreducible polynomials with coefficients in $\K$ such that
+$f$ and $g$ be two irreducible polynomials with coefficients in $\K$ and with
+respective degree $m$ and $n$, such that
 \[
-  m=\deg f\mid \deg g=n.
+  m\mid n.
 \]
-and let
+Let
 \[
   K=\K[X]/(f(X))\cong\mathbb{F}_{p^m}
 \]
@@ -148,7 +152,7 @@ and
 \[
   L = \K[Y]/(g(Y))\cong\mathbb{F}_{p^n}
 \]
-two finite fields. Then one can simply take $\alpha$ to be the class of $X$ in
+be two finite fields. Then one can simply take $\alpha$ to be the class of $X$ in
 $K$ and choose $\beta$ to be any root of $f$ in $L$. Indeed, we know that there
 is an isomorphic copy of $K$ in $L$ and thus that $f$ splits over $L$.
 Furthermore, any root of $f$ will have $f$ as its minimal polynomial, which is
@@ -174,11 +178,11 @@ was on proving the existence of a deterministic isomorphism algorithm, Allombert
 wanted to provide a practical algorithm. This led to the invention of the
 Lenstra-Allombert algorithm~\cite{Allombert02} in 2002, for which we give a
 description in this section. The ideas of Allombert play an important part in
-Chapter~\ref{chap:standard} too. The techniques based on Kummer theories work
+Chapter~\ref{chap:standard} too. The techniques based on Kummer theory work
 for extensions of degree $n$ coprime to the characteristic $p$. In order to have
 an algorithm working for any type of extension, the solution is to deal with the
 part of the extension which degree is divisible by $p$ separately using
-Artin-Shreier theory and to glue the results together in the end, more details
+Artin-Shreier theory and to glue the results together in the end. More details
 can be found in~\cite[Section 3.2]{BDDFS17}.
 
 % TODO
@@ -191,7 +195,7 @@ can be found in~\cite[Section 3.2]{BDDFS17}.
 \label{sec:preliminaries}
 
 Let us first discuss a simpler case than the general one, that will highlight
-the method behind Lenstra-Allombert isomorphism algorithm. Let $K$ and $L$ be
+the method behind the Lenstra-Allombert isomorphism algorithm. Let $K$ and $L$ be
 two finite fields of cardinality $p^n$, such that
 \[
   K\cong L\cong \mathbb{F}_{p^n}.
@@ -404,7 +408,7 @@ Let $\sigma:x\mapsto x^p$ be the Frobenius automorphism of the extension
 \[
   \mathbb{F}_{p^n}/\K,
 \]
-we extend it to $A_n$ by defining the linear map
+and extend it to $A_n$ by defining the linear map
 \[
   \begin{array}{cccc}
     \sigma\otimes 1: & A_n & \to & A_n\\
@@ -418,12 +422,12 @@ The map $\sigma\otimes 1$ will play the role of $\sigma$ in the simpler case.
   $1\otimes\zeta$.
 \end{lm}
 \begin{proof}
-  Because of the linear independance of characters~\cite[Chapter VI,
+  Because of the linear independence of characters~\cite[Chapter VI,
   §4]{Lang04}, we know that the automorphisms
   \[
     \Id, \sigma, \sigma^2, \dots, \sigma^{n-1}
   \]
-  are independant. We also know that 
+  are independent. We also know that 
   \[
     \sigma^n = \Id,
   \]
@@ -434,7 +438,7 @@ The map $\sigma\otimes 1$ will play the role of $\sigma$ in the simpler case.
   By the Cayley-Hamilton theorem, we deduce that the characteristic
   polynomial of $\sigma$ is also $X^n-1$. Now let $\B=\left\{ b_1, \dots, b_n \right\}$ be a basis of
   $\mathbb{F}_{p^n}/\K$ and let $M$ be the matrix of $\sigma$ in this basis.
-  Then the matrix of the $1\otimes\mathbb{F}(\zeta)$-linear endomorphism
+  Then the matrix of the $1\otimes\mathbb{F}_p(\zeta)$-linear endomorphism
   $\sigma\otimes1$ in the basis
   \[
     \B\otimes 1 =\left\{ b_1\otimes1, \dots, b_n\otimes1 \right\}
@@ -460,7 +464,7 @@ to the eigenvalue $\zeta$ is described by the equation
    (\sigma\otimes1)(x) = (1\otimes\zeta) x
    \label{eq:h90-kummer}
  \end{equation}
- that we again denote by~\eqref{eq:h90-kummer}. The field of scalar of $A_n$ now
+ that we again denote by~\eqref{eq:h90-kummer}. The field of scalars of $A_n$ now
  plays the role of the base field $\K$ in the simpler case and the solutions
  of~\eqref{eq:h90-kummer} have similar properties.
  \begin{lm}
@@ -559,7 +563,7 @@ to the eigenvalue $\zeta$ is described by the equation
  \end{proof}
  \begin{defi}[Kummer constant]
    Let $\alpha\in A_n$ be a nonzero solution of~\eqref{eq:h90-kummer} for the
-   root $\zeta$. The constant $c\in\mathbb{F}_p(\zeta)$ such
+   root $\zeta$. The constant $c\in\mathbb{F}_p(\zeta)$ such that
    \[
      \alpha^n = 1\otimes c
    \]
@@ -668,7 +672,8 @@ $\alpha\in\mathbb{F}_{p^n}$ of~\eqref{eq:h90} directly generate $\mathbb{F}_{p^n
 that the solutions $\alpha\in A_n$ of~\eqref{eq:h90-kummer} in the general case
 can also be used to generate $\mathbb{F}_{p^n}$ through $\first{\alpha}{\zeta}$.
 We can study these solutions a bit further: in fact the element
-$\first{\alpha}{\zeta}$ does not depend on $\alpha$, but only on $\alpha^n$.
+$\first{\alpha}{\zeta}$ essentially depends on $\alpha^n$, rather than on
+$\alpha$.
 \begin{prop}
   \label{prop:kummer-constant}
   Let
@@ -770,7 +775,7 @@ Proposition~\ref{prop:allombert-simple}.
   \[
     \phi:K\to L
   \]
-  be an isomorphism from $K$ to $L$, then $\phi\otimes1$ is a morphism of
+  be an isomorphism from $K$ to $L$. Then $\phi\otimes1$ is a morphism of
   algebra from $A_K$ to $A_L$ and
   \[
     (\phi\otimes1)(\alpha_K)
@@ -809,7 +814,7 @@ Finally, Lenstra-Allombert algorithm, in the general case, consists in
   \item returning the isomorphism described by
     $\first{\alpha_K}{\zeta}\mapsto\first{(1\otimes\kappa)\alpha_L}{\zeta}$.
 \end{enumerate}
-The computational cost of Lenstra-Allombert algorithm reside in the computation
+The computational cost of Lenstra-Allombert algorithm resides in the computation
 of~\eqref{eq:h90-kummer} solutions, \ie Step $1$ of the previous list.
 
 \subsection{Computing~\eqref{eq:h90-kummer} solutions}
@@ -877,13 +882,13 @@ This is also a consequence of the factorization
 \end{align*}
 The question is now whether the solution $\alpha_x$ is nonzero. By the theorem
 on character independence~\cite[Chapter VI, §4]{Lang04} the maps
-$1, \sigma, \sigma^2, \dots, \sigma^{n-1}$, all distinct, are independant.
+$1, \sigma, \sigma^2, \dots, \sigma^{n-1}$, all distinct, are independent.
 Therefore, the $\K$-linear map
 \[
   x\mapsto\alpha_x
 \]
 cannot be indentically zero on $\mathbb{F}_{p^n}$ and has rank at least $1$. A
-random $\alpha_x$ thus have a probability of being zero less than $1/p$, so we
+random $\alpha_x$ thus has a probability of being zero less than $1/p$, so we
 need $O(1)$ trials to find a nonzero $\alpha_x$ at random. Depending on the
 relative size of $p$, $n$, and $s=\left[ \mathbb{F}_p(\zeta):\K \right]$, the
 computational cost of finding a nonzero $\alpha_x$ is discussed in details
@@ -1025,8 +1030,9 @@ be an embedding. It is a $\K$-linear map and thus there exists a unique
 \]
 for all $x\in K$ and $y\in L$. Furthermore, if $M$ is the matrix representing
 $\psi$ in the monomial bases of $K$ and $L$, then its transposed matrix $M^t$
-represents the map $\psi^t$ in the \emph{dual bases}. This allows to efficiently compute
-$\psi^t$, because the conversions from the monomial basis to the dual basis of
+represents the map $\psi^t$ in the \emph{dual bases}. This allows us to
+efficiently compute $\psi^t$, because the conversions from the monomial basis to
+the dual basis of
 $\mathbb{F}_{p^m}$ can be done at a cost of $O(M(m)\log(m))$ operations in $\K$,
 as explained in~\cite{DDS14}. Fortunately, the map $\psi^t$, that is easy to
 compute, is closely related to $\psi^{-1}$, the map that we want. In particular, if

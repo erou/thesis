@@ -38,8 +38,6 @@ Chapter 6
 Chapter 7
 =========
 
-- Write Section 7.3 
-
 Overall
 =======
 

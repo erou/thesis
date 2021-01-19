@@ -1,5 +1,5 @@
 We have seen in Chapter~\ref{chap:lattice} two independant methods to create
-lattices of compatibly embedded finite fields. In this Chapter, we present a new
+lattices of compatibly embedded finite fields. In this chapter, we present a new
 framework, inspired by both Conway polynomials and Bosma-Canon-Steel, that we
 call \emph{standard lattice of compatibly embedded finite fields}.
 \minitoc
@@ -88,8 +88,8 @@ computation of a new Kummer algebra, a new solution of~\eqref{eq:h90-kummer}, an
 new element $\kappa$. We must also store the elements $\kappa$ and the elements
 defining the embeddings. Now, recall that if we want to use Bosma-Canon-Steel
 framework in order to compatibly embed $K$ in $L$, we must reccursively embed
-the intersections $K\cap M$ of each already embedded subfield $M$ of $L$ with $K$ in both $K$
-and $L$.
+the intersection $K\cap M$ in both fields $K$ and $M$, for each already
+embedded subfield $M$ of $L$. 
 \begin{center}
   \begin{tikzpicture}
     \node (K) at (0, 2) {$K$};
@@ -158,7 +158,7 @@ roots of unity $\zeta$. When we write a compatibility condition like
 \]
 we implicitly states that there is a natural inclusion 
 \[
-  \mathbb{F}_p(\zeta_m)\subset\mathbb{F}_p(\zeta_n)
+  \mathbb{F}_p(\zeta_m)\subseteq\mathbb{F}_p(\zeta_n)
 \]
 that makes the embedding from $\mathbb{F}_{p}(\zeta_m)$ to
 $\mathbb{F}_{p}(\zeta_n)$ trivial, \ie the embedding is the identity in that
@@ -299,7 +299,7 @@ and
 \[
   A_n=\mathbb{F}_{p^n}\otimes\mathbb{F}_{p}(\zeta_n)
 \]
-two Kummer algebras. As was the case for
+be two Kummer algebras. As was the case for
 Lenstra-Allombert \emph{isomorphism} algorithm, we want to deduce a field
 embedding from an algebra embedding between $A_m$ and $A_n$, using the
 properties of the solutions of~\eqref{eq:h90-kummer}. We are thus
@@ -360,7 +360,7 @@ of~\eqref{eq:h90-kummer}.
 for all $\beta\in A_m$. Since $(\sigma\otimes\sigma)(\beta) = \beta^p$, this
 proves that $\Phi$ commutes with $\sigma\otimes\sigma$. It also
 commutes with $\sigma\otimes1$, and thus with its inverse $\sigma^{-1}\otimes1$.
-In then also commutes with
+It then also commutes with
 \[
   (\sigma^{-1}\otimes1)\circ(\sigma\otimes\sigma) = 1\otimes\sigma.
 \]
@@ -687,7 +687,7 @@ are two of them on which we would like to improve.
     irreducible polynomial in $\K[X]$ of degree $m$. However this polynomials
     depends on the choice of $\alpha_l$, because it depends on the Kummer constant
     $c_l$ of $\alpha_l$ by Proposition~\ref{prop:kummer-constant}, thus there is
-    no unicity.
+    no uniqueness.
   \item[\emph{Compatibility:}] the embedding of finite fields
     $\phi:\mathbb{F}_{p^{m}}\to\mathbb{F}_{p^{n}}$ depends on
     the choice of the constant $\kappa$, which itself depends on the choice of
@@ -972,7 +972,7 @@ elements.
   of~\eqref{eq:h90-kummer} for $\zeta_m$ and let $c_m'$ be its Kummer constant.
   Then we know that there exists $\lambda\in\mathbb{F}_p(\zeta_m)$ a scalar such that
   \[
-    \pmb\alpha = (1\otimes\lambda)\alpha_m.
+    \pmb\alpha = (1\otimes\lambda)\alpha_m'.
   \]
   It follows that 
   \[
@@ -1250,7 +1250,7 @@ of standard embeddings of decorated algebras.
   \[
     \stdemb{m}{n}=\stdembff{m}{n}\otimes\iota_{m,n}.
   \]
-  This finite field embedding $\phi$ is called the \emph{standard embedding}
+  This finite field embedding $\stdembff{m}{n}$ is called the \emph{standard embedding}
   from $\mathbb{F}_{p^{m}}$ to $\mathbb{F}_{p^{n}}$.
 \end{defi}
 The existence result of Lemma~\ref{lm:existence-embedding} is 
@@ -1383,7 +1383,7 @@ which completes the proof.
     a = \nu(l)\quad b =\nu(m)\quad c = \nu(n)
   \]
   the respective levels of $A_l, A_m$ and $A_n$. Then we have the corresponding
-  commutative diagram where the arrows represent the Kummer standard embeddings.
+  commutative diagram where the arrows represent the standard Kummer embeddings.
  \begin{equation*}
 \begin{CD}
 A_{p^a-1} @>>> A_{p^b-1} @>>> A_{p^c-1} \\
@@ -1460,13 +1460,13 @@ our code.
 \subsection{Complexity analysis}
 
 In order to prove a bound on the complexity of our algorithms, we have to
-specify which representation we assume for our finite fields. A reasonble
+specify which representation we assume for our finite fields. A reasonable
 option, and also the one we use in practice, is to use Conway polynomials to
 represent the cyclotomic part of the lattice, \ie the fields
 \[
   \mathbb{F}_p(\zeta).
 \]
-To do so, we use the Conway polynomial to represent the finite fields
+To do so, we use the Conway polynomials to represent the finite fields
 \[
   \mathbb{F}_p(\zeta_{p^a-1})
 \]
@@ -1546,7 +1546,7 @@ Kummer constant
 \[
   c_m' = (\alpha_m')^m
 \]
-with $O(M(m^2)\log(m))$ operations in $\K$ via Kronecker substituion, and the
+with $O(M(m^2)\log(m))$ operations in $\K$ via Kronecker substitution, and the
 $m$-th root extraction of
 \[
   \stdc{m}/c_m' = \kappa^m
@@ -1705,8 +1705,8 @@ part of the Julia package \texttt{LatticeGFH90}, it is based on Flint and is
 compiled against Nemo's version of Flint when \texttt{LatticeGFH90} is built.
 All the tests in this sections were performed on an
 Intel Core i7-7500U CPU clocked at 2.70GHz, using Nemo 0.19.0 running on
-Julia 1.5.3, and Nemo’s corresponding version of Flint. All the figures where
-created using gnuplot version 5.2 pachlevel 8. The benchmark functions are
+Julia 1.5.3, and Nemo’s corresponding version of Flint. All the figures were
+created using gnuplot version 5.2 patchlevel 8. The benchmark functions are
 available in the file \texttt{benchmarks.jl} of the library
 \texttt{LatticeGFH90}, while the data and the gnuplot files are available in the
 benchmark directory at \url{https://github.com/erou/thesis/}.
@@ -1741,6 +1741,10 @@ available, which is not always the case.
 In the complexity analysis of Proposition~\ref{prop:complexity-h90}, the level
 of the algebra $A_m$ was bounded by its degree $m$, leading to a quasi-quadratic
 complexity. However, we see in the timings that this bound is not relevant in
+% TODO:
+% =====
+% Change that maybe? Not very smartly said. We could be more precise, and it is
+% not even very true what we say...
 practice. Indeed, the time results show that the level of the algebra has a
 great impact on the timings: when the level is low, the computations are much
 faster. In Figure~\ref{fig:level-12}, we selected only the computations that
@@ -1757,7 +1761,7 @@ We also see that the characteristic $p$ has a small impact on the timings, as sh
 in Figure~\ref{fig:degree-16} where we measure the timings for computing the
 algebra $A_{16}$ and the corresponding solution of~\eqref{eq:h90-kummer}
 $\alpha_{16}$, \ie we work with the fixed degree $m=16$ and we let the
-characteristic a prime number $p$ that grows from $3$ to $10^4$.
+characteristic be a prime number $p$ that grows from $3$ to $10^4$.
 \begin{figure}
   \centering
   \includegraphics{benchmarks/lattice-h90/solve-h90-primes-degree-16.eps}
