@@ -1740,16 +1740,12 @@ available, which is not always the case.
 \end{figure}
 In the complexity analysis of Proposition~\ref{prop:complexity-h90}, the level
 of the algebra $A_m$ was bounded by its degree $m$, leading to a quasi-quadratic
-complexity. However, we see in the timings that this bound is not relevant in
-% TODO:
-% =====
-% Change that maybe? Not very smartly said. We could be more precise, and it is
-% not even very true what we say...
-practice. Indeed, the time results show that the level of the algebra has a
-great impact on the timings: when the level is low, the computations are much
-faster. In Figure~\ref{fig:level-12}, we selected only the computations that
-occured on a fixed level $a=12$, and we see that in that case the time
-complexity seems to be quasi-linear in the degree $m$.
+complexity. However, we see in the timings that this bound is not always
+relevant in practice. Indeed, the time results show that the level of the
+algebra has a great impact on the timings: when the level is low, the
+computations are much faster. In Figure~\ref{fig:level-12}, we selected only the
+computations that occured on a fixed level $a=12$, and we see that in that case
+the time complexity seems to be quasi-linear in the degree $m$.
 \begin{figure}
   \centering
   \includegraphics{benchmarks/lattice-h90/level-12.eps}

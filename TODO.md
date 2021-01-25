@@ -24,16 +24,13 @@ Chapter 3
 Chapter 4
 =========
 
-- Add universal formulas
-- Add experimental results
+- Read and correct the chapter
 
 Chapter 5
 =========
 
 Chapter 6
 =========
-
-- Add experimental results on the BCS implementation in Nemo
 
 Chapter 7
 =========

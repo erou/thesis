@@ -1,5 +1,5 @@
 In Chapter~\ref{chap:isomorphism}, we have seen algorithms to compute
-isomorphisms, or inclusions, between pairs of finite fields. Now, we want to
+isomorphisms, or embeddings, between pairs of finite fields. Now, we want to
 integrate these algorithms in a larger global system with potentially as many
 finite fields as we want.
 \minitoc
@@ -128,7 +128,7 @@ and its representation on a computer, a question that was for example
 investigated in~\cite{DDS14}. 
 
 If we \emph{just} want to be able to compute embeddings between two finite
-fields in $\F$ when it makes sense, we can just use one of the algorithms presented
+fields in $\F$ when it makes sense, we can use one of the algorithms presented
 in Chapter~\ref{chap:isomorphism} each time we need it. In fact, we want to
 build a data structure $\Lambda$ to represent all the extensions of
 $\mathbb{F}_p$ that we need, and additionnal sub-goals might be desirable.
@@ -186,11 +186,11 @@ problem is that if we have three finite fields
   k\subset K\subset L
 \]
 and three embeddings $\phi:k\to K$, $\psi:K\to L$, $\chi:k\to L$, there is no
-warranty that the diagram of Figure~\ref{fig:compatibility} commutes, \ie
+guaranty that the diagram of Figure~\ref{fig:compatibility} commutes, \ie
 \[
   \chi = \psi\circ\phi.
 \]
-If we want to achive compatibility, we have to provide extra-work.
+If we want to achieve compatibility, we have to provide extra-work.
 The two constructions presented in Sections~\ref{sec:conway}
 and~\ref{sec:bosma-canon-steel} are both solutions oriented towards this goal.
 Conway polynomials allow \emph{uniqueness} while Bosma, Cannon and Steel
@@ -288,7 +288,8 @@ require any computation and the form of the embedding is already known. The
 only condition is to define each extension using the Conway polynomial of the
 corresponding degree. These polynomial always exist so this is possible,
 although the best known algorithm to compute Conway polynomials has exponential
-complexity~\cite{HL98}. Because the cost of computing Conway polynomials is
+complexity~\cite{HL98} in the degree of the polynomial. Because the cost of
+computing Conway polynomials is
 prohibitive, they are often precomputed and tabulated up to a certain degree in
 many computer algebra systems. As a result, most computer algebra systems use
 Conway polynomial to represent finite fields of small degrees, and switch to
@@ -306,7 +307,7 @@ embedding is higher.
 
 In 1987, Bosma, Canon and Steel proposed a new framework~\cite{BCS97} to deal
 with lattices of finite field extensions. These algorithms were initially
-implemented in the computer algebra system MAGMA. The framework allows the user
+implemented in the computer algebra system MAGMA~\cite{Magma}. The framework allows the user
 to define finite fields with custom polynomials, and compute the
 correct embeddings on the fly, in a way that guarantees that at least one
 compatible embedding will always exist between two finite fields, when that
@@ -315,7 +316,7 @@ until very recently. We first implemented the framework using Nemo and Flint and
 presented our software in the symbolic computation conference ISSAC in
 2018~\cite{DRR18}. In 2019, the code was also added to the official branch of
 Nemo, and Nemo can now deal with finite field extensions and compatibly embed
-them, in the case where the characteristic $p$ of the fields fit in a machine
+them, in the case where the characteristic $p$ of the fields fits in a machine
 word. There are no theretical obstacles preventing from implementing the algorithm in arbitrary
 large characteristic, but some tools were lacking at the C level (\ie in
 Flint).
@@ -358,167 +359,172 @@ chosen. Let
 with $k\emb K$ and $k\emb L$, as in Figure~\ref{fig:uncomplete}. The fundations
 of Bosma-Canon-Steel framework lay on the fact that we precisely know how many
 compatible embeddings from $K$ to $L$ we can find.
-  \begin{figure}%[h]
-    \centering
-    \begin{tikzpicture}
-      \node (E) at (0, 0) {$k$};
-      \node (F) at (1.5, 1) {$K$};
-      \node (G) at (0.5, 2) {$L$};
+\begin{figure}%[h]
+  \centering
+  \begin{tikzpicture}
+    \node (E) at (0, 0) {$k$};
+    \node (F) at (1.5, 1) {$K$};
+    \node (G) at (0.5, 2) {$L$};
 
-      \draw[arrow] (E) -- (F);
-      \draw[arrow] (E) -- (G);
-      \draw[dashed-arrow] (F) -- (G);
+    \draw[arrow] (E) -- (F);
+    \draw[arrow] (E) -- (G);
+    \draw[dashed-arrow] (F) -- (G);
 
-      \node (f12) at (1, 0.25) {$\phi$};
-      \node (f13) at (-0.1, 1) {$\chi$};
-      %\node (f23) at (1.4, 1.65) {$\psi$};
-    \end{tikzpicture}
-  \caption{Uncomplete embedding diagram.}
-  \label{fig:uncomplete}
-  \end{figure}
-  \begin{prop}[{\cite[Thm.~2.1]{BCS97}}]
-    \label{prop:number-embeddings}
-    Let $l\,|\,m\,|\,n$ three integers and
-    \[
-      k\subset K\subset L
-    \]
-    three finite fields extensions of $\mathbb{F}_q$, with respective
-    cardinalities $q^l$, $q^m$ and $q^n$. Assume that $k\emb K$ and $k\emb L$,
-    then there are $m/l$ compatible embeddings from $K$ to $L$.
-  \end{prop}
-  \begin{proof}
-    Let $\phi:k\to K$ be the embedding from $k$ to $K$ and $\chi:k\to L$ the
-    embedding from $k$ to $L$. Let $\widetilde\psi:K\to L$ be any embedding from $K$ to
-    $L$. The maps $\chi$ and $\widetilde\psi\circ\phi$ are two embeddings from
-    $k$ to $L$. Since there are only $l$ such maps, and since the difference
-    between them is only a matter of which conjugate is chosen for a generating
-    element in $k$, we know that there exist
-    \[
-      \sigma\in\Gal(L/\mathbb{F}_q)
-    \]
-    such that
-    \[
-      \chi = \sigma\circ\widetilde\psi\circ\phi.
-    \]
-    If we set
-    \[
-      \psi=\sigma\circ\widetilde\psi,
-    \]
-    we obtain a compatible embedding $\psi:K\to L$ from $K$ to $L$. If we
-    compose $\psi$ with a $\chi(k)$-automorphism of $L$, \ie an automorphism of
-    $\psi(K)$ that
-    fixes the subfield $\chi(k)$, we still obtain a compatible embedding because
-    the images of the elements in $\chi(k)$ are unchanged. Now, we know that
-    \[
-      \Card\Gal(\psi(K)/\chi(k)) = m/l,
-    \]
-    thus we know that there are exactly $m/l$ embeddings from $K$ to $L$ that
-    are compatible with $\phi$ and $\chi$.
-  \end{proof}
-  In the future, if we have two finite fields $k$ and $K$ such that $k\emb K$
-  with an explicit embedding $\phi:k\to K$, we will often identify $k$ with
-  its isomorphic image $\phi(k)\cong k$ in $K$, for the sake of simplicity. We
-  also have a constructive version of Proposition~\ref{prop:number-embeddings}.
-\begin{prop}[{\cite[Thm.~2.2]{BCS97}}]
-    \label{prop:number-embeddings-constructive}
-    Let $l\,|\,m\,|\,n$ three integers and
-    \[
-      k\subset K\subset L
-    \]
-    three finite fields extensions of $\mathbb{F}_q$, with respective
-    cardinalities $q^l$, $q^m$ and $q^n$. Assume that $k\emb K$ and $k\emb L$,
-    and let $\phi=\embed{k}{K}$, $\chi=\embed{k}{L}$ the respective embeddings.
-    Let also $\alpha\in K$ be an element that generates $K$ over $k$ and
-    \[
-      \pi_k=\Minpoly_k(\alpha)
-    \]
-    the minimum polynomial of $\alpha$ over $k$. Let $\rho\in L$ be a root of
-    $\pi_k$ in $L$. Let $\psi:K\to L$ be the map defined by
-    \[
-      \psi(\sum_{j=0}^{m/l-1}x_j\alpha^j) = \sum_{j=0}^{m/l}x_j\rho^j,
-    \]
-    using the unique representation of any element of $K$ as $\sum_j x_j
-    \alpha^j$ with $x_j\in k$. Then $\psi$ is an embedding from $K$ to $L$ that
-    is compatible with $\phi$ and $\chi$, \ie we have
-    \[
-      \chi = \psi\circ\phi.
-    \]
-  \end{prop}
-  \begin{proof}
-    The root $\rho$ in $L$ exists since we know that $\pi_k$ has a root in $K$
-    and $K\subset L$. The map $\psi$ is then well-defined because of the uniqueness of the
-    representation of the elements in $K$ as $\sum_jx_j\alpha^j$. The elements
-    $\alpha$ and $\rho$ have the same minimum polynomial so the map $\psi$ is a
-    homomorphism. The map $\psi$ is also injective and thus it is an embedding
-    from $K$ to $L$. The compatibility condition holds by construction.
-  \end{proof}
-  \begin{rem}
-    \label{rem:base-field}
-   % TODO
-   % ====
-   %
-   % Write something clearer.
-   In fact, in our implementation and even in
-   Proposition~\ref{prop:several-subfields}, this result will not be used as is and
-   we will usually take $\alpha\in K$ and element generating $K$ over the base
-   field $\mathbb{F}_q$ instead of over $k$. Indeed, if $\alpha$ generates $K$
-   over $\mathbb{F}_q$, it also generates $K$ over $k$. We can still take a root
-   $\rho$ of $\Minpoly_{k}(\alpha)$ because
-   \[
-     \Minpoly_k(\alpha)\,|\,\Minpoly_{\mathbb{F}_q}(\alpha)
-   \]
-   and so a root of $\Minpoly_{k}(\alpha)$ is \emph{a fortiori} a root of
-   $\Minpoly_{\mathbb{F}_q}(\alpha)$. As a result, we can use the
-   $\mathbb{F}_q$-algebra structure of $K$ and still achieve compatibility with
-   the subfield $k$.
-  \end{rem}
-  Although the result of Proposition~\ref{prop:number-embeddings} captures only
-  one configuration among the three different possibilities of
-  Figure~\ref{fig:triangles}, it is the most important case. Indeed, if we
-  already know $\embed{k}{K}$ and $\embed{K}{L}$ (the configuration in the
-  middle of Figure~\ref{fig:triangles}), we can just set
+    \node (f12) at (1, 0.25) {$\phi$};
+    \node (f13) at (-0.1, 1) {$\chi$};
+    %\node (f23) at (1.4, 1.65) {$\psi$};
+  \end{tikzpicture}
+\caption{Uncomplete embedding diagram.}
+\label{fig:uncomplete}
+\end{figure}
+\begin{prop}[{\cite[Thm.~2.1]{BCS97}}]
+  \label{prop:number-embeddings}
+  Let $l\,|\,m\,|\,n$ be three integers and let
   \[
-    \embed{k}{L} = \embed{K}{L}\circ\embed{k}{K}.
+    k\subset K\subset L
   \]
-  Finally the configuration on the right, where we know $\embed{k}{L}$ and
-  $\embed{K}{L}$, is also unrelevant because, by construction, this case never
-  happens when working with Bosma-Canon-Steel framework.
-    \begin{figure}
-    \centering
-    \begin{tikzpicture}
-      \node (E) at (0, 0) {$k$};
-      \node (F) at (1.5, 1) {$K$};
-      \node (G) at (0.5, 2) {$L$};
+  be three finite fields extensions of $\mathbb{F}_q$, with respective
+  cardinalities $q^l$, $q^m$ and $q^n$. Assume that $k\emb K$ and $k\emb L$,
+  then there are $m/l$ compatible embeddings from $K$ to $L$.
+\end{prop}
+\begin{proof}
+  Let $\phi:k\to K$ be the embedding from $k$ to $K$ and $\chi:k\to L$ the
+  embedding from $k$ to $L$. Let $\widetilde\psi:K\to L$ be any embedding from $K$ to
+  $L$. The maps $\chi$ and $\widetilde\psi\circ\phi$ are two embeddings from
+  $k$ to $L$.
+  There are only $l$ such maps, because if $\alpha$ is a generating element in
+  $k$ and if $\pi$ is its minimal polynomial over $\mathbb{F}_q$, then an
+  embedding from $k$ to $L$ necessarily sends $\alpha\in k$ to a root $\beta\in
+  L$ of $\pi$ in $L$.
+  The embedding is then uniquely defined by 
+  \[
+    \alpha\mapsto\beta
+  \]
+  and there are $l$ such roots, that are all conjugates, thus we know that there
+  exist
+  \[
+    \sigma\in\Gal(L/\mathbb{F}_q)
+  \]
+  such that
+  \[
+    \chi = \sigma\circ\widetilde\psi\circ\phi.
+  \]
+  If we set
+  \[
+    \psi=\sigma\circ\widetilde\psi,
+  \]
+  we obtain a compatible embedding $\psi:K\to L$ from $K$ to $L$. If we
+  compose $\psi$ with a $\chi(k)$-automorphism of $L$, \ie an automorphism of
+  $\psi(K)$ that
+  fixes the subfield $\chi(k)$, we still obtain a compatible embedding because
+  the images of the elements in $\chi(k)$ are unchanged. Now, we know that
+  \[
+    \Card\Gal(\psi(K)/\chi(k)) = m/l,
+  \]
+  thus we know that there are exactly $m/l$ embeddings from $K$ to $L$ that
+  are compatible with $\phi$ and $\chi$.
+\end{proof}
+In the future, if we have two finite fields $k$ and $K$ such that $k\emb K$
+with an explicit embedding $\phi:k\to K$, we will often identify $k$ with
+its isomorphic image $\phi(k)\cong k$ in $K$, for the sake of simplicity. We
+ also have a constructive version of Proposition~\ref{prop:number-embeddings}.
+\begin{prop}[{\cite[Thm.~2.2]{BCS97}}]
+  \label{prop:number-embeddings-constructive}
+  Let $l\,|\,m\,|\,n$ be three integers and let
+  \[
+    k\subset K\subset L
+  \]
+  three finite fields extensions of $\mathbb{F}_q$, with respective
+  cardinalities $q^l$, $q^m$ and $q^n$. Assume that $k\emb K$ and $k\emb L$,
+  and let $\phi=\embed{k}{K}$, $\chi=\embed{k}{L}$ the respective embeddings.
+  Let also $\alpha\in K$ be an element that generates $K$ over $k$ and
+  \[
+    \pi_k=\Minpoly_k(\alpha)
+  \]
+  the minimum polynomial of $\alpha$ over $k$. Let $\rho\in L$ be a root of
+  $\pi_k$ in $L$. Let $\psi:K\to L$ be the map defined by
+  \[
+    \psi(\sum_{j=0}^{m/l-1}x_j\alpha^j) = \sum_{j=0}^{m/l-1}x_j\rho^j,
+  \]
+  using the unique representation of any element of $K$ as $\sum_j x_j
+  \alpha^j$ with $x_j\in k$. Then $\psi$ is an embedding from $K$ to $L$ that
+  is compatible with $\phi$ and $\chi$, \ie we have
+  \[
+    \chi = \psi\circ\phi.
+  \]
+\end{prop}
+\begin{proof}
+  The root $\rho$ in $L$ exists since we know that $\pi_k$ has a root in $K$
+  and $K\subset L$. The map $\psi$ is then well-defined because of the uniqueness of the
+  representation of the elements in $K$ as $\sum_jx_j\alpha^j$. The elements
+  $\alpha$ and $\rho$ have the same minimum polynomial so the map $\psi$ is a
+  homomorphism. The map $\psi$ is also injective and thus it is an embedding
+  from $K$ to $L$. The compatibility condition holds by construction.
+\end{proof}
+\begin{rem}
+\label{rem:base-field}
 
-      \draw[arrow] (E) -- (F);
-      \draw[arrow] (E) -- (G);
-      \draw[dashed-arrow] (F) -- (G);
-    \end{tikzpicture}
-    \phantom{and}
-    \begin{tikzpicture}
-      \node (E) at (0, 0) {$k$};
-      \node (F) at (1.5, 1) {$K$};
-      \node (G) at (0.5, 2) {$L$};
+In fact, in our implementation and even in
+Proposition~\ref{prop:several-subfields}, this result will not be used as is and
+we will usually take $\alpha\in K$ an element generating $K$ over the base
+field $\mathbb{F}_q$ instead of over $k$. Indeed, if $\alpha$ generates $K$
+over $\mathbb{F}_q$, it also generates $K$ over $k$. We can still take a root
+$\rho$ of $\Minpoly_{k}(\alpha)$ because
+\[
+  \Minpoly_k(\alpha)\,|\,\Minpoly_{\mathbb{F}_q}(\alpha)
+\]
+and so a root of $\Minpoly_{k}(\alpha)$ is \emph{a fortiori} a root of
+$\Minpoly_{\mathbb{F}_q}(\alpha)$. As a result, we can use the
+$\mathbb{F}_q$-algebra structure of $K$ and still achieve compatibility with
+the subfield $k$.
+\end{rem}
+Although the result of Proposition~\ref{prop:number-embeddings} captures only
+one configuration among the three different possibilities of
+Figure~\ref{fig:triangles}, it is the most important case. Indeed, if we
+already know $\embed{k}{K}$ and $\embed{K}{L}$ (the configuration in the
+middle of Figure~\ref{fig:triangles}), we can just set
+\[
+  \embed{k}{L} = \embed{K}{L}\circ\embed{k}{K}.
+\]
+Finally the configuration on the right, where we know $\embed{k}{L}$ and
+$\embed{K}{L}$, is also unrelevant because, by construction, this case never
+happens when working with Bosma-Canon-Steel framework.
+\begin{figure}
+  \centering
+  \begin{tikzpicture}
+    \node (E) at (0, 0) {$k$};
+    \node (F) at (1.5, 1) {$K$};
+    \node (G) at (0.5, 2) {$L$};
 
-      \draw[arrow] (E) -- (F);
-      \draw[dashed-arrow] (E) -- (G);
-      \draw[arrow] (F) -- (G);
+    \draw[arrow] (E) -- (F);
+    \draw[arrow] (E) -- (G);
+    \draw[dashed-arrow] (F) -- (G);
+  \end{tikzpicture}
+  \phantom{and}
+  \begin{tikzpicture}
+    \node (E) at (0, 0) {$k$};
+    \node (F) at (1.5, 1) {$K$};
+    \node (G) at (0.5, 2) {$L$};
 
-    \end{tikzpicture}
-    \phantom{and}
-    \begin{tikzpicture}
-      \node (E) at (0, 0) {$k$};
-      \node (F) at (1.5, 1) {$K$};
-      \node (G) at (0.5, 2) {$L$};
+    \draw[arrow] (E) -- (F);
+    \draw[dashed-arrow] (E) -- (G);
+    \draw[arrow] (F) -- (G);
 
-      \draw[dashed-arrow] (E) -- (F);
-      \draw[arrow] (E) -- (G);
-      \draw[arrow] (F) -- (G);
+  \end{tikzpicture}
+  \phantom{and}
+  \begin{tikzpicture}
+    \node (E) at (0, 0) {$k$};
+    \node (F) at (1.5, 1) {$K$};
+    \node (G) at (0.5, 2) {$L$};
 
-    \end{tikzpicture}
-    \caption{The different configurations with triangles.}
-    \label{fig:triangles}
-  \end{figure}
+    \draw[dashed-arrow] (E) -- (F);
+    \draw[arrow] (E) -- (G);
+    \draw[arrow] (F) -- (G);
+
+  \end{tikzpicture}
+  \caption{The different configurations with triangles.}
+  \label{fig:triangles}
+\end{figure}
 
 \paragraph{Description of the framework.} The general strategy of Bosma, Canon,
 and Steel to compute and maintain the data of several finite fields and
@@ -646,20 +652,20 @@ Proposition~\ref{prop:number-embeddings-constructive}, where we allow an
 arbitrary number of common subfields.
 \begin{prop}
   \label{prop:several-subfields}
-  Let $K, L\in\mathcal K$ two finite fields with
+  Let $K, L\in\mathcal K$ be two finite fields with
   \[
     K\subset L
   \]
-  and let $k_1, \dots, k_r\in\mathcal K$ the common subfields of $K$ and $L$,
+  and let $k_1, \dots, k_r\in\mathcal K$ be the common subfields of $K$ and $L$,
   \ie for all $1\leq j\leq r$, we have
   \[
     k_j\emb K\text{ and }k_j\emb L.
   \]
-  Let $\alpha\in K$ an element generating $K$ over $\mathbb{F}_q$ and
+  Let $\alpha\in K$ be an element generating $K$ over $\mathbb{F}_q$ and
   \[
     \pi = \gcd_{1\leq j\leq r}(\Minpoly_{k_j}(\alpha)).
   \]
-  Let $\rho\in L$ a root of $\pi$ in $L$ and let $\psi:K\to L$ be the map
+  Let $\rho\in L$ be a root of $\pi$ in $L$ and let $\psi:K\to L$ be the map
   defined by
   \[
     \psi(\sum_{j=0}^{\partial(K)-1}x_j\alpha^j) =
@@ -881,7 +887,8 @@ factorization to obtain an embedding, \ie we use the naive embedding algorithm.
 When a suitable embedding $\phi:K\emb L$ has been found, in order to ensure that
 the lattice $\Lambda$ is transitive, we apply
 Algorithm~\ref{algo:transitive-closure} that loops through all subfields $k$ of
-$K$, and if we let $\psi:k\emb K$, checks that the embedding $\phi\circ\psi$ is
+$K$, and if we let $\psi:k\emb K$ be an embedding into $K$, checks that the
+embedding $\phi\circ\psi$ is
 also in the lattice. We then reccursively call the \texttt{transitive\_closure}
 procedure on the fields that $L$ is embedded into.
 \begin{figure}
@@ -1098,7 +1105,7 @@ The defect depends on the state of the lattice $\Lambda$ at the moment of the
 computation and has an important impact on the timings.
 Consequently, there are several reasonable ways of measuring the timings
 of Bosma-Canon-Steel framework, which produce quite different results.
-There is not major difference between two choices of characteristic $p$ so we
+There is no major difference between two choices of characteristic $p$ so we
 arbitrarily chose $p=3$. We
 computed all the possible embeddings between finite fields of degree up to $400$
 in two different ways. The first one consists in looping through the degrees
@@ -1216,7 +1223,7 @@ plot the time needed to compute the embedding
   \mathbb{F}_{p^{12}}\emb\mathbb{F}_{p^{24}}
 \]
 for different primes $p$. Because the impact on the timing is logarithmic in the
-characteristic $p$, we use each the prime numbers found immediately after $2^j$,
+characteristic $p$, we use each prime number found immediately after $2^j$,
 for $1\leq j\leq m$, \ie $p\approx 2^j$. The result is shown in
 Figure~\ref{fig:bcs-embed-primes}.
 \begin{figure}
@@ -1241,5 +1248,5 @@ indicates that the julia code could be optimized some more.
 % TODO
 % ====
 %
-% Comparison with MAGMA? Critical routines!
+% Comparison with MAGMA?
 %%
