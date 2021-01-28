@@ -1,7 +1,7 @@
 Throughout all this document, we will use a lot of results from algebra. This
 chapter is here to sum up these results and try to maintain the illusion that
-this thesis is self-contained. Our references for standard results in algebra are
-~\cite{Lang04} or~\cite{Perrin96}.
+this thesis is self-contained. Our references for standard results in algebra
+are~\cite{Lang04} or~\cite{Perrin96}.
 The reader familiar with the notions of finite
 fields, algebraic function fields, or complexity model may very well skip this
 chapter.
@@ -355,17 +355,17 @@ over a finite field $\K$ of characteristic $p$.
 \section{Complexity models}
 \label{sec:complexity-models}
 
-In algorithmic, it is of central interest to understand how our algorithms
+When studying algorithms, it is of central interest to understand how our algorithms
 \emph{scale}, \ie to understand how they perform if the size of the input is
-getting larger and larger. Complexity theory studies this phenomenon and give us models
+getting larger and larger. Complexity theory studies this phenomenon and gives us models
 of computation in order to quantify the behaviour of our algorithms. Depending
 on the situation, not all models are relevant, and one has to balance between
-the concreteness of a model and its ease to use. An extreme viewpoint is to
+the concreteness of a model and its ease of use. An extreme viewpoint is to
 specify an operating system with a compiled programming language and to compare
 the running time or the memory requirements between algorithms. The advantage of
 such a model is that it is very concrete, but it is also its main disadvantage
 because it makes the model hard to use. Thus, there exist other models of
-\emph{idealized} computer, such as Turing machines~\cite{Papadimitriou03},
+\emph{idealized} computers, such as Turing machines~\cite{Papadimitriou03},
 random access machines, or the algebraic complexity model.
 We use the latter, that we present in more details in the next section.
 
@@ -373,7 +373,7 @@ We use the latter, that we present in more details in the next section.
 
 This model is widely presented in~\cite{BCS13}, we only give a brief
 presentation of the subject. This model assumes that we use an abstract computer
-that is able to perform operation in some base field $\K$ at a constant, unit
+that is able to perform operations in some base field $\K$ at a constant, unit
 cost. We also assume that accessing the memory of the computer is free.
 Algebraic complexity is especially useful with algorithms dealing with
 algebraic structures. This is very handy for us, since
