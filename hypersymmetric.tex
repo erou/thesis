@@ -57,7 +57,7 @@ symmetric, \ie if for all $x, y\in V$
 \]
 we can investigate the existence of formulas satisfying the same condition of
 symmetry, \ie formulas where for all $1\leq j\leq t$, $\varphi_j=\psi_j$,
-resulting in \emph{symmetric} bilinear form:
+resulting in \emph{symmetric} bilinear formulas:
 \[
   \Phi(x, y) = \sum_{j=1}^t\varphi_j(x)\varphi_j(y)w_j.
 \]
@@ -118,7 +118,7 @@ spaces and
 \[
   \Phi:\underset{\textrm{$s$ times}}{\underbrace{V\times\dots\times V}}\to W
 \]
-a symmetric $s$-linear map. A \emph{symmetric multilinear formula}, or
+be a symmetric $s$-linear map. A \emph{symmetric multilinear formula}, or
 \emph{symmetric multilinear
 decomposition}, or \emph{symmetric multilinear algorithm} of length $t$ for $\Phi$ is a
 collection of $t$ linear forms $\varphi_1, \varphi_2, \dots,
@@ -135,9 +135,9 @@ spaces and
 \[
   \Phi:\underset{\textrm{$s$ times}}{\underbrace{V\times\dots\times V}}\to W
 \]
-a symmetric $s$-linear map. The \emph{symmetric multilinear complexity} $\musym(\Phi)$ of $\Phi$ is the
-minimal length $t$ of a symmetric multilinear formula for $\Phi$. If no such
-formula exists, we set
+be a symmetric $s$-linear map. The \emph{symmetric multilinear complexity}
+$\musym(\Phi)$ of $\Phi$ is the minimal length $t$ of a symmetric multilinear
+formula for $\Phi$. If no such formula exists, we set 
 \[
   \musym(\Phi) = \infty.
 \]
@@ -164,10 +164,10 @@ Then $\Phi$ admits a symmetric decomposition if and only if $\Phi$ is \emph{Frob
 \label{subsec:trisym}
 
 Under even stricter conditions, we can study the existence of even more
-symmetric formulas. These formulas allow to describe a multilinear map with
+symmetric formulas. These formulas allow us to describe a multilinear map with
 fewer elements, and thus give a compact definition of the map. Since the
 symmetry conditions are stronger there are fewer such formulas, and as a
-consequence the search space is smaller. Thus, we expect algorithms to be
+consequence the search space is smaller. Thus, we expect search algorithms to be
 faster, as was the case when using Barbulescu \etal algorithm
 (Algorithm~\ref{algo:BDEZ}) to find symmetric formulas. Let us define those
 ``stricter conditions''. Let
@@ -222,8 +222,8 @@ formula.
 % a decomposition with the same elements three times being then very clear.
 
 \begin{defi}[Hypersymmetric formula]
-Let $V$ a finite-dimensional $\K$-vector
-spaces equipped with a saclar product and
+Let $V$ be a finite-dimensional $\K$-vector
+space equipped with a scalar product and
 \[
   \Phi:\underset{\textrm{$s$ times}}{\underbrace{V\times\dots\times V}}\to W
 \]
