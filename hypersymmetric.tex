@@ -40,7 +40,7 @@ map.
 % decomposition, but it is probably just simpler.
 
 Let $\K$ be a finite field, $V_1$, $V_2$ and $W$ three finite-dimensional $\K$-vector
-space and
+spaces and
 \[
   \Phi:V_1\times V_2\to W
 \]
@@ -57,7 +57,7 @@ symmetric, \ie if for all $x, y\in V$
 \]
 we can investigate the existence of formulas satisfying the same condition of
 symmetry, \ie formulas where for all $1\leq j\leq t$, $\varphi_j=\psi_j$,
-resulting in \emph{symmetric} bilinear form:
+resulting in a \emph{symmetric} bilinear form:
 \[
   \Phi(x, y) = \sum_{j=1}^t\varphi_j(x)\varphi_j(y)w_j.
 \]
@@ -107,7 +107,7 @@ illustration of this correspondence in the bilinear case. In the case where
 \]
 symmetric formulas and
 symmetric complexity can also be generalized when $\Phi$ is a \emph{symmetric}
-multilinear map, \ie when for all permutation $\sigma\in\mathfrak S_s$ and for
+multilinear map, \ie when for all permutations $\sigma\in\mathfrak S_s$ and for
 all vectors $x_1, \dots, x_s\in V$, we have
 \[
   \Phi(x_1, \dots, x_s) = \Phi(\sigma(x_1), \dots, \sigma(x_s)).
@@ -174,7 +174,7 @@ faster, as was the case when using Barbulescu \etal algorithm
 \[
   \Phi:V^s\to V
 \]
-be an $s$-linear symmetric map, \ie we additionnaly ask that $W=V$. We also
+be an $s$-linear symmetric map, \ie we additionally ask that $W=V$. We also
 assume that $V$ has a non-degenerate symmetric bilinear form, that we write as a
 scalar product
 \[
@@ -223,7 +223,7 @@ formula.
 
 \begin{defi}[Hypersymmetric formula]
 Let $V$ a finite-dimensional $\K$-vector
-spaces equipped with a saclar product and
+space equipped with a scalar product and
 \[
   \Phi:\underset{\textrm{$s$ times}}{\underbrace{V\times\dots\times V}}\to W
 \]
@@ -238,7 +238,7 @@ V$, we have
 \]
 \end{defi}
 \begin{defi}[Hypersymmetric complexity]
-Let $V$ be a finite-dimensional $\K$-vector spaces equipped with a saclar product
+Let $V$ be a finite-dimensional $\K$-vector space equipped with a saclar product
 and
 \[
   \Phi:\underset{\textrm{$s$ times}}{\underbrace{V\times\dots\times V}}\to W
@@ -331,11 +331,11 @@ form $\widetilde\Phi$ is symmetric.
   a symmetric $s$-linear map. 
 Elements $(a_j)_{1\leq j\leq t}$ in $V$ and scalars $(\lambda_j)_{1\leq j\leq t}$ in $\K$ define a hypersymmetric formula for the $s$-linear map $\Phi$,
 \[
-\Phi(x_1,\dots,x_s)=\sum_{j=1}^{t}\lambda_j\ps{a_j}{x_1}\cdots\ps{a_j}{x_t}a_j,
+\Phi(x_1,\dots,x_s)=\sum_{j=1}^{t}\lambda_j\ps{a_j}{x_1}\cdots\ps{a_j}{x_s}a_j,
 \]
 if and only if they define a symmetric formula for the $(s+1)$-linear form $\widetilde{\Phi}$,
 \[
-\widetilde{\Phi}(x_1,\dots,x_s,x_{s+1})=\sum_{j=1}^{t}\lambda_i\ps{a_j}{x_1}\cdots\ps{a_j}{x_t}\ps{a_j}{x_{s+1}}.
+\widetilde{\Phi}(x_1,\dots,x_s,x_{s+1})=\sum_{j=1}^{t}\lambda_i\ps{a_j}{x_1}\cdots\ps{a_j}{x_s}\ps{a_j}{x_{s+1}}.
 \]
 
 Thus, $\Phi$ admits a hypersymmetric formula if and only if $\widetilde{\Phi}$ is Frobenius-symmetric (in the sense of Theorem~\ref{thm:symmetric-formula}),
@@ -355,13 +355,13 @@ In particular, if $q\geq s+1$, then any hypersymmetric $s$-linear map over $\mat
   then, by taking the scalar product with any $x_{s+1}$, we obtain
 \[
   \ps{\Phi(x_1, \dots,
-  x_s)}{x_{s+1}}=\widetilde{\Phi}(x_1,\dots,x_s,x_{s+1})=\sum_{j=1}^{t}\lambda_i\ps{a_j}{x_1}\cdots\ps{a_j}{x_t}\ps{a_j}{x_{s+1}},
+  x_s)}{x_{s+1}}=\widetilde{\Phi}(x_1,\dots,x_s,x_{s+1})=\sum_{j=1}^{t}\lambda_i\ps{a_j}{x_1}\cdots\ps{a_j}{x_s}\ps{a_j}{x_{s+1}},
 \]
 which defines a symmetric decomposition for $\widetilde\Phi$. In the other
 direction, assume that $\widetilde\Phi$ admits a symmetric decomposition, such
 that for all $x_1, \dots, x_{s+1}\in V$, we have
 \[
-\widetilde{\Phi}(x_1,\dots,x_s,x_{s+1})=\sum_{j=1}^{t}\lambda_i\ps{a_j}{x_1}\cdots\ps{a_j}{x_t}\ps{a_j}{x_{s+1}}.
+\widetilde{\Phi}(x_1,\dots,x_s,x_{s+1})=\sum_{j=1}^{t}\lambda_i\ps{a_j}{x_1}\cdots\ps{a_j}{x_s}\ps{a_j}{x_{s+1}}.
 \]
 It can also be written as
 \[
@@ -393,7 +393,7 @@ trisymmetric map $\Phi$ always admits a trisymmetric decomposition.
 
 \subsection{Galois invariance}
 
-An other type of interesting decompositions is Galois invariant decompositions.
+Another type of interesting decompositions is Galois invariant decompositions.
 It is motivated by the study of group actions on the set of decompositions, that
 can sometimes be used to cut branches in the search tree of the algorithms.
 % TODO
@@ -413,11 +413,11 @@ y\in V$, we have
   \ps{x^\sigma}{y^\sigma} = \ps{x}{y}.
 \]
 Then, if $\sigma$ is also compatible with some studied multilinear map $\Phi$, it induces
-an action on the set of decomposition, as explained in
+an action on the set of decompositions, as explained in
 Lemma~\ref{lm:action-sym}.
 \begin{lm}
   \label{lm:action-sym}
-  Let $V$ a finite-dimensional $\K$-vector space and
+  Let $V$ be a finite-dimensional $\K$-vector space and
   \[
     \Phi:V^s\to V
   \]
@@ -509,7 +509,7 @@ we see that the formula is $\sigma$-invariant.
 \subsection{Multiplication formulas in algebras}
 \label{sec:formulas-algebras}
 
-In the previous pages, we have defined (hyper)symmetric formulas for any
+In the previous pages, we defined (hyper)symmetric formulas for any
 multilinear map defined over some finite-dimensional $\K$-vector space.
 Nevertheless, as seen in the examples, we are often interested in special
 instances of multilinear maps. In fact, the map that we have in mind is almost
@@ -556,7 +556,7 @@ $\mathbb{F}_q[T]/(T^k)$.
 
 In very small dimension, \eg in Examples~\ref{ex:bilinear-complexity}
 and~\ref{ex:trisymmetric-formula} where we are working with $\K$-vector spaces
-of dimension $2$, the search of formulas can be done by hand relatively easily
+of dimension $2$, the search for formulas can be done by hand relatively easily
 because the length of the formulas is short. Though, even in small dimension, if
 the cardinality of $\K$ is large, the number of different formulas can be
 big, thus making it hard to list \emph{all} different solutions. For these
@@ -602,7 +602,7 @@ Assume that
 \]
 is a $\K$-vector space of dimension $m$, for which a basis has been chosen and
 allows us to identify $V$ to $\K^m$, and
-let $(b_j)_{1\leq j\leq m}$ be the bilinear forms on each coordinates, \ie for
+let $(b_j)_{1\leq j\leq m}$ be the bilinear forms on each coordinate, \ie for
 all $x,y\in V$, we have
 \[
   \Phi(x, y) = (b_1(x, y), \dots, b_m(x, y)).
@@ -702,7 +702,7 @@ such that for all vectors $x, y\in V$, we have
   b_1(x, y) = X B_1 Y^t,
 \]
 where $X, Y\in\K^{1\times m}$ are the row vectors representing $x$ and $y$ and
-where $Y^t$ is the transposed of $y$. Let $r_1$ be the rank of $b_1$, we know
+where $Y^t$ is the transpose of $y$. Let $r_1$ be the rank of $b_1$, we know
 that $b_1$ can be decomposed as a sum of $r_1$ bilinear forms of rank $1$. Let
 $f$ be the application mapping an element in $V$ to its associated bilinear
 form:
@@ -717,13 +717,13 @@ $a_1\in \E_1$ such that
 \[
   r_1-1=\rank(b_1-\lambda_1 f(a_1)) < \rank(b_1)=r_1.
 \]
-Then, for each such couple $(\lambda_1, a_1)$, we exhaustively search through
+Then, for each such pair $(\lambda_1, a_1)$, we exhaustively search through
 scalars $\lambda_2\in\K$ and vectors $a_2\in \E_1$ such that
 \[
   r_1-2=\rank(b_1-\lambda_1 f(a_1)-\lambda_2f(a_2)) < \rank(b_1-\lambda_1
   f(a_1))=r_1-1.
 \]
-We continue this process until we have $r_1$ couples $(\lambda_1, a_1), \dots,
+We continue this process until we have $r_1$ pairs $(\lambda_1, a_1), \dots,
 (\lambda_{r_1}, a_{r_1})$ such that
 \[
   0 = \rank(b_1-\sum_{j=1}^{r_1}\lambda_jf(a_j)) <
@@ -737,7 +737,7 @@ and we have found our decomposition.
 In fact, we can search in a more clever way. Since the rank of $b_1$ is $r_1$
 and we are looking for decompositions as a sum of exactly $r_1$ bilinear forms of
 rank $1$, we must choose
-couples $(\lambda_j, a_j)$ that decrease the rank of our bilinear form at each
+pairs $(\lambda_j, a_j)$ that decrease the rank of our bilinear form at each
 step, otherwise we will need strictly more than $r_1$ bilinear forms of rank
 $1$. Therefore, at each step, we can search only through the vectors that can
 decrease the rank of the last considered bilinear form. After each choice of
@@ -768,7 +768,7 @@ the potential to decrease the rank, instead of all the vectors in $\E_1$.
     \Require{$b\in \B$ a bilinear form of rank $r$, $E\subset\E$
     the space of vectors in which to search}
     \Ensure{A list of decompositions of $b$ as a sum of bilinear forms of rank
-    $1$, each decomposition represented by a set of $r$ couples $\left\{
+    $1$, each decomposition represented by a set of $r$ pairs $\left\{
       (\lambda_1, a_1), \dots, (\lambda_{r}, a_{r})\right\}$.}
 
     \Procedure{MinimalDecomposition}{$b, E, R_{\text{glob}},
@@ -776,7 +776,7 @@ the potential to decrease the rank, instead of all the vectors in $\E_1$.
     \If{$\varphi=0$}\Comment{$\rank(\varphi)=0$}
     \State $R_\text{glob}\gets R_\text{glob}\bigcup\left\{R_\text{loc}\right\}$
     \Else
-    \State $\mathcal C\gets\emptyset$\Comment{$\mathcal C$ is the set of couples
+    \State $\mathcal C\gets\emptyset$\Comment{$\mathcal C$ is the set of pairs
     that decrease the rank}
     \ForAll{$a\in E$}
     \ForAll{$\lambda\in\K$}
@@ -904,7 +904,7 @@ presented (\ie Algorithm~\ref{algo:mindecomp}).
     the space of vectors in which to search, $\mu$ the margin, $t$ the maximum
   length of a decompositon of $b$}
     \Ensure{A list of decompositions of $b$ as a sum of at bilinear forms of rank
-    $1$, each decomposition represented by a set of at most $t$ couples $\left\{
+    $1$, each decomposition represented by a set of at most $t$ pairs $\left\{
       (\lambda_1, a_1), \dots, (\lambda_{r}, a_{t})\right\}$.}
 
     \Procedure{DecompositionWithMargin}{$b, E, r, m, R_{\text{glob}},
@@ -1004,7 +1004,7 @@ small field extension.
  \[
    \mathbb{F}_{3^3}\cong \mathbb{F}_{3}[x]/(x^3-x+1)\cong \mathbb{F}_3[z]
  \]
- over $\mathbb{F}_3$. There are $4$ tri-symmetric decomposition of length $6$ of
+ over $\mathbb{F}_3$. There are $4$ tri-symmetric decompositions of length $6$ of
  the product in $\mathbb{F}_{3^4}$:
  \begin{align*}
    d_1 &=\left\{(1, z^2 + z),
@@ -1082,7 +1082,7 @@ decomposition.
 The ideas discussed in Section~\ref{sec:general-algorithm}, in particular
 Algorithms~\ref{algo:decompmargin}~and~\ref{algo:trisymmargin}, were implemented
 using Nemo~\cite{Nemo}, a number theory library written in the Julia programming
-language~\cite{Julia}. Nemo functionnalities includes a wrapper for
+language~\cite{Julia}. Nemo functionalities includes a wrapper for
 Flint~\cite{Flint}, a number theory library written in the C programming
 language. The code is available online at
 \url{https://github.com/erou/TriSym.jl}.
@@ -1094,7 +1094,7 @@ compilation is almost invisible for the user but performances are comparable
 with other compiled languages. It is easy to learn and to read, especially
 for someone who already worked with a high-level language like Python.
 There are of course many other things to say about this new language, the
-interested reader can find additional informations on Julia’s
+interested reader can find additional information on Julia’s
 website\footnote{\url{https://julialang.org/}} and, of
 course, in the documentation of the language. Julia is designed for numerical
 computing, but there are many other kind of possibilities, \eg some symbolic computer algebra packages, such as
@@ -1116,7 +1116,7 @@ directly in C and call the code if necessary.
 
 An algorithm in our Julia library \texttt{Trisym.jl} is specially designed to
 handle trisymmetric decompositions of the product in finite fields. We use a lot
-of native Nemo types, that are wrappers for Flint types. Finite fields elements
+of native Nemo types, that are wrappers for Flint types. Finite field elements
 are represented by univariate polynomials modulo an irreducible polynomial and
 only prime field extensions
 \[
@@ -1125,7 +1125,7 @@ only prime field extensions
 where $p$ is a prime number, can be considered.
 There are two types used to work with finite fields in Flint: \texttt{fq} and
 \texttt{fq\_nmod}, the latter only works for word-size primes $p$. Because the
-algorithms for trisymmetric searchs have an exponential complexity, we focused
+algorithms for trisymmetric searches have exponential complexity, we focused
 our implementation on finite fields with a word-size characteristic, but there
 are no theoretical nor implementation obstacles preventing an
 implementation with the type \texttt{fq} and arbitrary large characteristic.
@@ -1133,13 +1133,13 @@ Nonetheless, implementing the algorithms for any kind of extension
 \[
   \mathbb{F}_{q^k}/\mathbb{F}_q,
 \]
-where $q$ is a prime power, would require additionnal work.
+where $q$ is a prime power, would require additional work.
 The
 bilinear forms in $\mathbb{F}_{p^k}$ are represented by $k\times k$ matrices
 over $\mathbb{F}_p$, and the product in $\mathbb{F}_{p^k}$ is represented by a
 $k$-uple of $k\times k$ matrices. The matrix manipulations are all done by Flint using
 efficient C code: it is in particular true for the rank computation, that plays a central role
-in Algorithm~\ref{algo:decompmargin}. We always precompute a dictionnary maping
+in Algorithm~\ref{algo:decompmargin}. We always precompute a dictionary mapping
 elements in the finite field
 \[
   a\in\mathbb{F}_{p^k}
@@ -1150,7 +1150,7 @@ to the matrix representing the bilinear form
 \]
 This bilinear form is not hard to compute: it suffices to compute a
 matrix-vector multiplication, but since we have to compute the same bilinear
-forms several times, we prefer to store them in a dictionnary.
+forms several times, we prefer to store them in a dictionary.
 
 \paragraph{Experimental results}
 
@@ -1162,8 +1162,8 @@ file \texttt{bencharks.jl} of the repository of the package
 data generated from the benchmarks can be found in the repository of the
 thesis\footnote{\url{https://github.com/erou/thesis/}}. All plots were made
 using gnuplot version 5.2 patchlevel 8, and the gnuplot files can also be found
-in the thesis repository. As previously said, the complexity of our search
-algorithm has an exponential complexity in the size of the algebra we are
+in the thesis repository. As previously said, our search
+algorithm has exponential complexity in the size of the algebra we are
 searching in. This is similar to the algorithms searching for (symmetric)
 bilinear formulas, such as~\cite{Covanov19, BDEZ12}. For the smallest case of
 $q=3$, we are able to compute solutions up to $k=4$ with
@@ -1232,7 +1232,7 @@ directly impacts the size of the finite field, and thus the search is longer. We
 can see in Figure~\ref{fig:fixed-margin-0-0} the timings related to the
 computation of all the trisymmetric decompositions in $\mathbb{F}_{p^2}$ for
 $3\leq p\leq 300$ with a fixed margin $\mathfrak M =(0,0)$. In these timings, we
-assume that the dictionnary mapping an element $a\in\mathbb{F}_{p^2}$ to its
+assume that the dictionary mapping an element $a\in\mathbb{F}_{p^2}$ to its
 symmetric bilinear form
 \[
   (x,y)\mapsto\ps{a}{x}\ps{a}{y}
@@ -1380,7 +1380,7 @@ For any odd $q$ we have
 \begin{proof}
 The fact that $\mu_q(2)=3$ is not new and follows, for example, from~\cite[Thm.
 2.2]{BCPRRR19}. In order to prove that
-$\mutri_q(2) = 3$, we find an \emph{universal} trisymmetric formula of length
+$\mutri_q(2) = 3$, we find a \emph{universal} trisymmetric formula of length
 $3$. We know that we can find a non-square element $\zeta$ in $\mathbb{F}_q$, we
 can then define
 \[
@@ -1635,12 +1635,12 @@ We use the function field terminology and notations
 presented in~\cite{Stichtenoth09} and recalled in
 Section~\ref{sec:algebraic-function-fields}. Let $F/\mathbb{F}_q$ be an algebraic
 function field of one variable over $\mathbb{F}_{q}$ and let $\mathbb{P}_F$ be the
-set of places of $F$. Let $\D_F$ the set of
+set of places of $F$. Let $\D_F$ be the set of
 divisors on $F$, and if $D\in\D_F$ is a divisor on
-$F$, we denote by $L(D)$ its Riemann-Roch space and we $\ell(D)=\dim L(D)$ be
+$F$, we denote by $L(D)$ its Riemann-Roch space and we let $\ell(D)=\dim L(D)$ be
 the dimension of this space. Proposition~\ref{prop:method} generalizes the idea
 of the Chudnovsky brothers to the product of $t$ variables and highlights the
-method to obtain symmetrics formulas.
+method to obtain symmetric formulas.
 \begin{prop}
   \label{prop:method}
   Assume there exist a place $Q\in\mathbb{P}_{F}$ of $F$ of degree $k$, $P_1,
@@ -1686,7 +1686,7 @@ so the map $x\mapsto f_x$ is linear, and $f_x(Q)=x$. We
           & x & \mapsto & (f_x(P_1), \dots, f_x(P_n))
 \end{array}
   \]
-  be the composite map $a = \ev_{\Pcal, D}\circ s$. The situation is sumed up in the
+  be the composite map $a = \ev_{\Pcal, D}\circ s$. The situation is summed up in the
   following drawing.
    \begin{center}
   \begin{tikzpicture}
@@ -1716,7 +1716,7 @@ where $\varphi_i:\mathbb{F}_{q^k}\to\mathbb{F}_{q}$ is a linear form, namely $\v
   \[r\circ\ev_{\Pcal, tD} = \Id_{L(tD)}.
   \]
 We also let $b: (\mathbb{F}_{q})^n \to \mathbb{F}_{q^k}$
-  be the composite map $b = \ev_{Q, tD}\circ r$.   The situation is sumed up in the
+  be the composite map $b = \ev_{Q, tD}\circ r$.   The situation is summed up in the
   following drawing.
   \begin{center}
   \begin{tikzpicture}
@@ -1820,7 +1820,7 @@ and the injectivity condition~\ref{cond:2} in Proposition~\ref{prop:method} is a
 Now that we have somewhat easier assumptions to fulfill, that are only based on
 the existence of a certain number of places, we prove that we can indeed find
 algebraic number fields that satisfy these properties. We first prove it in the
-special case, where the cardinality $q$ of the base field $\K$ is large enough
+special case, where the cardinality $q$ of the base field $\K$ is a large enough
 square.
 \begin{prop}
 \label{prop:asymptsquare}
