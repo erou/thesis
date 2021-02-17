@@ -45,14 +45,14 @@ of the four classic ones $a_0b_0$, $a_0b_1$, $a_1b_0$ and $a_1b_1$ as follows:
 \[
   AB = c_\infty X^2 + (c_1-c_\infty-c_0) X + c_0.
 \]
-It will become clear in Section~\ref{sec:evalinter} why we use the index
+It will become clear in Section~\ref{sec:evalinter} why we use the subscript
 $\infty$ instead of $2$ for $c_\infty = a_1b_1$. Strassen's algorithm
 exploits a similar idea in the case of $2\times2$ matrices: only $7$ products
 are used instead of $8$ in order to compute a matrix product. Both these
 algorithms have very practical consequences. Karatsuba's algorithm is used in
-computer algebra softwares, when the standard multiplication is no longer
+computer algebra software, when the standard multiplication is no longer
 optimal, and when the Discrete Fourier Transform (DFT) is not yet the fastest.
-Strassen's algorithm, used reccursively, is the fastest strategy available for
+Strassen's algorithm, used recursively, is the fastest strategy available for
 large matrix multiplication. Both these questions are treated in~\cite{GG13}.
 Thus the idea of minimizing the number of multiplications, even if it means
 having to compute more additions and substractions, seems a good idea.
@@ -139,9 +139,9 @@ multiplication to compute
   \varphi_j(x)\psi_j(y)w_j.
 \]
 We said that the bilinear complexity measures the minimal number of
-$2$-multiplication needed to compute a bilinear map $\Phi$. Knowing that a
+$2$-multiplications needed to compute a bilinear map $\Phi$. Knowing that a
 bilinear formula of length $n$ for $\Phi$ implies that we can compute $\Phi$
-with the same number $n$ of $2$-variable multiplication, the definition of
+with the same number $n$ of $2$-variable multiplications, the definition of
 bilinear complexity follows.
 \begin{defi}[Bilinear complexity]
   Let $V_1, V_2$ and $W$ be three finite dimensional vector spaces over $\K$ and 
@@ -227,7 +227,7 @@ can be symmetric, \ie they can verify that, for all $x, y\in V$
 \]
 In that case, it is natural to investigate the existence and the length of
 \emph{symmetric bilinear formulas}, \ie bilinear formulas where the linear forms
-$\varphi_j$ and $\psi_j$ are equal, for all $j$. On an algorithmtic point of
+$\varphi_j$ and $\psi_j$ are equal, for all $j$. From an algorithmtic point of
 view, it should also be easier to find all such formulas because the
 search space is smaller. It is also easier to represent such formulas because we
 only need to store $n$ linear forms instead of $2n$.
@@ -276,7 +276,7 @@ interested in algebras $\A$ of the form
   \A = \mathbb{F}_{q^k}[T]/(T^l)
 \]
 and for that reason we introduce a special notation for the bilinear complexity
-of those algebra
+of those algebras
 \[
   \mu_q(k, l) = \mu(\A/\K).
 \]
@@ -314,7 +314,7 @@ and $l\geq1$
 \]
 In the other direction, we know (\cite[Theorem $1$]{SL84} or \cite[Lemma
 $1.6$]{Randriam12}) that when the characteristic of $\A$ is not $2$,
-or equivalently when $k$ is not a power of $2$ , that we have
+or equivalently when $k$ is not a power of $2$, we have
 \[
   \musym_q(k, l)\leq2\mu_q(k, l).
 \]
@@ -340,7 +340,7 @@ evaluation-interpolation strategy is based on two facts:
 \begin{itemize}
   \item a polynomial of degree $n$ can be described by its values at $n+1$
     points and reconstructed via \emph{interpolation};
-  \item the \emph{evaluation} map at some point $a\in\K$ is a homomorphism of ring from
+  \item the \emph{evaluation} map at some point $a\in\K$ is a homomorphism of rings from
     $\K[x]$ to $\K$.
 \end{itemize}
 \paragraph{Interpolation.} The fact that a polynomial $P\in\K[x]$ of degree $n$
@@ -391,7 +391,7 @@ In other words, the map
   &P&\mapsto&P(a)
 \end{array}
 \]
-is an homomorphism of rings from $\K[x]$ to $\K$.
+is a homomorphism of rings from $\K[x]$ to $\K$.
 
 We are used to represent polynomials by their coefficients, but these two facts
 suggest that we can also represent polynomials by their values at some points.
@@ -414,7 +414,7 @@ $\K$ and the evaluation-interpolation strategy consists in $3$ steps:
 \end{enumerate}
 When there are not enough points in $\K$ to use this method, instead of
 evaluating on points of $\K$, we can evaluate the polynomials on points of
-curves on $\K$ with enough points. As a first example, we can interpret
+curves over $\K$ with enough points. As a first example, we can interpret
 Karatsuba's algorithm as an evaluation-interpolation scheme on
 the projective line $\mathbb{P}^1(\K)$. Let 
 \[
@@ -506,14 +506,14 @@ complexity of a bilinear map, algorithms were developped to find bilinear
 formulas. These algorithms are essentially exhaustive searches, so they 
 have an exponential complexity, but they also exploit the eventual symmetries
 in the definition of $\Phi$ to eliminate a lot of potential candidates along the
-way, in order to be as efficient as possible in practice. We first see
+way, in order to be as efficient as possible in practice. We first look at
 Barbulescu, Detrey, Estibals and Zimmerman's algorithm~\cite{BDEZ12}.
 
 \subsection{Barbulescu, Detrey, Estibals and Zimmerman's algorithm}
 
 In $2012$, Barbulescu, Detrey, Estibals and Zimmerman published a new framework
 to find bilinear formulas for arbitrary bilinear maps over finite fields. Let
-$V_1$, $V_2$ and $W$ be three finite dimensional $\K$-vector space of respective
+$V_1$, $V_2$ and $W$ be three finite dimensional $\K$-vector spaces of respective
 dimension $l$, $m$, and $n$, such that we have
 \[
   V_1\cong\K^l\hspace{3cm}V_2\cong\K^m\hspace{3cm}W\cong\K^n.
@@ -540,7 +540,7 @@ a vector
 \[
   \gamma = (\gamma_{1, 1}, \dots, \gamma_{l, m}).
 \]
-An other interesting representation is to see $\gamma$ as a $l\times m$ matrix
+Another interesting representation is to see $\gamma$ as a $l\times m$ matrix
 \[
   G = (\gamma_{i, j})_{i, j},
 \]
@@ -548,7 +548,7 @@ such that $\gamma$ is given by
 \[
   \gamma(x, y) = x G y^t
 \]
-where $y^t$ is the transposed of $y$ and thus $y^t$ is a column vector. We let
+where $y^t$ is the transpose of $y$ and thus $y^t$ is a column vector. We let
 $\gamma_j$ be the $j$-th coordinate of $\Phi$ in $W$, such that
 \[
   \Phi = (\gamma_1, \dots, \gamma_n).
@@ -562,7 +562,7 @@ there exist a nonzero vector
   b=(b_1, \dots, b_m)\in\K^m
 \]
 such that the rows $(r_j)_{1\leq j \leq m}$ of $A$, seen as vectors $\K^m$, are
-all multiple of $b$, \ie for all $1\leq j \leq l$, we have
+all multiples of $b$, \ie for all $1\leq j \leq l$, we have
 \[
   r_j = a_j b
 \]
@@ -599,7 +599,7 @@ one, and the subspace
 plays a central role. The general idea is to find a generating family of $V$ composed of
 rank $1$ bilinear forms.
 \begin{prop}
-  Let $V_1$, $V_2$, and $W$ three finite $\K$-vector spaces and $\Phi:V_1\times
+  Let $V_1$, $V_2$, and $W$ be three finite $\K$-vector spaces and $\Phi:V_1\times
   V_2\to W$ a bilinear map such that
   \[
     \Phi = (\gamma_1, \dots, \gamma_n).
@@ -656,7 +656,7 @@ such that
   V\subseteq\Span\left\{ g_1, \dots, g_t \right\}.
   \label{eq:subspace-cond}
 \end{equation}
-There is 
+There are
 \[
   {\Card\G}\choose{t}
 \]
@@ -666,13 +666,13 @@ simplicity, we consider the \emph{combinatorial complexity} of this problem, \ie
 we consider that all matrix operations have constant complexity (\eg computing
 the dimension of a vector space, checking if a vector is in a vector space).
 Thus the combinatorial complexity of this strategy is ${\Card\G}\choose{t}$.
-Unfortunately, two different $t$-uple of generators in $\G$ can span the same
+Unfortunately, two different $t$-uples of generators in $\G$ can span the same
 vector space, and so the naive algorithm is non optimal. Barbulescu \etal attack
 this problem by looking directly at subspaces $W$ such that
 \[
 V\subseteq W.
 \]
-More precisely, if we want to find a length $t$ formula, we search at spaces $W$ such that
+More precisely, if we want to find a length $t$ formula, we search for spaces $W$ such that
 \begin{enumerate}[(i)]
   \item \label{enum:subspace} $V\subseteq W$;
   \item \label{enum:rank1} $\Span(W\cap\G) = W$, \ie $W$ is generated by rank $1$ bilinear forms;
@@ -680,7 +680,7 @@ More precisely, if we want to find a length $t$ formula, we search at spaces $W$
 \end{enumerate}
 We remark thanks to~\ref{enum:subspace} that $V$ is contained in each space $W$
 that we are looking for. Thus, we can search for spaces $W$ by adding elements
-to $V$. Of course, there a lot of spaces verifying~\ref{enum:subspace}
+to $V$. Of course, there are lots of spaces verifying~\ref{enum:subspace}
 alone, but this condition, together with~\ref{enum:rank1}, is in fact equivalent
 to
 \begin{enumerate}
@@ -747,7 +747,7 @@ therefore, we need only to add elements from $\G$ to $V$.
   \]
   We take the set $\W = \W_{m-l}$ and we have the desired property.
 \end{proof}
-Lemma~\ref{lm:cond-equiv} essentially tell us that the combinatorial complexity
+Lemma~\ref{lm:cond-equiv} essentially tells us that the combinatorial complexity
 of finding a length $t$ formula is
 \[
   {\Card\G}\choose{t - \dim V}
@@ -769,7 +769,7 @@ terminology, if we want to compute formulas of length $t$ for
 \]
 our goal is now to compute $\mathcal S_t(V)$ with
 \[
-  V = \Span(\left\{ \gamma_1, \dots, \gamma_n \right\}.
+  V = \Span(\left\{ \gamma_1, \dots, \gamma_n \right\}).
 \]
 In order to effectively compute these sets, we use Algorithm~\ref{algo:rank1} to
 check if a vector space is generated by rank $1$ bilinear forms.
@@ -817,8 +817,8 @@ Algorithm~\ref{algo:BDEZ}.
     $t$}}\Comment{Gaussian reduction of $\G$ modulo a basis of $V$}
   \end{algorithmic}
 \end{algorithm}
-There is an other advantage of Algorithm~\ref{algo:BDEZ} compared to the naive
-algorithm. We see Line~\ref{line:SmodPhi} and Line~\ref{line:GmodV} that it
+There is another advantage of Algorithm~\ref{algo:BDEZ} compared to the naive
+algorithm. We see in Line~\ref{line:SmodPhi} and Line~\ref{line:GmodV} that it
 takes into account the equivalence relation ``modulo $V$'', \ie if there are two
 elements $\phi$ and $\phi'$ of $\G$ such that 
 \[
