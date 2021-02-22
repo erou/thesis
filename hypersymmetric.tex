@@ -1688,7 +1688,7 @@ method to obtain symmetric formulas.
   $D\in\D_F$ of $F$ such that the places $Q$ and $P_1, \dots, P_n$ are not in
   the support of $D$ and such that the following conditions hold.
   \begin{enumerate}[(i)]
-    \item \label{cond:1} The evaluation map
+    \item \label{cond:hyper-1} The evaluation map
       \[
         \begin{array}{cccc}
         \ev_{Q, D}: & L(D) & \to & \mathbb{F}_{q^k}\\
@@ -1696,7 +1696,7 @@ method to obtain symmetric formulas.
 \end{array}
 \]
 is \emph{surjective}.
-    \item \label{cond:2} The evaluation map
+    \item \label{cond:hyper-2} The evaluation map
       \[
         \begin{array}{cccc}
         \ev_{\Pcal, sD}: & L(sD) & \to & (\mathbb{F}_{q})^n\\
@@ -1717,7 +1717,7 @@ is \emph{injective}.
   \[
     \ev_{Q, D}\circ u = \Id_{\mathbb{F}_{q^k}}.
   \]
-For all $x\in\mathbb{F}_{q^k}$, we denote $s(x)\in L(D)$ by $f_x$,
+For all $x\in\mathbb{F}_{q^k}$, we denote $u(x)\in L(D)$ by $f_x$,
 so the map $x\mapsto f_x$ is linear, and $f_x(Q)=x$. We
   also let
   \[
@@ -1811,7 +1811,7 @@ and finally we get a symmetric formula for $m_s$:
 \]
 \end{proof}
 Now that we have a method to find formulas, we have to prove that
-Conditions~\ref{cond:1}~and~\ref{cond:2} can be satisfied.
+Conditions~\ref{cond:hyper-1}~and~\ref{cond:hyper-2} can be satisfied.
 Proposition~\ref{prop:numerical} gives sufficient assumptions to obtain these
 conditions.
 \begin{prop}
@@ -1840,7 +1840,7 @@ We thus find
   \Ker(\ev_{Q, D}:L(D)\to\mathbb{F}_{q^k}) = L(D-Q) = 0,
 \]
 so $\ev_{Q, D}$ is injective, hence also surjective by equality of dimensions,
-\ie the surjectivity condition~\ref{cond:1} in Proposition~\ref{prop:method} is satisfied.
+\ie the surjectivity condition~\ref{cond:hyper-1} in Proposition~\ref{prop:method} is satisfied.
 
 Likewise, $sD$ is non-special, with $\deg(sD)=(k+g-1)s$ and $\ell(sD)=ks+(g-1)(s-1)$.
 Then the evaluation map
@@ -1854,7 +1854,7 @@ has kernel $L(sD-\sum_{P\in\mathcal{S}}P)=0$, because $\deg(sD-\sum_{P\in\mathca
 So $\ev_{\mathcal{S}, sD}$ is injective, with image of dimension $\dim\Img(\ev_{\mathcal{S}, sD})=\ell(sD)=n$.
 Then we can find a subset $\Pcal=\{P_1,\dots,P_n\}\subset\mathcal{S}$ of size $n$,
 such that $\ev_{\Pcal, sD}: L(sD) \to (\mathbb{F}_{q})^n$ is an isomorphism,
-and the injectivity condition~\ref{cond:2} in Proposition~\ref{prop:method} is also satisfied.
+and the injectivity condition~\ref{cond:hyper-2} in Proposition~\ref{prop:method} is also satisfied.
 \end{proof}
 
 \paragraph{Choice of the curves for $q$ a large enough square.}

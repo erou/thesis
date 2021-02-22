@@ -18,7 +18,8 @@ In the \emph{algebraic complexity model}~\cite{BCS13}, we assume that our
 machine is able to perform any operation in some base field $\K$ in constant,
 unit time. This is an idealized model made in order to simplify the
 computation of the complexity of algebraic algorithms. Nevertheless,
-multiplication of two variable quantities in $\K$ is arguably more expensive
+multiplication of two quantities in $\K$ that are both variable is arguably more
+expensive
 than addition, or than multiplication of a variable by a fixed constant. In the
 context of the computation of bilinear maps, extensive work has been done to
 reduce the number of $2$-variable multiplications involved. Notable examples are
@@ -51,18 +52,20 @@ exploits a similar idea in the case of $2\times2$ matrices: only $7$ products
 are used instead of $8$ in order to compute a matrix product. Both these
 algorithms have very practical consequences. Karatsuba's algorithm is used in
 computer algebra software, when the standard multiplication is no longer
-optimal, and when the Discrete Fourier Transform (DFT) is not yet the fastest.
-Strassen's algorithm, used recursively, is the fastest strategy available for
-large matrix multiplication. Both these questions are treated in~\cite{GG13}.
-Thus the idea of minimizing the number of multiplications, even if it means
-having to compute more additions and substractions, seems a good idea.
+optimal, and when the Fast Fourier Transform (FFT)~\cite{CT65, SS71} is not yet
+the fastest. Though Strassen's algorithm does not achieve the best asymptotic
+complexity (see for example~\cite{CW90, AW21}), in practice, when used
+recursively, it is the fastest strategy available for large symbolic matrix
+multiplication. Both these questions are treated in~\cite{GG13}. Thus the idea
+of minimizing the number of multiplications, even if it means having to compute
+more additions and substractions, seems a good idea.
 
-The \emph{bilinear complexity}
-$\mu(\Phi)$ of a bilinear map $\Phi$ over $\K$ represents the minimum number of two-variable
+The \emph{bilinear complexity} $\mu(\Phi)$ of a bilinear map $\Phi$ over $\K$
+represents the minimum number of $2$-variable
 multiplications in a formula that computes $\Phi$, discarding the cost of other
 operations such as addition or multiplication by a constant. In other words, in
 this model of computation, we only count $2$-variable multiplications, and other
-operations are assumed to have no cost. It is motivated by the fact that
+operations are assumed to be free. It is motivated by the fact that
 $2$-variable multiplication is often more expensive to compute than other
 operations and by the practicality of algorithms minimizing the multiplications,
 such as Karatsuba's and Strassen's.
@@ -76,7 +79,7 @@ of $2\times2$ matrices over $\K$. We know thanks to Strassen's algorithm that
 \[
   \mu(\K^{2\times 2}/\K) \leq 7.
 \]
-In fact, this is optimal, so we have exactly $\mu(\K^{2\times2}/\K)=7$. In
+In fact, this is optimal~\cite[Theorem 3.1]{Winograd71}, so we have exactly $\mu(\K^{2\times2}/\K)=7$. In
 general, it seems to be hard to find the bilinear complexity of a given algebra,
 for example the bilinear complexity of $\K^{3\times3}$ is not known.
 In the litterature, work has been done both to algorithmically find the bilinear complexity of
@@ -91,7 +94,8 @@ method in Section~\ref{sec:evalinter}.
 
 We can precisely define bilinear complexity with \emph{bilinear formulas}. We
 also sometimes use the terms \emph{bilinear decomposition}, or \emph{bilinear
-algorithm}, but it is really the same notion.
+algorithm}, but it is really the same notion. For any vector space $V$, we let
+$V^\vee$ be its dual space, \ie the vector space of $\K$-linear forms on $V$.
 \begin{defi}[Bilinear formula]
   \label{defi:bilinear-formula}
   Let $V_1, V_2$ and $W$ be three finite dimensional vector spaces over $\K$ and 
@@ -100,8 +104,8 @@ algorithm}, but it is really the same notion.
   \]
   a bilinear map. A \emph{bilinear fomula}, or \emph{bilinear decomposition}, or
   \emph{bilinear algorithm} of length $n$ for $\Phi$ is a
-  collection of $2n$ linear forms $\varphi_1, \dots, \varphi_n$ and $\psi_1,
-  \dots, \psi_n$, and $n$ vectors $w_1, \dots, w_n$ in $W$ such that for all
+  collection of $2n$ linear forms $\varphi_1, \dots, \varphi_n\in V_1^\vee$ and $\psi_1,
+  \dots, \psi_n\in V_2^\vee$, and $n$ vectors $w_1, \dots, w_n$ in $W$ such that for all
   $x\in V_1$ and $y\in V_2$, we have
   \[
     \Phi(x, y) = \sum_{j=1}^n \varphi_j(x)\psi_j(y)w_j.
@@ -156,10 +160,9 @@ bilinear complexity follows.
 \end{defi}
 Equivalently, we can define the bilinear complexity as the rank of the tensor in 
 \[
-  V_1^\vee \times V_2^\vee \times W
+  V_1^\vee \otimes V_2^\vee \otimes W
 \]
-corresponding to $\Phi$, where $V_1^\vee$ (resp. $V_2^\vee$) is the dual space
-of $V_1$ (resp. $V_2$).
+corresponding to $\Phi$~\cite{Randriam12}, as shown in Example~\ref{ex:bilinear-complexity}.
 \begin{ex}
   \label{ex:bilinear-complexity}
   Let $\K=\mathbb{F}_2$ and $V_1=V_2=W=(\mathbb{F}_2)^2$. We consider the
@@ -210,7 +213,7 @@ corresponding to $\Phi$ is
   e_1^\vee\otimes e_0+(e_0^\vee+e_1^\vee)\otimes (e_0^\vee+e_1^\vee)\otimes e_1,
 \end{align*}
 and we can check that no smaller decomposition of $\widetilde\Phi$ into a sum of simple
-tensors $a\otimes b\otimes c$ exist,
+tensors $a\otimes b\otimes c$ exists,
 so we also see that the rank of the tensor $\widetilde\Phi$ is $3$.
 \end{ex}
 When the spaces $V_1$ and $V_2$ are equal
@@ -240,7 +243,7 @@ only need to store $n$ linear forms instead of $2n$.
   a symmetric bilinear map. A \emph{symmetric bilinear fomula}, or
   \emph{symmetric bilinear decomposition}, or
   \emph{symmetric bilinear algorithm} of length $n$ for $\Phi$ is a
-  collection of $n$ linear forms $\varphi_1, \dots, \varphi_n$
+  collection of $n$ linear forms $\varphi_1, \dots, \varphi_n\in V^\vee$
   and $n$ vectors $w_1, \dots, w_n$ in $W$ such that for all
   $x, y\in V$, we have
   \[
@@ -267,7 +270,7 @@ clear from Definition~\ref{def:sym-bil-for} that a
 \emph{symmetric} bilinear formula always
 exists for symmetric bilinear maps, but it is indeed
 true~\cite[Lemma $1.6$]{Randriam12}, thus
-Definiton~\ref{def:sym-bil-com} makes sense. The formula obtained in
+Definition~\ref{def:sym-bil-com} makes sense. The formula obtained in
 Example~\ref{ex:bilinear-complexity} is an example of bilinear formula that is
 also a symmetric bilinear formula, therefore the symmetric bilinear complexity
 is the same as the bilinear complexity in that case. We are particularly
@@ -320,18 +323,23 @@ or equivalently when $k$ is not a power of $2$, we have
 \]
 Finally, we have no example of algebra $\A = \mathbb{F}_{q^k}[T]/(T^l)$ where the
 quantities $\mu_q(k, l)$ and $\musym_q(k, l)$ are different when $q\geq3$.
+% TODO
+% ====
+%
+% Ask Hugues what's conjectured, if something is
 % TODO: elaborate on this, is it true for q = 2?
 % see for example
 % [ 0 1 ]
 % [ 1 0 ]
 % ~~~~~~~~~~~~~~
 % but that one does *not* come from a *regular* algebra A does it? If we take a
-% counter example it has to have in the same realm as the fact that we are
+% counter example it has to be in the same realm as the fact that we are
 % stating. 
 
 \section{Chudnovsky-Chudnovsky algorithm}
-Chudnovsky and Chudnovsky algorithm is based on evaluation-interpolation on
-curves, we thus begin by presenting this principle.
+
+Chudnovsky and Chudnovsky's algorithm is based on evaluation-interpolation on
+algebraic curves, we thus begin by presenting this principle.
 \subsection{Evaluation - Interpolation}
 \label{sec:evalinter}
 
@@ -345,7 +353,7 @@ evaluation-interpolation strategy is based on two facts:
 \end{itemize}
 \paragraph{Interpolation.} The fact that a polynomial $P\in\K[x]$ of degree $n$
 is uniquely determined by its values at $n+1$ (different) points in $\K$ follows
-from the fact that a polynomial of degree $n$ with coefficients in $\K$ has up
+from the fact that a nonzero polynomial of degree $n$ with coefficients in $\K$ has up
 to $n$ roots. This gives us the \emph{uniqueness} of the polynomial. As for the
 \emph{existence}, it follows from the Lagrange interpolation. Let $x_1, \dots,
 x_{n+1}\in\K$ be $n+1$ points in $\K$ and $y_1, \dots, y_{n+1}$ the
@@ -396,25 +404,25 @@ is a homomorphism of rings from $\K[x]$ to $\K$.
 We are used to represent polynomials by their coefficients, but these two facts
 suggest that we can also represent polynomials by their values at some points.
 With this representation, adding two polynomials is done by adding the
-values, which is done with linear complexity, the same as with the coefficient
+values, which is done with linear algebraic complexity, the same as with the coefficient
 representation. But the multiplication of polynomials is also obtained via the
 multiplication of the values, which is linear again and better than the
 quadratic complexity obtained with the usual multiplication formula for the
 coefficients. An important problem is then to be able to change between
 representations at a small cost, this is done using well-chosen points of
 evaluation and this strategy is known under the name of Fast Fourier
-Transform (FFT)~\cite{GG13}. Let $P, Q\in\K[x]$ be two polynomials with
+Transform (FFT)~\cite[Chapter~$8$]{SS71, GG13}. Let $P, Q\in\K[x]$ be two polynomials with
 coefficients in $\K$ represented by their coefficients, such that
 $\deg(PQ)=n-1$. In order to multiply $P$ and $Q$ we need at least $n$ points in
 $\K$ and the evaluation-interpolation strategy consists in $3$ steps:
 \begin{enumerate}
-  \item multipoint evaluation of $P$ and $Q$ at $n$ points $a_1, \dots, a_n$;
+  \item evaluation of $P$ and $Q$ at $n$ points $a_1, \dots, a_n$;
   \item coordinate-wise multiplication;
   \item interpolation to reconstruct the product $PQ$.
 \end{enumerate}
 When there are not enough points in $\K$ to use this method, instead of
 evaluating on points of $\K$, we can evaluate the polynomials on points of
-curves over $\K$ with enough points. As a first example, we can interpret
+algebraic curves over $\K$ with enough points. As a first example, we can interpret
 Karatsuba's algorithm as an evaluation-interpolation scheme on
 the projective line $\mathbb{P}^1(\K)$. Let 
 \[
@@ -451,14 +459,14 @@ a function field. It led to an algorithm for the finite field product with an
 asymptotically linear complexity in the extension degree. We first present the historical theorem
 in~\cite{CC88}.
 \begin{thm}
-  \label{thm:CC88}
+  \label{thm:cc88}
   Let $F$ be a function field over $\mathbb{F}_q$.
   Assume there exist a place $Q\in\mathbb{P}_{F}$ of $F$ of degree $k$, $P_1,
   \dots, P_n\in\mathbb{P}_F$ places of $F$ of degree $1$, and a divisor
   $D\in\D_F$ of $F$ such that the places $Q$ and $P_1, \dots, P_n$ are not in
   the support of $D$ and such that the following conditions hold.
   \begin{enumerate}[(i)]
-    \item \label{cond:1} The evaluation map
+    \item \label{cond:cc88-1} The evaluation map
       \[
         \begin{array}{cccc}
         \ev_{Q, D}: & L(D) & \to & \mathbb{F}_{q^k}\\
@@ -466,7 +474,7 @@ in~\cite{CC88}.
 \end{array}
 \]
 is \emph{surjective}.
-    \item \label{cond:2} The evaluation map
+    \item \label{cond:cc88-2} The evaluation map
       \[
         \begin{array}{cccc}
         \ev_{\Pcal, 2D}: & L(2D) & \to & (\mathbb{F}_{q})^n\\
@@ -481,6 +489,79 @@ is \emph{injective}.
   \]
   admits a symmetric formula of length $n$, \ie we have $\musym_q(k)\leq n$.
 \end{thm}
+% TODO
+% ====
+%
+% Following Pieltant's PhD thesis:
+% * how to interpret Chud**2 algorithm in terms of evaluation-interpolation
+% * sufficient conditions to apply the theorem and consequences on the bilinear
+% complexity
+% * what it means for the function field and how we know some suitable function
+% fields do exist
+% * first generalization by Cenk and Özbudak
+% * generalisation by Randriambololona
+Theorem~\ref{thm:cc88} can be interpreted in terms of evaluation and
+interpolation. Condition~\ref{cond:cc88-1} ensures that any element $x\in
+\mathbb{F}_{q^k}$ can be represented by a function $f_x\in L(D)$. Given two
+elements $x,y\in \mathbb{F}_{q^k}$ that we want to multiply, we thus represent
+them as functions $f_x, f_y\in L(D)$ and we \emph{evaluate} these functions at the $n$
+places $P_1, \dots, P_n$ of degree $1$. We obtain two elements
+\[
+  a_x = (f_x(P_1), \dots, f_x(P_n))
+\]
+and
+\[
+  a_y = (f_y(P_1), \dots, f_y(P_n))
+\]
+that we multiply coefficient-wise in order to obtain
+\[
+  a_{xy} = (f_{x}(P_1)f_y(P_1), \dots, f_x(P_n)f_y(P_n)).
+\]
+Now, the injectivity in Condition~\ref{cond:cc88-2} ensures that the element
+$a_{xy}$, \ie the evaluations at the points $P_1, \dots, P_n$, defines a unique
+function in $L(2D)$, that is in fact $f_xf_y$. Indeed, we see that the function
+$f_xf_y$ is in $L(2D)$ since $f_x$ and $f_y$ are each in $L(D)$, and we have
+\[
+  \ev_{\Pcal, 2D}(f_xf_y) = a_{xy}.
+\]
+Given the evaluations $a_{xy}$, we thus \emph{interpolate}, \ie reconstruct a
+function
+\[
+  g = f_xf_y\in L(2D)
+\]
+that we finally evaluate at the place $Q$ to recover
+\[
+  g(Q) = f_x(Q)f_y(Q) = xy.
+\]
+This whole process costs $n$ multiplication: those that appear when we compute
+the coefficient-wise multiplication of $a_x$ and $a_y$.
+Details can be found in~\cite{CC88}. Another version of Theorem~\ref{thm:cc88},
+generalized to the case of the multiplication of an arbitrary number $s\geq2$ of
+variables, is also discussed in Proposition~\ref{prop:method}. One can also give
+sufficient numerical conditions~\cite{Ballet98, Ballet99} on the genus $g$ of
+the function field $F$ and the number
+$n$ of places $P_1, \dots, P_n$ of degree $1$ to ensure that
+Conditions~\ref{cond:cc88-1} and~\ref{cond:cc88-2} are met.
+% TODO: explain the link between g and n
+The challenge is
+then to find function fields that meet the conditions: they must have many
+places of degree $1$, while trying to maintain the genus at a minimum.
+Using for example~\cite{STV92} or~\cite{Pieltant12}, we know that there exist
+suitable families of function fields, but it is quite arduous to find good
+asymptotic families. Following the pioneer idea of Chudnovsky and Chudnovsky and
+additionnal work from Shparlinski, Tfasman and
+Vlăduţ~\cite{STV92}, Ballet was able to prove~\cite{Ballet99} that the bilinear
+complexity of the multiplication in the finite field extension
+\[
+  \mathbb{F}_{q^k}/\mathbb{F}_q
+\]
+is \emph{linear} in the degree of the extension $k$. Theorem~\ref{thm:cc88} was
+then generalized by Ballet and Rolland~\cite{BR04} and Cenk and
+Özbudak~\cite{CO10} in order to exploit places of higher degrees.
+Finally the most general version, allowing us to use asymetric
+formulas, was proposed by Randriambololona in~\cite{Randriam12}.
+All the historical and technical details can be found in the survey of Ballet,
+Chaumine, Pieltant, Rambaud, Randriambololona and Rolland~\cite{BCPRRR19}.
 
 \section{Algorithmic searches in small dimension}
 
@@ -490,7 +571,7 @@ is \emph{injective}.
 % - Barbulescu, Detrey, et al 
 % - Covanov 
 
-The last results based on Chudnovsky and Chudnovsky algorithm allow us to find
+The last results based on Chudnovsky and Chudnovsky's algorithm allow us to find
 one decomposition, and thus give us an (asymptotic) upper bound on the bilinear
 complexity of algebras
 \[
@@ -554,7 +635,8 @@ $\gamma_j$ be the $j$-th coordinate of $\Phi$ in $W$, such that
   \Phi = (\gamma_1, \dots, \gamma_n).
 \]
 If $n=1$, $\Phi$ is a bilinear form and its bilinear complexity is given by the
-rank of its matrix representation. The reason is that a rank $r$ matrix is the sum of $r$ matrices of rank $1$,
+rank of its matrix representation. The reason is that the rank of a matrix is
+invariant by change of basis, a rank $r$ matrix is the sum of $r$ matrices of rank $1$,
 and a rank $1$ matrix corresponds to a bilinear form that can be evaluated using
 only one $2$-variable multiplication. Indeed, let $A$ be a $l\times m$ matrix of rank $1$, we know that
 there exist a nonzero vector 
@@ -591,7 +673,7 @@ bilinear form, there is no similar way of knowing the bilinear complexity of
   \Phi = (\gamma_1, \dots, \gamma_n).
 \]
 Nonetheless, Barbulescu \etal presented an algorithm to find bilinear formulas
-for $\Phi$. The representation that is used for this algorithm is the vector
+for $\Phi$. The representation that is used for this algorithm is the vectorial
 one, and the subspace
 \[
   V = \Span\left\{ \gamma_1, \dots, \gamma_n \right\}\subset\B
@@ -667,7 +749,7 @@ we consider that all matrix operations have constant complexity (\eg computing
 the dimension of a vector space, checking if a vector is in a vector space).
 Thus the combinatorial complexity of this strategy is ${\Card\G}\choose{t}$.
 Unfortunately, two different $t$-uples of generators in $\G$ can span the same
-vector space, and so the naive algorithm is non optimal. Barbulescu \etal attack
+vector space, and so the naive algorithm is non-optimal. Barbulescu \etal attack
 this problem by looking directly at subspaces $W$ such that
 \[
 V\subseteq W.

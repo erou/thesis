@@ -24,7 +24,7 @@ Chapter 3
 Chapter 4
 =========
 
-- Read and correct the chapter
+- Rewrite the parts that need to be changed
 
 Chapter 5
 =========
