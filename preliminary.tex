@@ -275,7 +275,9 @@ notions leading to the definition of \emph{places}.
   $\K(x)$ for some element $x\in F$ which is transcendental over $\K$.
 \end{defi}
 From now on, the notation $F$ will represent an algebraic function field over
-$\K$.
+$\K$. Since it is not critical to the theory, we also assume that $\K$ is
+algebraically closed in $\K$ for simplicity.
+
 \begin{defi}[Valuation ring]
   A \emph{valuation ring} $\vr$ of the function field $F/\K$ is a ring 
   \[
@@ -287,30 +289,135 @@ $\K$.
     \item for all $z\in F$, we have $z\in\vr$ or $z^{-1}\in\vr$.
   \end{enumerate}
 \end{defi}
-Valuation rings $\vr$ are local rings, \ie they have a unique maximal ideal that is
-given by 
-\[
-  P = \vr\setminus\vr^\times
-\]
-where $\vr^\times$ is the group of units of the ring $\vr$.
+\begin{prop}
+  \label{prop:valring}
+Let $\vr$ be the a valuation ring of the function field $F$. 
+\begin{enumerate}[(a)]
+    \item The ring $\vr$ is local, \ie it has a unique maximal ideal that is given
+      by
+      \[
+        P = \vr\setminus\vr^\times
+      \]
+      where $\vr^\times$ is the group of units of the ring $\vr$.
+    \item \label{cond:valring} For any nonzero $x\in F$, we have
+      \[
+        x\in P\Longleftrightarrow x^{-1}\notin\vr.
+      \]
+\end{enumerate}
+\end{prop}
+\begin{thm}
+  \label{thm:discrete-valring}
+ Let $\vr$ be the valuation ring of the function field $F$ and $P$ be its unique
+ maximal ideal. Then
+ \begin{enumerate}[(a)]
+   \item The ideal $P$ is principal.
+   \item If $P=t\vr$ then any nonzero $z\in F$ has a unique representation of
+     the form
+     \[
+       z = t^n u
+     \]
+     with $n\in\mathbb{Z}$ and $u\in\vr^\times$
+   \item The ring $\vr$ is a principal ideal domain. More precisely, if $P=t\vr$
+     and
+     \[
+       \left\{ 0 \right\}\neq I\subseteq\vr
+     \]
+     is an ideal then
+     \[
+       I = t^n\vr
+     \]
+     for some $n\in\mathbb{N}$.
+ \end{enumerate}
+\end{thm}
+A ring having the properties described in Theorem~\ref{thm:discrete-valring} is
+called a \emph{discrete valuation ring}.
 \begin{defi}[Place]
   A \emph{place} $P$ of $F$ is the maximal ideal of some valuation ring $\vr$ of $F$.
 \end{defi}
-
-% Note
-% ====
-%
-% Maybe a word about the equivalence of the notions of places, discrete valuation
-% and valuation ring could be nice here, just a proposition without a proof or
-% even a remark not too formal, we'll see.
-
+\begin{defi}[Prime element]
+  Let $\vr$ be a valuation ring and $P$ its maximal ideal. Any element $t\in P$
+  such that
+  \[
+    P = t\vr
+  \]
+  is called a \emph{prime element} for $P$. It is also sometimes called a
+  \emph{local parameter} or a \emph{uniformizing variable}.
+\end{defi}
+If $\vr$ is a valuation ring of $F$ and if $P$ is its maximal ideal, then $\vr$
+is uniquely determined by $P$, indeed we have
+\[
+  \vr = \left\{ z\in F\mid z^{-1}\notin P \right\}
+\]
+thanks to Proposition~\ref{prop:valring}\ref{cond:valring}. Thus, the notions of
+valuation rings and places are essentially equivalent. There is a third way of
+describing a place, given by discrete valuations.
+\begin{defi}[Discrete valuation]
+  A \emph{discrete valuation} of $F$ is a function
+  \[
+    v:F\to\mathbb{Z}\cup\left\{ \infty \right\}
+  \]
+  with the following properties:
+  \begin{enumerate}
+    \item $v(x) = \infty \Leftrightarrow x=0$;
+    \item for any $x,y\in F$, $v(xy) = v(x)+v(y)$;
+    \item for any $x,y\in F$, $v(x+y)\geq\min(v(x), v(y)$;
+    \item there exists an element $z\in F$ with $v(z)=1$;
+    \item for any nonzero element $a\in\K$, $v(a) = 0$.
+  \end{enumerate}
+\end{defi}
+Here, the symbol $\infty$ means an element that is not in $\mathbb{Z}$, such
+that $\infty+\infty = \infty + n = \infty$ and $\infty > m$ for any
+$m,n\in\mathbb{Z}$.
+\begin{defi}
+  To any place $P\in\mathbb{P}_F$, we associate a function
+  \[
+    v_P:F\to\mathbb{Z}\cup\left\{ \infty \right\}
+  \]
+  that is in fact a discrete valuation ring. Let $t$ be a prime element for $P$.
+  Then every nonzero element $z\in F$ has a unique representation
+  \[
+    z = t^n u
+  \]
+  with $u\in\vr^\times$ and $n\in\mathbb{Z}$. We define
+  \[
+    v_P(z)\eqdef n
+  \]
+  and
+  \[
+    v_P(0)\eqdef\infty.
+  \]
+\end{defi}
+This definition does not depend on the prime element $t$ that was chosen. It
+allows us to give the third equivalent way of describing a place of $F$.
+\begin{thm}
+ Let $F$ be a function field.
+ \begin{enumerate}[(a)]
+   \item For any place $P\in\mathbb{P}_F$, the function $v_P$ defined above is a
+     discrete valuation of $F$. Moreover, we have
+     \begin{align*}
+       \vr_P &= \left\{ z\in F\mid v_P(z)\geq0 \right\},\\
+       \vr_P^\times &= \left\{ z\in F\mid v_P(z)>0 \right\},\\
+       P &= \left\{ z\in F\mid v_P(z)=0 \right\}.
+     \end{align*}
+     An element $x\in F$ is a prime element for $P$ if and only if $v_P(x)=1$.
+   \item Conversely, if $v$ is a discrete valuation of $F$, then the set
+     \[
+       P = \left\{ z\in F\mid v(z)>0 \right\}
+     \]
+     is a place of $F$, and
+     \[
+       \vr_P = \left\{ z\in F\mid v(z)\geq0\right\}
+     \]
+     is the corresponding valuation ring.
+ \end{enumerate}
+\end{thm}
 We let $\mathbb{P}_F$ be the set of places of $F$. If $P\in\mathbb{P}_F$ is a
 place of $F$, we denote by $\vr_P$ the corresponding valuation ring. Since $P$
 is a maximal ideal of $\vr$, we also know that the quotient ring
 \[
   F_P = \vr_P/P
 \]
-is a field. We call this field $F_P$ the residue class field of $P$.
+is a field. We call this field $F_P$ the \emph{residue class field} of $P$.
 \begin{defi}[Residue class map]
 Let $P\in\mathbb{P}_F$ be a place of $F$. For $x\in F$, we let 
 \[
@@ -331,6 +438,75 @@ is called the \emph{residue class map}.
   \]
   the \emph{degree} of $P$.
 \end{defi}
+In fact, the degree of a place if always finite. If $P$ is a place of degree
+$1$, then its residue class field $F_P$ is equal to
+\[
+  F_P = \K.
+\]
+The residue class map then maps $F$ to $\K\cup\left\{ \infty \right\}$. In
+particular, if $\K$ is algebraically closed, any place has degree $1$, thus we
+can interpret an element $z\in F$ as a function
+\[
+  \begin{array}{cccc}
+    z:&\mathbb{P}_F&\to&\K\cup\left\{ \infty \right\}\\
+    & P & \mapsto & z(P)
+  \end{array}.
+\]
+This justifies the name \emph{function field} for $F$. With this interpretation,
+places of degree $1$ are viewed as points and elements in $\K$ are viewed as
+constant functions. This is also a reason behing the following terminology.
+\begin{defi}[Zero and pole]
+  Let $z\in F$ be an element in the function field $F$ and $P\in\mathbb{P}_F$ a
+  place of $F$. We say that $P$ is a \emph{zero} of $z$ if $v_P(z)>0$ and that
+  $P$ is a \emph{pole} of $z$ if $v_P(z)<0$. If $v_P(z) = n > 0$, then $P$ is a
+  \emph{zero of order} $n$; if $v_P(z) = -n < 0$, then $P$ is a \emph{pole of
+  order} $n$.
+\end{defi}
+Note that if $P$ is a zero of $z\in F$, we have $z(P) = 0$, while we have
+$z(P)=\infty$ if $P$ is a pole of $z$. Another important results states that
+every element not in $\K$ yields a non-constant function.
+\begin{prop}
+ Let $F$ be a function field and $z\in F$ an element in $F$ that is
+ not in $\K$. Then $z$ has at least one zero and one pole. In particular, this
+ proves that the set $\mathbb{P}_F$ of places is not empty.
+\end{prop}
+
+\subsection{Independence of valuations}
+
+Before talking about the central notions of divisors and Riemann-Roch spaces, we
+must mention one important theorem called the \emph{weak approximation theorem}
+(also reffered to as \emph{theorem of independence}). It essentially says that
+if we have pairwise distinct discrete valuations $v_1, \dots, v_n$ of $F$ and an
+element $z\in F$ for which we know the values $v_1(z), \dots, v_{n-1}(z)$, then
+we cannot conclude anything about the value $v_n(z)$.
+\begin{thm}
+  \label{thm:weak-approx}
+  Let $F$ be a function field, $P_1, \dots, P_n\in\mathbb{P}_F$ be pairwise
+  distinct places of $F$, $x_1, \dots, x_n\in F$ be elements in $F$ and $r_1,
+  \dots, r_n\in\mathbb{Z}$ be integers. Then there is some $x\in F$ such that
+  \[
+    v_{P_i}(x-x_i) = r_i\text{ for all }1\leq i\leq n.
+  \]
+\end{thm}
+The name ``approximation theorem'' comes from the fact that $v_{P_i}(x-x_i)$ can
+be interpreted as some ``distance'' between $x$ and $x_i$. With this
+interpretation, Theorem~\ref{thm:weak-approx} says that the distances between
+$x$ and $x_i$ can be made simultaneously arbitrarily small using \emph{one}
+element $x$. This theorem allows us to mention important results.
+\begin{cor}
+  Any function field $F$ has infinitely many places.
+\end{cor}
+\begin{prop}
+  Let $F$ be a function field and $P_1, \dots, P_r$ be the zeros of some element
+  $x\in F$. Then
+  \[
+    \sum_{i=1}^r{v_{P_i}(x)\cdot\deg P_i}\leq \left[ F:\K(x) \right].
+  \]
+\end{prop}
+\begin{cor}
+  In a function field $F$, any nonzero element $x\in F$ has only finitely many
+  zeros and poles.
+\end{cor}
 
 \subsection{Divisors}
 
@@ -345,18 +521,139 @@ over a finite field $\K$ of characteristic $p$.
     D = \sum_{P\in\mathbb{P}_F} n_P\cdot P
   \]
   with $n_P\in\mathbb{Z}$ and $n_P=0$ for all but finitely many places $P$.
-  We define the \emph{support} of $D$ as
+\end{defi}
+\begin{defi}[Support]
+  Let 
+  \[
+    D = \sum_{P\in\mathbb{P}_F} n_P\cdot P
+  \]
+  be a divisor of $F$. We define the \emph{support} of $D$ as
   \[
     \supp D = \left\{ P\in\mathbb{P}_F\,|\,n_P\neq 0 \right\}.
   \]
 \end{defi}
-
-% TODO
-% ====
-% * Definition of support
-% * partial ordering and positive (effective) divisor
-% * degree of a divisor
-
+Two divisors 
+\[
+  D = \sum_{P\in\mathbb{P}_F} n_P\cdot P
+\]
+and
+\[
+  D' = \sum_{P\in\mathbb{P}_F} n_P'\cdot P
+\]
+in $\Div(F)$ are added coefficient-wise:
+\[
+  D+D' = \sum_{P\in\mathbb{P}_F} (n_P+n_P')\cdot P
+\]
+and the zero element is the divisor
+\[
+  0 \eqdef \sum_{P\in\mathbb{P}_F} n_P\cdot P
+\]
+with $n_P=0$ for all places $P\in\mathbb{P}_F$. If
+\[
+  D = \sum_{P\in\mathbb{P}_F}n_P\cdot P
+\]
+is a divisor $\Div(F)$ and $Q\in\mathbb{P}_F$ is a place of $F$, we let 
+\[
+  v_Q(D) = n_Q
+\]
+be the coefficient multiplying $Q$ in the formal sum $D$. We then have
+\[
+  \supp D = \left\{ P\in\mathbb{P}_F\mid v_P(D)\neq 0 \right\}.
+\]
+We then define a partial ordering on $\Div(F)$ by
+\[
+  D_1 \leq D_2 \overset{\text{def}}{\Longleftrightarrow} v_P(D_1)\leq v_P(D_2)\text{ for all
+  }P\in\mathbb{P}_F.
+\]
+A divisor $D\geq 0$ is called \emph{positive} (or \emph{effective}).
+\begin{defi}[Degree]
+  Let $D\in\Div(F)$ be a divisor, its \emph{degree} is defined by
+  \[
+    \deg(D) = \sum_{P\in\mathbb{P}_F}v_P(D)\deg(P)
+  \]
+  and yields a homomorphism $\deg:\Div(F)\to\mathbb{Z}$.
+\end{defi}
+\begin{defi}
+  Let $x\in F$ be a nonzero element in $F$, $Z\subset\mathbb{P}_F$ be the set of
+  its zeros and $N\subset\mathbb{P}_F$ be the set of its poles. Then, we define
+  \begin{align*}
+    (x)_0 &= \sum_{P\in Z}v_P(x)P ,\,\text{ the \emph{zero divisor} of }x,\\
+    (x)_\infty &= \sum_{P\in N}(-v_P(x))P ,\,\text{ the \emph{pole divisor} of
+  }x,\\
+    (x) &= (x)_0 - (x)_\infty ,\,\text{ the \emph{principal divisor} of }x.
+  \end{align*}
+\end{defi}
+We have $(x)_0\geq0, (x)_\infty\geq0$ and
+\[
+  (x) = \sum_{P\in\mathbb{P}_F}v_P(x)P.
+\]
+If $x\in K$, then $x$ does not have zeros nor poles and the sum is then empty,
+conversely a function in $F\setminus\K$ has at least one zero and one pole, we
+thus have
+\[
+  x\in\K\Leftrightarrow (x)=0.
+\]
+\begin{defi}[Equivalence]
+  Let $D, D'\in\Div(F)$ be two divisors of $F$. We can define an equivalence
+  relation by
+  \[
+    D\sim D'\Longleftrightarrow\text{ there exists }x\in F\text{ such that }D =
+    D'+(x).
+  \]
+  In that case, we say that $D$ and $D'$ are \emph{equivalent}.
+\end{defi}
+Principal divisors play a crucial role in the algebraic function field theory.
+They allow us to define spaces that play a fundamental role.
+\begin{defi}
+  Let $D\in\Div(F)$ be a divisor of $F$. We let
+  \[
+    L(D) = \left\{ x\in F\mid(x)\geq -D \right\}\cup\left\{ 0 \right\}.
+  \]
+\end{defi}
+This definition can be interpreted in the following way: if
+\[
+  D = \sum_{i=1}^rn_iP_i - \sum_{j=1}^sm_jQ_j,
+\]
+with $n_i>0$ and $m_j>0$, then $L(D)$ consists of all elements $x\in F$ such
+that
+\begin{enumerate}
+  \item for all $1\leq j\leq s$, $x$ has a zero of order at least $m_j$ at $Q_j$;
+  \item the places $P_1, \dots, P_r$ are the only poles of $x$, and for all
+    $1\leq i\leq r$, the order of the pole $P_i$ is bounded by $n_i$.
+\end{enumerate}
+We recall some properties of the spaces $L(D)$ in
+Proposition~\ref{prop:LD-spaces}.
+\begin{prop}
+  \label{prop:LD-spaces}
+ Let $D\in\Div(F)$ be a divisor.
+ \begin{enumerate}[(a)]
+   \item $L(D)$ is a finite-dimensionnal $\K$-vector space.
+   \item $L(D)\neq\left\{ 0 \right\}$ if and only if there exists a divisor
+     $D'\sim D$ with $D'\geq0$.
+   \item If $D'\sim D$, then $L(D)$ and $L(D')$ are isomorphic as $\K$-vector
+     spaces.
+   \item $x\in L(D)$ if and only if $v_P(x)\geq - v_P(D)$ for all
+     $P\in\mathbb{P}_F$.
+   \item $L(0)=\K$.
+   \item If $\deg(D)<0$ then $L(D)=\left\{ 0 \right\}$. In particular if $D<0$
+     then $L(D)=\left\{ 0 \right\}$.
+ \end{enumerate}
+\end{prop}
+\begin{defi}[Dimension]
+  Let $D\in\Div(F)$ be a divisor of $F$. The \emph{dimension} of $D$ is denoted
+  by $\ell(D)$ and is defined by
+  \[
+    \ell(D) = \dim L(D).
+  \]
+\end{defi}
+We can now define the most important invariant of a function field $F$, its
+\emph{genus}.
+\begin{defi}
+  Let $F$ be a function field. The \emph{genus} $g$ of $F$ is defined by
+  \[
+    g = \max\left\{ \deg D-\ell(D)+1\mid D\in\Div(F) \right\}.
+  \]
+\end{defi}
 
 \section{Complexity models}
 \label{sec:complexity-models}

@@ -18,8 +18,7 @@ Chapter 2
 Chapter 3
 =========
 
-- Finish Section 3.2.2 with asymptotic results
-- Add BDEZ algo with symmetries
+- Add BDEZ algo with symmetries?
 
 Chapter 4
 =========
