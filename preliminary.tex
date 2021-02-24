@@ -833,13 +833,13 @@ Adding two elements in $\mathbb{F}_{q^n}$ takes $O(n)$ additions in $\K$.
 Similarly, adding two polynomials of degree up to $s$ in $\mathbb{F}_{q^n}\left[
 T \right]$ takes $O(s)$ additions in $\mathbb{F}_{q^n}$, thus takes $O(sn)$
 additions in $\K$. Multiplying and dividing polynomials of degree at most $s$ in
-$\mathbb{F}_{q^n}$ in $\mathbb{F}_{q^n}\left[ T \right]$ is done in $O(M(sn))$
+$\mathbb{F}_{q^n}\left[ T \right]$ is done in $O(M(sn))$
 operations in $\K$, using Kronecker's substitution~\cite{Moenck76, Kaltofen87,
 GG13, GS92, Harvey09}. If $h(T)\in\mathbb{F}_{q^n}[T]$ is a monic polynomial,
 multiplication in $\mathbb{F}_{q^n}[T]/(h(T))$ is also done in $O(M(sn))$, using
 the technique in~\cite{PS06}. In particular, this means that multiplication in
-$\mathbb{F}_{q^n}$ costs $O(n)$ operations in $\K$. Using the same techniques,
-the greater common divisor (gcd) of degree $s$ polynomials in
+$\mathbb{F}_{q^n}$ costs $O(M(n))$ operations in $\K$. Using the same techniques,
+the greatest common divisor (gcd) of degree $s$ polynomials in
 $\mathbb{F}_{q^n}[T]$ and inverses in $\mathbb{F}_{q^n}[T]/(h(T))$ can be
 computed using $O(M(sn)\log(sn))$ operations in $\K$. Again, this means that
 inverses in $\mathbb{F}_{q^n}$ can be computed using $O(M(n)\log(n))$
@@ -873,8 +873,9 @@ techniques, called \emph{transposition principle} (or \emph{Tellegen's
 principle}) in Section~\ref{sec:modular-composition}.
 
 We also sometimes use Berlekamp-Massey algorithm in order to compute the minimal
-generating polynomial of a recurring sequence. Berlekamp-Massey algorithm takes
-as input the $2n$ first terms $a_0, \dots, a_{2n-1}\in\K$ of a reccuring
+generating polynomial of a sequence satisfying a linear recurrence relation.
+Berlekamp-Massey algorithm takes
+as input the $2n$ first terms $a_0, \dots, a_{2n-1}\in\K$ of the
 sequence for which we know that the minimal generating polynomial has its degree
 bounded by $n$. Using rational reconstruction~\cite[Chapter 7]{BCGLLSS17},
 Berlekamp-Massey algorithm outputs the minimal generating polynomial of the
