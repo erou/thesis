@@ -2,6 +2,7 @@
 \usetikzlibrary{arrows}
 \usetikzlibrary{math}
 \usetikzlibrary{calc}
+\usetikzlibrary{decorations.text}
 
 % Tikz style
 
@@ -14,7 +15,10 @@
          edgecomp/.style={thick, lightgray}}
 \tikzset{additive-structure/.style={very thick, red!50}}
 \tikzset{multiplicative-structure/.style={very thick, blue!50}}
-           
+\tikzset{curved text/.style={decorate,
+        decoration={text effects along path,
+            text={#1}, text align=center,
+            text effects/.cd, text along path}}}
 
 % New command
 \newcommand{\drawrec}[3]{

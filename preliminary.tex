@@ -9,7 +9,7 @@ chapter.
 
 \begin{figure}
   \centering
-  \begin{tikzpicture}
+  \begin{tikzpicture}[scale=0.8]
     \foreach \x in {0, 1,...,10} \coordinate (\x) at (32.7*\x:2);
     \draw[additive-structure] (0,0) circle (2);
     \draw[multiplicative-structure] (1) to [bend left] (2);
