@@ -20,7 +20,9 @@
 %   - The algebraic closure (the different results about that, see Luca's HDR
 %   probably to have some background)
 
-This introduction is intended to all readers, not only mathematicians. Those
+This introduction is intended to all readers, not only mathematicians. Our first
+step will be to understand the title of this document (\emph{Efficient
+arithmetic for cryptography and cryptanalysis}). Those
 eager to learn more about the technical details or the mathematics behind the
 exposed subjects can do so by reading the articles and books for which we give
 references. Of course, this thirst for mathematics can also be fulfilled (up to
@@ -44,6 +46,7 @@ roots or have applications in cryptography, thus we begin by explaining what it
 is.
 
 \section{Cryptography}
+\label{sec:crypto}
 
 As we are social animals, we often need to communicate with each other.
 Sometimes, we want our communications to be secret: the reasons behind this
@@ -85,8 +88,9 @@ the same key. The situation is summed up in Figure~\ref{fig:crypto-sym}.
 One famous example of an old cryptography protocol is the Caesar cipher, in
 which each letter of the message is replaced by another letter. All the letters
 are shifted by a constant number $n$ of positions down the alphabet. For
-example, with $n=3$, the letter D becomes A, the letter E becomes B, the letter
-F becomes C, and so on. This encryption protocol is named after Julius Caesar,
+example, with $n=3$, the letter \texttt{D} becomes \texttt{A}, the letter
+\texttt{E} becomes \texttt{B}, the letter \texttt{F} becomes \texttt{C}, and so
+on. This encryption protocol is named after Julius Caesar,
 who was using it to communicate with his generals with the shift $n=3$. In
 Figure~\ref{fig:caesar}, we draw the correspondence between the letters using
 the shift $n=3$. The outer ring represent the letters in the \emph{plaintext}
@@ -121,7 +125,7 @@ In this example, the secret key of the protocol is the shift parameter $n$: if
 you know $n$, you know both how to encrypt a message and how to decrypt one.
 Caesar cipher is simple enough to be executed by a machine, but it is not used
 nowadays. Indeed, the number of keys one can choose when using Caesar cipher is
-rather small, so an adversary (a spy, an ennemy...) can easily guess what it is
+rather small, so an adversary (a spy, an enemy...) can easily guess what it is
 after spending enough time trying all the possibilities. One could even ask a
 computer to search for all the possible keys, thus recovering it even faster.
 That is why, in modern cryptography, the number of possible keys must be way
@@ -187,6 +191,7 @@ communications are secure.
     \node (key-pub-txt) at (5, 3) {Public key};
     \node (key-pri) at (7, 2) {\includegraphics[scale=0.065]{img/key-512.png}};
     \node (key-pri-txt) at (7, 3) {Private key};
+    \node (lock) at (6,-1) {\includegraphics[scale=0.05]{img/lock-128.png}};  
     \draw[->] (msg) -- (msg-enc);
     \draw[->] (msg-enc) -- (msg-dec);
     \draw[->] (bob) to[bend left, edge label=Encrypts] (2.5,0);
@@ -199,8 +204,204 @@ communications are secure.
   \caption{General concept of public-key encryption.}
   \label{fig:crypto-asym}
 \end{figure}
+We dray a diagram of the general idea in Figure~\ref{fig:crypto-asym}. With such
+a system, only Bob can send messages to Alice. If Alice wants to send a message
+to Bob using public-key cryptography, then Bob has to create his own pair of
+keys. He then gives his public key to Alice, that can then encrypt her message
+using this key and send it to Bob. Bob decrypts the message using his private
+key. Public-key cryptography is somewhat heavier than symmetric
+cryptography, hence another solution for Bob is to encrypt a secret and send it
+to Alice, in order to be able to use symmetric encryption with that secret. This
+is what is done in practice: only a \emph{key exchange} is performed using
+public-key cryptography, the rest being handled by symmetric cryptography.
+Still, public-key cryptography is fundamental, since it allows us to use
+symmetric cryptography.
+
+The first key exchange protocol was invented by Diffie and Hellman in
+1976~\cite{DH76}, and an example of public-key encryption is given by the RSA
+(named after Rivest, Shamir, and Adleman) protocol~\cite{RSA78} that was
+described in 1977. These two protocols are both based on mathematical algebraic
+structures. Indeed, mathematics are a handy way of studying and explaining
+cryptography, for example Caesar cipher with $n=3$ can be explained by
+representing all letters by the numbers between $0$ and $25$
+\[
+  \texttt{A}\to 0, \texttt{B} \to 1, \dots,\texttt{Y}\to24, \texttt{Z}\to25
+\]
+and by defining the encryption as the substration by $3$. With this
+representation, we have to agree that the number $-1$ is equivalent to the
+number $25$, \ie before \texttt{A} comes \texttt{Z}, that $-2$ is equivalent to
+$24$, \ie two times before \texttt{A} comes \texttt{Y}, and so on. In fact a
+subpart of mathematics called \emph{number theory} is dedicated to the study of
+this kind of numbers, together with some rules like the one that we just stated:
+$-1=25$. These sets of numbers are called \emph{cyclic groups}, because they can
+be represented on a circle, the one we spoke about is denoted by
+\[
+  \mathbb{Z}/26\mathbb{Z}
+\]
+and is represented in Figure~\ref{fig:cyclic-group}.
+\begin{figure}[h]
+  \centering
+  \begin{tikzpicture}
+    \foreach \x in {0, 1,...,25} \coordinate (\x) at (13.85*\x:3);
+    \draw[additive-structure] (0,0) circle (3);
+    \foreach \x in {0, 1,...,25} \draw[fill] (13.85*\x:3) circle (.1);
+    \foreach \x in {0, 1,...,25} \node (p) at (13.85*\x:3.4) {$\x$};
+  \end{tikzpicture}
+  \caption{The cyclic group $\mathbb{Z}/26\mathbb{Z}$ represented on a circle.}
+  \label{fig:cyclic-group}
+\end{figure}
+Many other interesting structures exist, see for example~\cite{Lang04, Perrin96}
+for a course in algebra. With the growth of public-key cryptography, number
+theory became its corner stone, and more advanced mathematical concepts were
+used, like finite fields, elliptic curves or isogenies. Without entering into
+the details of what these objects are, what is important is that the security of
+cryptographic protocols relies on hard mathematical problems involving these
+concepts. Thus, a better understanding of them means a better understanding of
+the security of our cryptographic protocols. The part of cryptography that is
+dedicated to the study of the security of cryptographic protocols (\ie how to
+``break'' them) is called \emph{cryptanalysis}.
+
+At the same time, since the protocols are based on the manipulation of these
+objects, a better understanding of them also means better (in particular,
+faster) cryptographic protocols. Since cryptography is everywhere in modern
+communications (on the Internet, when you use your credit card, on messaging
+applications on your smartphone, ...), efficient protocols are crucial. It is
+thus necessary to be able to efficiently manipulate the mathematical concepts
+behind our protocols both for cryptography (making efficient protocols) and
+cryptanalysis (being able to analyse their security). By ``manipulate'', we mean
+being able to do additions, multiplications, and sometimes more complicated
+operations with these objects: the science studying how to do so is called
+\emph{arithmetic}. In conclusion, it is necessary to have efficient arithmetic
+for cryptography and cryptanalysis.
 
 \section{Finite fields arithmetic}
 
-\section{Lattices of finite fields}
-%
+As stated in Section~\ref{sec:crypto}, cryptographic protocols rely on
+mathematical structures in order to work. The one we will study during all this
+document is called \emph{finite field}. A \emph{field} is a mathematical
+structure (we also say \emph{algebraic structure}) composed of elements that we
+can \emph{add}, \emph{substract}, \emph{multiply}, and \emph{divide} (except by
+zero). It is a well-known algebraic structure: for example the set of real
+numbers, denoted by $\mathbb{R}$, is a field. Indeed, the elements in
+$\mathbb{R}$, for example $0, 1, -3, 5631$ but also more complicated numbers
+such as $\pi, \sqrt 2, \frac{7}{13}$ can be added, substracted, multiplied or
+divided. Numbers in $\mathbb{R}$ can have an infinite number of decimals, for
+example the $60$ first decimals of the constant $\pi$ are
+\[
+  \pi = 3.14159265358979323846264338327950288419716939937510582097494\dots.
+\]
+A computer only has a finite memory, \ie the quantity of information it can
+store is finite. As a consequence, it is impossible to store all the decimals of
+$\pi$, and, more generally, the decimals of a lot of numbers in $\mathbb{R}$. It
+is still possible to work with numbers in $\mathbb{R}$ on a computer, but it is
+somewhat harder than to work with elements in a \emph{finite} algebraic
+structure, \ie a set composed of $n$ elements, with
+\[
+  n < \infty.
+\]
+One example of such a structure was given in Section~\ref{sec:crypto}: the
+cyclic groupe $\mathbb{Z}/26\mathbb{Z}$ that is composed of the ``numbers'' $0,
+1, \dots, 25$. They are not the same numbers as those we know though, since with
+the elements of $\mathbb{Z}/26\mathbb{Z}$ we have, for example
+\[
+  3 - 4 = -1 = 25,
+\]
+and this is not true for the actual numbers in $\mathbb{R}$, but we still write
+them the same way for convenience. We already defined an
+addition and substration on $\mathbb{Z}/26\mathbb{Z}$, and we could also define
+a multiplication and a division in a very natural way. Finite fields are a
+generalization of spaces like
+$\mathbb{Z}/26\mathbb{Z}$. The set $\mathbb{Z}/26\mathbb{Z}$ is not a field for
+technical reasons, but to think of finite fields as sets like this is a good
+enough approximation for this introduction.
+
+Because the elements of a finite fields are, by definition, finite, they are
+somewhat easier to manipulate on a computer. Moreover, the field structure
+allows us to manipulate the elements like usual numbers (\ie with additions,
+multiplications, ...), which makes them useful. This is why today, finite fields
+are everywhere in cryptography, but also in other domains at the crossroad of
+mathematics and computer science, like coding theory.
+
+Sometimes, simple mathematical problems are well understood on a theoretical
+point of view, but there are still open questions concerning practical aspects.
+For example, the multiplication of two integers $a$ and $b$ in $\mathbb{N}$ is a
+simple problem, that can be done by hand by children. Still, the question of how
+to compute it on a computer (in an optimal way) is open, and there are still
+research articles~\cite{HVDH19} on that problem.
+Finite field arithmetic (\ie how to perform operations such as additions and
+multiplications) is very well understood, because the finite field structure is
+rather simple. But again, the best way of multiplying two elements in a finite
+field is still unknown. This is the subject of this thesis: the study of the
+finite field arithmetic.
+
+\section{Organization of the document}
+
+This work is composed of two parts, that are essentially independent. In
+Part~\ref{part:single}, we study the arithmetic of one fixed finite field
+extension
+\[
+  \mathbb{F}_{p^k}.
+\]
+We begin in Chapter~\ref{chap:preliminary} by recalling fundamental
+facts about the mathematical objects that we use in the rest of the document. We
+review \emph{finite fields}, that are at the center of this thesis, and
+\emph{algebraic function fields}, a concept that we use in proofs in
+Chapters~\ref{chap:bilinear} and~\ref{chap:hypersymmetric}. We also
+present the algebraic complexity model and some classic routines, that are
+especially used in Chapters~\ref{chap:isomorphism} and~\ref{chap:standard}.
+
+In Chapter~\ref{chap:bilinear}, we present the theory of \emph{bilinear
+complexity}, an
+alternative model of complexity used to measure the cost of computing bilinear
+maps. We are in particular interested in the multiplication in finite field
+extensions. We present an algorithm due to Chudnovsky and Chudnovsky~\cite{CC88}
+that gives an asymptotic bound on the bilinear complexity of the product in
+finite field extensions. Since this algorithm is not practical, we also give an
+algorithm due to Barbulescu, Detrey, Estibal and Zimmermanm~\cite{BDEZ12} to
+compute the bilinear complexity in small dimension.
+
+In Chapter~\ref{chap:hypersymmetric}, we generalize the notion of bilinear
+complexity to the product of $s\geq2$ variables
+\[
+  x_1\times x_2\times\dots\times x_{s-1}\times x_s
+\]
+in a finite field extension $\mathbb{F}_{p^k}$. We also generalize the fact
+that this so called \emph{multilinear complexity} is still linear in the degree
+$k$ of the extension~\cite{RR21}, as is the case with
+the classic bilinear complexity. We define a new kind of complexity called the
+\emph{hypersymmetric bilinear complexity}, that is inspired by the usual
+symmetric bilinear complexity. We provide an \emph{ad hoc} algorithm to compute
+this complexity in small dimension, and prove that it is still asymptotically
+linear in the degree of the extension.
+
+In Part~\ref{part:lattice}, we study how to deal with multiple finite fields
+at once, in what we call a \emph{lattice of compatibly embedded finite fields}.
+This is the equivalent as wondering how to compute in the algebraic closure
+\[
+  \bar{\mathbb{F}}_{p} = \bigcup_{k\geq1}\mathbb{F}_{p^k}
+\]
+of the base field $\mathbb{F}_p$. In Chapter~\ref{chap:isomorphism}, we review
+the isomorphism problem, which asks how to efficiently compute an isomorphism
+(or more generally an embedding)
+\[
+  K \emb L
+\]
+between two finite fields $K$ and $L$. We present the naive algorithm and the
+Lenstra-Allombert algorithm~\cite{Lenstra91, Allombert02}. These algorithms will
+respectively serve as the building blocks of the algorithms in
+Chapters~\ref{chap:lattice} and~\ref{chap:standard}.
+
+In Chapter~\ref{chap:lattice}, we present \emph{the compatibility problem}, that
+asks how to compute embeddings between potentially much more that two finite
+fields, in a compatible way, \ie so that the diagrams made of the embeddings
+always commute. We present the Conway polynomials~\cite{Parker90, Scheerhorn92}
+and the Bosma-Canon-Steel~\cite{BCS97}
+framework, two different solutions for the compatibility problem. We also
+provide an implementation~\cite{DRR18} of Bosma-Canon-Steel framework in
+Nemo~\cite{Nemo}, a library of the Julia~\cite{Julia} programming language.
+
+Finally, in Chapter~\ref{chap:standard}, we construct a new method~\cite{DRR19}
+for computing lattices of compatibly embedded finite fields, that is halfway
+between the Conway polynomials and the Bosma-Canon-Steel framework, and is
+inspired by the Lenstra-Allombert embedding algorithm. We explain the benefits
+of using this new method and provide an implementation in Julia, using Nemo.
