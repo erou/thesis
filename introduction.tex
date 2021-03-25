@@ -29,7 +29,7 @@ is.
 As we are social animals, we often need to communicate with each other.
 Sometimes, we want our communications to be secret: the reasons behind this
 wish are multiple: military informations, business, secret love stories, banking
-informations, personnal medical informations, and so on... Cryptography is the
+informations, personal medical informations, and so on... Cryptography is the
 practice and study of the techniques used to secure communications, in the
 presence of third parties called \emph{adversaries}. Historically, cryptography
 focused on \emph{encryption} of messages (message confidentiality), \ie making
@@ -73,7 +73,7 @@ who was using it to communicate with his generals with the shift $n=3$. In
 Figure~\ref{fig:caesar}, we draw the correspondence between the letters using
 the shift $n=3$. The outer ring represent the letters in the \emph{plaintext}
 (the original text, without encryption) while the inner ring represent the
-letters in the \emph{cyphertext} (the text after the encryption).
+letters in the \emph{ciphertext} (the text after the encryption).
 \begin{figure}[h]
   \centering
   \begin{tikzpicture}[x=1em,y=1em]
@@ -122,7 +122,7 @@ when a billion looks like
 so they are really big numbers.
 
 The number of possible keys is not the only thing that changed since Julius
-Caesar. First, communication is now essentially numerical, thus cryptography is
+Caesar. First, communication is now essentially digital, thus cryptography is
 now a part of computer science. This is very important because it means that the
 work in this thesis is also oriented towards computer science: we want to obtain
 mathematical results that are effective, \ie usable by a computer.
@@ -182,10 +182,10 @@ communications are secure.
   \caption{General concept of public-key encryption.}
   \label{fig:crypto-asym}
 \end{figure}
-We dray a diagram of the general idea in Figure~\ref{fig:crypto-asym}. With such
+We draw a diagram of the general idea in Figure~\ref{fig:crypto-asym}. With such
 a system, only Bob can send messages to Alice. If Alice wants to send a message
 to Bob using public-key cryptography, then Bob has to create his own pair of
-keys. He then gives his public key to Alice, that can then encrypt her message
+keys. He then gives his public key to Alice, who can then encrypt her message
 using this key and send it to Bob. Bob decrypts the message using his private
 key. Public-key cryptography is somewhat heavier than symmetric
 cryptography, hence another solution for Bob is to encrypt a secret and send it
@@ -205,7 +205,7 @@ representing all letters by the numbers between $0$ and $25$
 \[
   \texttt{A}\to 0, \texttt{B} \to 1, \dots,\texttt{Y}\to24, \texttt{Z}\to25
 \]
-and by defining the encryption as the substration by $3$. With this
+and by defining the encryption as the substraction by $3$. With this
 representation, we have to agree that the number $-1$ is equivalent to the
 number $25$, \ie before \texttt{A} comes \texttt{Z}, that $-2$ is equivalent to
 $24$, \ie two times before \texttt{A} comes \texttt{Y}, and so on. In fact a
@@ -246,7 +246,7 @@ communications (on the Internet, when you use your credit card, on messaging
 applications on your smartphone, ...), efficient protocols are crucial. It is
 thus necessary to be able to efficiently manipulate the mathematical concepts
 behind our protocols both for cryptography (making efficient protocols) and
-cryptanalysis (being able to analyse their security). By ``manipulate'', we mean
+cryptanalysis (being able to analyze their security). By ``manipulate'', we mean
 being able to do additions, multiplications, and sometimes more complicated
 operations with these objects: the science studying how to do so is called
 \emph{arithmetic}. In conclusion, it is necessary to have efficient arithmetic
@@ -255,7 +255,7 @@ for cryptography and cryptanalysis.
 \section{Finite fields arithmetic}
 
 As stated in Section~\ref{sec:crypto}, cryptographic protocols rely on
-mathematical structures in order to work. The one we will study during all this
+mathematical structures in order to work. The one we will study throughout this
 document is called \emph{finite field}. A \emph{field} is a mathematical
 structure (we also say \emph{algebraic structure}) composed of elements that we
 can \emph{add}, \emph{substract}, \emph{multiply}, and \emph{divide} (except by
@@ -286,14 +286,14 @@ the elements of $\mathbb{Z}/26\mathbb{Z}$ we have, for example
 \]
 and this is not true for the actual numbers in $\mathbb{R}$, but we still write
 them the same way for convenience. We already defined an
-addition and substration on $\mathbb{Z}/26\mathbb{Z}$, and we could also define
+addition and substraction on $\mathbb{Z}/26\mathbb{Z}$, and we could also define
 a multiplication and a division in a very natural way. Finite fields are a
 generalization of spaces like
 $\mathbb{Z}/26\mathbb{Z}$. The set $\mathbb{Z}/26\mathbb{Z}$ is not a field for
 technical reasons, but to think of finite fields as sets like this is a good
 enough approximation for this introduction.
 
-Because the elements of a finite fields are, by definition, finite, they are
+Because the elements of a finite field are, by definition, finite, they are
 somewhat easier to manipulate on a computer. Moreover, the field structure
 allows us to manipulate the elements like usual numbers (\ie with additions,
 multiplications, ...), which makes them useful. This is why today, finite fields

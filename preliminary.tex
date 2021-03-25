@@ -52,7 +52,8 @@ $\mathbb{F}_{q}$ the finite field with $q$ elements. The cardinality of a finite
 field is very well understood.
 \begin{prop}
  There exists a unique (up to isomorphism) finite field of cardinality $q = p^l$
- for earch prime number $p\in\mathbb{N}$ and integer $l\geq1$.
+ for each prime number $p\in\mathbb{N}$ and integer $l\geq1$, and every finite
+ field has cardinality of the form $q = p^l$.
 \end{prop}
 Let $q=p^l$ a prime power, there are several ways of representing
 \emph{the} finite field with $q$ elements, but the one that we will almost
@@ -80,12 +81,12 @@ The finite field $\mathbb{F}_{p^l}$ is a
 field extension of $\mathbb{F}_{p}$ of dimension $l$, \ie it is a
 $\mathbb{F}_{p}$-vector space of dimension $l$. When dealing with the vector
 space structure of $\mathbb{F}_{p^l}=\mathbb{F}_{p}(\alpha)$, we almost always choose to work with the
-cannonical basis 
+canonical basis 
 \[
   1, \alpha, \alpha^2, \dots, \alpha^{l-1}.
 \]
 Other interesting types of bases exist, such as for example normal
-bases~\cite{Gao93}, but we always precise the basis when it is not clear from
+bases~\cite{Gao93}, but we always specify the basis when it is not clear from
 the context.
 Given $q=p^m$ a prime power and
 $l\in\mathbb{N}$ an integer, we also write 
@@ -122,7 +123,7 @@ $\mathbb{F}_{q^l}$ are also well understood.
   \]
   in $\mathbb{F}_{q^l}$.
 \end{prop}
-Figure~\ref{fig:F12} describes the subfields of $\mathbb{F}_{12}$, as an
+Figure~\ref{fig:F12} describes the subfields of $\mathbb{F}_{q^{12}}$, as an
 illustration of Proposition~\ref{prop:subfields}.
 \begin{figure}
   \centering
@@ -141,7 +142,7 @@ illustration of Proposition~\ref{prop:subfields}.
     \draw (6) -- (12);
     \draw (4) -- (12);
   \end{tikzpicture}
-  \caption{The subfields of $\mathbb{F}_{12}$. Two fields are linked if one is a
+  \caption{The subfields of $\mathbb{F}_{q^{12}}$. Two fields are linked if one is a
 subfield of the other.}
   \label{fig:F12}
 \end{figure}
@@ -164,8 +165,8 @@ and the orbit of $u$ is the set
   \left\{ u, \sigma(u), \dots, \sigma^{l-1} \right\}.
 \]
 This orbit might have any length $m$ dividing $l$. The orbit of $u$ is of length
-$m$ if and only if $u$ is in a subfield $\mathbb{F}_{q^m}$ of
-$\mathbb{F}_{q^l}$. We also sometimes write
+exactly $m$ if and only if the smallest subfield $u$ belongs to is the subfield
+$\mathbb{F}_{q^m}$ of $\mathbb{F}_{q^l}$. We also sometimes write
 \[
   u^\sigma = \sigma(u).
 \]
@@ -349,7 +350,7 @@ describing a place, given by discrete valuations.
   \begin{enumerate}
     \item $v(x) = \infty \Leftrightarrow x=0$;
     \item for any $x,y\in F$, $v(xy) = v(x)+v(y)$;
-    \item for any $x,y\in F$, $v(x+y)\geq\min(v(x), v(y)$;
+    \item for any $x,y\in F$, $v(x+y)\geq\min(v(x), v(y))$;
     \item there exists an element $z\in F$ with $v(z)=1$;
     \item for any nonzero element $a\in\K$, $v(a) = 0$.
   \end{enumerate}
@@ -420,7 +421,7 @@ The map from $F$ to $F_P\cup\left\{ \infty \right\}$
 is called the \emph{residue class map}.
 \end{defi}
 \begin{defi}[Degree of a place]
-  Let $P\in\mathbb{P}_F$ a place of $F$. The residue class field $F_P$ is a
+  Let $P\in\mathbb{P}_F$ be a place of $F$. The residue class field $F_P$ is a
   finite extension of $\K$ and we call
   \[
     \deg P = \left[ F_P\,:\,\K \right]
@@ -452,7 +453,7 @@ constant functions. This is also a reason behing the following terminology.
   order} $n$.
 \end{defi}
 Note that if $P$ is a zero of $z\in F$, we have $z(P) = 0$, while we have
-$z(P)=\infty$ if $P$ is a pole of $z$. Another important results states that
+$z(P)=\infty$ if $P$ is a pole of $z$. Another important result states that
 every element not in $\K$ yields a non-constant function.
 \begin{prop}
  Let $F$ be a function field and $z\in F$ an element in $F$ that is
@@ -464,7 +465,7 @@ every element not in $\K$ yields a non-constant function.
 
 Before talking about the central notions of divisors and Riemann-Roch spaces, we
 must mention one important theorem called the \emph{weak approximation theorem}
-(also reffered to as \emph{theorem of independence}). It essentially says that
+(also refered to as \emph{theorem of independence}). It essentially says that
 if we have pairwise distinct discrete valuations $v_1, \dots, v_n$ of $F$ and an
 element $z\in F$ for which we know the values $v_1(z), \dots, v_{n-1}(z)$, then
 we cannot conclude anything about the value $v_n(z)$.
@@ -499,8 +500,8 @@ element $x$. This theorem allows us to mention important results.
 
 \subsection{Divisors}
 
-Now that we now what places are, we can define divisors. In this section, we
-keep the notation of last section: we let $F$ be an algebraic function field
+Now that we know what places are, we can define divisors. In this section, we
+keep the notation of the last section: we let $F$ be an algebraic function field
 over a finite field $\K$ of characteristic $p$.
 \begin{defi}[Divisor]
   The \emph{divisor group} $\Div(F)$ of $F$ is defined as the free abelian group generated
@@ -589,7 +590,8 @@ thus have
     D\sim D'\Longleftrightarrow\text{ there exists }x\in F\text{ such that }D =
     D'+(x).
   \]
-  In that case, we say that $D$ and $D'$ are \emph{equivalent}.
+  In that case, we say that $D$ and $D'$ are \emph{linearly equivalent}, or just
+  \emph{equivalent}.
 \end{defi}
 Principal divisors play a crucial role in the algebraic function field theory.
 They allow us to define spaces that play a fundamental role.
@@ -645,6 +647,7 @@ We can now define the most important invariant of a function field $F$, its
   \]
 \end{defi}
 \begin{defi}[Index of specialty]
+  \label{defi:index-specialty}
   Let $D\in\Div(F)$ be a divisor of $F$, the nonnegative integer
   \[
     i(D) = \ell(D) - \deg(D) + g - 1
@@ -660,12 +663,20 @@ We can now define the most important invariant of a function field $F$, its
 In fact, all canonical divisors are equivalent, and they are involved in the
 very important Riemman-Roch theorem.
 \begin{thm}[Riemann-Roch]
+  \label{thm:riemann-roch}
   Let $W\in\Div(F)$ be a canonical divisor of $F$. Then, for any divisor
   $D\in\Div(F)$, we have
   \[
     \ell(D) = \deg(D) + 1 - g + \ell(W-D).
   \]
 \end{thm}
+\begin{rem}
+Note that with Definition~\ref{defi:index-specialty},
+Theorem~\ref{thm:riemann-roch} means that
+\[
+  i(D) = \ell(W-D).
+\]
+\end{rem}
 
 \section{Complexity models}
 \label{sec:complexity-models}
@@ -796,7 +807,7 @@ defining $\mathbb{F}_{q^n}$, \ie we have
 Then, the cost of the operations in $\mathbb{F}_{q^n}$ are those of polynomial
 operations modulo $P$ in $\K\left[ x \right]$ and depend on polynomial
 arithmetic. We let $M(n)$ be a function such that polynomials in $\K\left[ x
-\right]$ of legree less than $n$ can be multiplied in $M(n)$ operations in $\K$.
+\right]$ of degree less than $n$ can be multiplied in $M(n)$ operations in $\K$.
 We assume that the function $M$ has the \emph{superlinearity}
 property~\cite[Chapter 8.3]{GG13}, \ie that for any $m,
 n\in\mathbb{N}\setminus\left\{ 0 \right\}$, we have
@@ -863,7 +874,7 @@ $\K$. In the binary RAM complexity model, the Kedlaya-Umans
 algorithm~\cite{KU11} and its extension~\cite{PS13} yield an algorithm with
 essentially linear complexity in $s, n$ and $\log(q)$. Unfortunately, these
 algorithms prove to be hard te implement in a competitive way, and Brent and
-Kung's algorithm seem to outperform them in practice.
+Kung's algorithm seems to outperform them in practice.
 
 By applying transposition techniques~\cite{BLS03, DeFeo10, DS10, BCS13} to Brent
 and Kung's algorithm, Shoup~\cite{Shoup94, Shoup99} derived an algorithm to
@@ -872,11 +883,11 @@ using $O(n^{(\omega+1)/2})$ operations in $\K$. We say a bit more about these
 techniques, called \emph{transposition principle} (or \emph{Tellegen's
 principle}) in Section~\ref{sec:modular-composition}.
 
-We also sometimes use Berlekamp-Massey algorithm in order to compute the minimal
-generating polynomial of a sequence satisfying a linear recurrence relation.
-Berlekamp-Massey algorithm takes
+We also sometimes use the Berlekamp-Massey algorithm in order to compute the
+minimal generating polynomial of a sequence satisfying a linear recurrence
+relation. The Berlekamp-Massey algorithm takes
 as input the $2n$ first terms $a_0, \dots, a_{2n-1}\in\K$ of the
 sequence for which we know that the minimal generating polynomial has its degree
 bounded by $n$. Using rational reconstruction~\cite[Chapter 7]{BCGLLSS17},
-Berlekamp-Massey algorithm outputs the minimal generating polynomial of the
+the Berlekamp-Massey algorithm outputs the minimal generating polynomial of the
 sequence $a_0, \dots, a_{2n-1}$ using $O(M(n)\log(n))$ operations in $\K$.
