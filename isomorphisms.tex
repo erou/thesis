@@ -11,12 +11,12 @@ fields: this is the material of this chapter.
 Our reference for this chapter is~\cite{BDDFS17}: although it provides a variety
 of isomorphism algorithms (and their analysis), we are mainly interested in the
 naive isomorphism algorithm (used in
-Chapter~\ref{chap:lattice}) and Allombert's algorithm (used in
+Chapter~\ref{chap:lattice}) and in Allombert's algorithm (used in
 Chapter~\ref{chap:standard}). We thus do not cover all the isomorphism
-algorithms, the reader interested in Rains' algorithm and its elliptic variant
-can take a look at the paper cited above.
+algorithms, the reader interested in Rains' algorithm~\cite{Pinch92, Rains96}
+and its elliptic variant can take a look at the paper cited above.
 
-\section{Generalities and naive algorithm}
+\section{Preliminaries and naive algorithm}
 
 Even if our real goal is to compute \emph{embeddings} of finite fields, \ie
 ring homomorphisms
@@ -31,7 +31,7 @@ the same as computing an isomorphism
 \]
 of $K$ with a subfield $K'\subset L$ of $L$. The
 isomorphism $\phi'$ is just the embedding $\phi$ with its codomain being
-restricted to $K'$. That is why in the following of this chapter, we present
+restricted to $K'$. That is why in the remainder of this chapter, we present
 \emph{isomorphism} algorithms, rather than embedding algorithms.
 
 \subsection{Description of the problem}
@@ -50,7 +50,7 @@ and
 \[
   L = \K[Y]/(g(Y))\cong\mathbb{F}_{p^n}
 \]
-two extensions of $\K$. We know there is an embedding
+be two extensions of $\K$. We know there is an embedding
 \[
   \phi:K\to L,
 \]
@@ -67,8 +67,8 @@ for $\sigma\in\Gal(K/\K)$. Equivalently, they can also be described as
   \sigma'\circ\phi
 \]
 with $\sigma'\in\Gal(\phi(K)/\K)$. The \emph{embedding problem} is then to
-efficiently find, represent and evaluate one such embedding $\phi$. The problem
-is split in two parts.
+efficiently find, represent and evaluate one such embedding $\phi$. 
+Following~\cite{BDDFS17}, the problem is split in two parts.
 \begin{description}
   \item[Embedding description problem.] Compute elements $\alpha\in K$ and
     $\beta\in L$ such that 
@@ -80,7 +80,7 @@ is split in two parts.
     defined above, and elements $x\in K$, $y\in L$, solve the
     following problems:
     \begin{itemize}
-      \item compute $\phi(x)\in L$, rather than on $\alpha$;
+      \item compute $\phi(x)\in L$;
       \item test if $y\in\phi(K)$;
       \item if $y\in\phi(K)$, then compute $\phi^{-1}(y)\in K$.
     \end{itemize}
@@ -162,11 +162,11 @@ Proposition~\ref{prop:description}, the map
   \phi:K\to L
 \]
 sending $\alpha$ to $\beta$ is an embedding. The critical routine in that
-algorithm is to find a root of $f$ in $L$, that can be done using Shoup-Kaltofen
-\emph{equal degree factorization} algorithm~\cite{KS97}. The complexity analysis
-of~\cite{BDDFS17} indicates that the cost is strictly larger than quasi-quadratic
-complexity $\tilde O(m^2)$. A more efficient algorithm, due to Lenstra and
-Allombert, is discussed in Section~\ref{sec:allombert}.
+algorithm is to find a root of $f$ in $L$, that can be done using the
+Shoup-Kaltofen \emph{equal degree factorization} algorithm~\cite{KS97}. The
+complexity analysis of~\cite{BDDFS17} indicates that the cost is strictly larger
+than quasi-quadratic complexity $\tilde O(m^2)$. A more efficient algorithm, due
+to Lenstra and Allombert, is discussed in Section~\ref{sec:allombert}.
 
 \section{Lenstra-Allombert algorithm}
 \label{sec:allombert}
@@ -213,7 +213,7 @@ Proposition~\ref{prop:h90}.
   Let $K$ be a finite extension of $\K=\mathbb{F}_p$ of degree $n$ such that there exists a
 primitive $n$-th root of unity $\zeta\in\K$ in the base field $\K$, \ie such
 that $n$ divides $p-1$. 
- Let $\sigma$ be the generator of the Galois group of the extension
+ Let $\sigma$ be the Frobenius automorphism of the extension
  \[
    K/\K
  \]
@@ -357,15 +357,16 @@ in
 \begin{enumerate}
   \item finding $\alpha_K\in K$ and $\alpha_L\in L$ with
     $\sigma(\alpha_K)=\zeta\alpha_K$ and $\sigma(\alpha_L)=\zeta\alpha_L$;
-  \item computing a $n$-th $c$ root of $\alpha_K^n/\alpha_L^n$;
+  \item computing a $n$-th root $c$ of $\alpha_K^n/\alpha_L^n$;
   \item returning the isomorphism described by $\alpha_K\mapsto c\alpha_L$.
 \end{enumerate}
 
 \paragraph{General case.} When $n\nmid p-1$, which is always
-the case asymptotically since $n>p-1$ at some point, there are no $n$-th roots
-of unity in $\K$, and the strategy of Section~\ref{sec:preliminaries} cannot be
-applied as if. Nevertheless, it is still possible to apply a similar idea by
-extending the space so that it contains roots of unity.
+the case asymptotically since we work with $p$ fixed and we let $n$ grow, there
+are no $n$-th roots of unity in $\K$, and the strategy of
+Section~\ref{sec:preliminaries} cannot be applied as if. Nevertheless, it is
+still possible to apply a similar idea by extending the space so that it
+contains artificial roots of unity.
 
 \subsection{Kummer algebras}
 \label{sec:kummer-algebras}
@@ -384,15 +385,18 @@ Instead of ``just'' working in $\mathbb{F}_{p^n}$, we work in
 where $\zeta$ is a primitive $n$-th root of unity, and where $\otimes$ is the tensor
 product over $\K=\mathbb{F}_p$. We thus extend the scalars and force the existence of
 suitable roots of unity. The $\K$-algebra $A_n$ can now be used instead of
-$\mathbb{F}_{p^n}$ in Lenstra-Allombert algorithm. Following the terminology
+$\mathbb{F}_{p^n}$ in the Lenstra-Allombert algorithm. Following the terminology
 of~\cite{DRR19}, we call these algebras \emph{Kummer algebras}.
 
 \begin{defi}[Kummer algebra]
+  Let $p\in\mathbb{N}$ a prime number and $\K=\mathbb{F}_p$ the finite field
+  with $p$ elements.
  We call the $\K$-algebra
  \[
-   A_n = \mathbb{F}_{p^n}\otimes\mathbb{F}_{p}(\zeta)
+   A_n = \mathbb{F}_{p^n}\otimes\mathbb{F}_{p}(\zeta),
  \]
- a \emph{Kummer algebra of degree $n$}.
+ where $\otimes$ is the tensor product over $\K$, a \emph{Kummer algebra of
+ degree $n$}.
 \end{defi}
 \begin{defi}[Field of scalars]
   Let $A_n$ be a Kummer algebra of degree $n$. Then we define
@@ -510,7 +514,9 @@ to the eigenvalue $\zeta$ is described by the equation
    \label{rem:fixed-elems}
    We can use the proof of Lemma~\ref{lm:fixed-elems} (modulo appropriate
    changes) in order to prove that the set of elements in $A_n$ fixed by
-   $1\otimes\sigma$ is $\mathbb{F}_{p^n}\otimes1.$
+   $1\otimes\sigma'$, with $\sigma'$ the Frobenius automorphism of the extension
+   $\mathbb{F}_{p}(\zeta)/\K$, is $\mathbb{F}_{p^n}\otimes1$. In the remainder
+   of the document, we write $\sigma$ for both $\sigma$ and $\sigma'$.
  \end{rem}
  \begin{lm}
    \label{lm:h90-solutions}
@@ -776,7 +782,7 @@ Proposition~\ref{prop:allombert-simple}.
     \phi:K\to L
   \]
   be an isomorphism from $K$ to $L$. Then $\phi\otimes1$ is a morphism of
-  algebra from $A_K$ to $A_L$ and
+  algebras from $A_K$ to $A_L$ and
   \[
     (\phi\otimes1)(\alpha_K)
   \]
@@ -833,12 +839,13 @@ for the eigenvalue
 \[
   1\otimes\zeta\cong\zeta.
 \]
-Allombert later revised his algorithm: instead of directly using linear algebra over
+Allombert later revised his algorithm~\cite{Allombert02, Allombert02-rev}:
+instead of directly using linear algebra over
 $\mathbb{F}_{p}(\zeta)$, we can use the factorization
 \[
   P(X) = (X-\zeta)b(X)
 \]
-where $P$ is the minimal polynomial of $\zeta$ over $\K$. If we note
+where $P$ is the minimal polynomial of $\zeta$ over $\K$. If we write 
 \[
   P = X^r + \sum_{j=0}^{r-1}z_jX^j,
 \]
@@ -901,7 +908,7 @@ multiplication, then the cost is at best quadratic in $n$.
 
 Let us first recall the problem. Let $\K=\mathbb{F}_p$ the prime field with $p$
 elements, where $p\in\mathbb{N}$ is a prime number, and let $K$ and $L$ be
-two finite extensisons of $\K$. Let $m=\left[ K:\K \right]$ and $n = \left[ L:\K
+two finite extensions of $\K$. Let $m=\left[ K:\K \right]$ and $n = \left[ L:\K
 \right]$ be the respective degrees of the extensions $K/\K$ and $L/\K$ and
 assume that
 \[
@@ -1109,7 +1116,7 @@ into three maps
 \]
 and that we want to be able to compute both $\phi$ and its inverse
 $\phi^{-1}$. The map $V_\alpha\overset{\sim}{\to}V_\beta$ is represented by the
-identity matrix, thus is straighforward to compute. The map
+identity matrix, thus it is straighforward to compute. The map
 $V_\alpha\overset{\sim}{\to}V_X$ (the inverse of
 $V_X\overset{\sim}{\to}V_\alpha$) is represented, in the monomial bases of
 $V_\alpha$ and $V_X$, by the matrix whose columns are the vectors
@@ -1132,7 +1139,7 @@ $\phi^{-1}$ is defined only on the image of $\phi$, \ie the subfield
 \[
   \phi(K)\subset L.
 \]
-It the element we apply our steps to is not in $\phi(K)$, we just obtain an
+If the element we apply our steps to is not in $\phi(K)$, we just obtain an
 arbitrary projection in $K$. Indeed, if $x\in K$ and $y\in L$, we can decompose
 $y$ as
 \begin{align*}
@@ -1209,7 +1216,7 @@ use the transposition principle with the modular composition, since the map
   \gamma\to\gamma(\beta)\mod g
 \]
 is linear. The dual problem to modular composition was called \emph{power
-projection} by Shoup, who introduced the transposition principle. It takes as
+projection} by Shoup, who popularized the transposition principle. It takes as
 inputs the polynomials $\beta,g\in\K[Y]$, and an element $\gamma^\vee$ in
 $\K[Y]^\vee$, the dual space of $\K[Y]$, \ie the space of linear forms on
 $\K[Y]$. Its output is the list of elements
