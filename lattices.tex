@@ -1024,13 +1024,15 @@ heavily depends on the other embeddings in the lattice. Indeed, if there are no
 embeddings in the lattice, the embedding computation is in that case essentially
 the same as the factorization of a degree $m$ polynomial in
 $\mathbb{F}_{p^{n}}[X]$. On the contrary, if a subfield
-$\mathbb{F}_{p^{d}}$ of degree $d\mid m$ exists in the lattice and is embedded
+$\mathbb{F}_{p^{d}}$ of degree $d\mid m$ exists in the lattice (see
+Figure~\ref{fig:illustration-common-subfield} for an illustration) and is embedded
 in both $\mathbb{F}_{p^{m}}$ and $\mathbb{F}_{p^{n}}$, then the degree of the
 polynomial that is factorized is at most $\frac{m}{d}$, and could be less if
 several subfields exist, as explained in
 Proposition~\ref{prop:several-subfields} and
 Remark~\ref{rem:greatest-common-subfield}.
 \begin{figure}[h]
+  \label{fig:illustration-common-subfield}
   \centering
   \begin{tikzpicture}
     \node (d) at (0, 0) {$\mathbb{F}_{p^{d}}$};
@@ -1041,6 +1043,8 @@ Remark~\ref{rem:greatest-common-subfield}.
     \draw[arrow] (d) to (m);
     \draw[arrow] (d) to (n);
   \end{tikzpicture}
+  \caption{The computation of an embedding with a common subfield, that leads to
+  the factorization of a polynomial of degree at most $m/d$.}
 \end{figure}
 As an illustration of that phenomenon, note that if the finite fields
 $\mathbb{F}_{p^{2}}$, $\mathbb{F}_{p^{3}}$, $\mathbb{F}_{p^{6}}$ and
@@ -1070,11 +1074,15 @@ $\mathbb{F}_{p^{6}}$ to $\mathbb{F}_{p^{12}}$.
     \node (?) at (-0.5, 0.75) {\textbf{?}};
     \node (??) at (0.5, 0.75) {\textbf{?}};
   \end{tikzpicture}
+  \caption{A lattice with four finite fields of size $p^2, p^3, p^6,
+    p^{12}$ with some embeddings already computed.}
+  \label{fig:example-F12}
 \end{figure}
 In this case, factorization in $\mathbb{F}_{p^{12}}[X]$ is not required, and the
 work is essentially already done, although the embeddings from
 $\mathbb{F}_{p^{2}}$ and $\mathbb{F}_{p^{3}}$ in $\mathbb{F}_{p^{6}}$ (easier
-to compute) have to be computed if they are not already.
+to compute) have to be computed if they are not already (see
+Figure~\ref{fig:example-F12}).
 In fact, when computing the embedding
 \[
   \mathbb{F}_{p^{m}}\emb\mathbb{F}_{p^{n}},

@@ -1,10 +1,10 @@
-This introduction is intended to all readers, not only mathematicians. Our first
-step will be to understand the title of this document (\emph{Efficient
-arithmetic for cryptography and cryptanalysis}). Those eager to learn more about
-the technical details or the mathematics behind the
-exposed subjects can do so by reading the articles and books for which we give
-references. Of course, this thirst for mathematics can also be fulfilled (up to
-a point) by reading the next chapters of this thesis.
+This introduction is intended to all readers, not only mathematicians. We
+first present some applications of the concept at the center of this thesis, the
+\emph{finite field} structure, in order to grasp how useful it is in real life.
+Those eager to learn more about the technical details or the mathematics behind
+the exposed subjects can do so by reading the articles and books for which we
+give references. Of course, this thirst for mathematics can also be fulfilled
+(up to a point) by reading the next chapters of this thesis.
 
 \minitoc
 % TODO
@@ -13,17 +13,19 @@ a point) by reading the next chapters of this thesis.
 % Find an illustration (something linked with crypto preferably)
 \clearpage
 
-During my PhD, I would always explain to non-mathematicians that I was doing a
-PhD in \emph{cryptography}. This is in fact an elaborate lie, because even if
-the words ``cryptography'' and ``cryptanalysis'' are among those composing
-the title of this work: \emph{Efficient arithmetic for cryptography and
-cryptanalysis}, the thesis is definitely more oriented towards the two first
-words: \emph{efficient arithmetic}. Still, cryptography is the motivation and
-sometimes inspiration for this work. The problems we focus on either have their
-roots or have applications in cryptography, thus we begin by explaining what it
-is.
+\section{Applications of finite fields}
 
-\section{Cryptography}
+During my PhD, I would always explain to non-mathematicians that I was doing a
+PhD in \emph{cryptography}. This is in fact a lie, because even if
+the words ``cryptography'' and ``cryptanalysis'' were initially among those composing
+the title of this project, that was first called \emph{Efficient arithmetic for
+cryptography and cryptanalysis}, the thesis is definitely more oriented
+towards the two first words: \emph{efficient arithmetic}. Still, cryptography
+is one of the motivations and sometimes inspiration for this work. The problems
+we focus on either have their roots or have applications in cryptography, thus
+we begin by explaining what it is.
+
+\subsection{Cryptography}
 \label{sec:crypto}
 
 As we are social animals, we often need to communicate with each other.
@@ -252,9 +254,124 @@ operations with these objects: the science studying how to do so is called
 \emph{arithmetic}. In conclusion, it is necessary to have efficient arithmetic
 for cryptography and cryptanalysis.
 
+\subsection{Coding theory}
+\label{sec:coding}
+
+Another very elegant (and useful) application of finite fields is
+\emph{coding theory}. Like cryptography, it is linked with communication,
+although it adresses a different issue entirely. We now assume that Alice and
+Bob want to communicate, and that the informations they send go through a
+channel. In practice, this channel could be optical fiber, electrical wires, radio
+waves, and many more things. Assume that Alice wants to send the message ``Hi!
+How are you?'' to Bob. In fact these letters would probably first be translated
+into some stream of bits \texttt{0} and \texttt{1}, thus we will imagine that
+Alice sends the message
+\[
+  m = \texttt{0010110001010111}
+\]
+through the cannel. Very often, in real conditions, the communication channel is
+not perfect and is subject to \emph{channel noise}, \ie because of the quality of
+the channel, or because of the environment, some errors can appear and change
+the message sent by Alice into something else, as shown in
+Figure~\ref{fig:communication-channel}.
+\begin{figure}[h]
+  \centering
+  \begin{tikzpicture}
+    \node (msg) at (0,2) {\texttt{0010110001010111}};
+    \node (msg-dec) at (0,0)
+    {\texttt{0010\textcolor{red}{0}10\textcolor{red}{1}0101011\textcolor{red}{0}}};
+    \node (channel) at (0, 1) {Communication channel};
+    \draw[->] (msg) -- (channel);
+    \draw[->] (channel) -- (msg-dec);
+  \end{tikzpicture}
+  \caption{An imperfect communication channel.}
+  \label{fig:communication-channel}
+\end{figure}
+Without any tool or context, it can be hard (or impossible) for Bob to guess
+what was the initial message coming from Alice. Coding theory studies how to
+make sure that Bob can recover the original message, even with some errors. The
+goal is to build so-called \emph{codes} that can correct errors,
+thus they are called \emph{error correcting codes} or \emph{error correction
+codes}. The intuition is that in order to make sure that some
+information, that is elementary reprensented by a \texttt{0} or a
+\texttt{1}, arrives without error to Bob, Alice can just repeat it multiple
+times. For example, if Alice repeats every bit three times, making words of
+three symbols:
+\[
+  \texttt{0}\to\texttt{000}\quad\quad\texttt{1}\to\texttt{111},
+\]
+then an error can be corrected, because if Bob receives, for example, the
+word \texttt{001}, he knows that is it most likely coming from
+the word \texttt{000}, and he can interpret it as coming from the bit \texttt{0} in
+Alice's initial message. More generally, if Bob receives the word
+\texttt{abc}, he
+interprets it as coming from the symbol \texttt{0} if there is a majority of
+\texttt{0} in the word \texttt{abc}. Conversely, if there is a majority of
+\texttt{1} in the word \texttt{abc}, he interprets the word as the symbol
+\texttt{1}. Of course, if there are too much errors on a single word, it is
+still possible to misinterpret it. For example, if the word
+\texttt{000} becomes \texttt{110} after going through the communication channel,
+then Bob will decode it as $\texttt{111}\to\texttt{1}$. This strategy is known
+as the binary repetition code of
+length $3$ and is an example of an error correction code. The whole procedure is
+described in Figure~\ref{fig:rep3}.
+\begin{figure}[h]
+  \centering
+  \begin{tikzpicture}
+    \node (msg-init) at (0,3)
+    {\texttt{\phantom{ }0\phantom{ } \phantom{ }0\phantom{ } \phantom{
+    }1\phantom{ }  \phantom{ }0\phantom{ }  \phantom{ }1\phantom{ }  \phantom{
+    }1\phantom{ }  \phantom{ }0\phantom{ }  \phantom{ }0\phantom{ }  \phantom{
+    }0\phantom{ }  \phantom{ }1\phantom{ }  \phantom{ }0\phantom{ }  \phantom{
+    }1\phantom{ }  \phantom{ }0\phantom{ }  \phantom{ }1\phantom{ }  \phantom{
+    }1\phantom{ }  \phantom{ }1\phantom{ }}};
+    \node (msg) at (0,2)
+    {\texttt{000 000 111 000 111 111 000 000 000 111 000 111 000 111 111 111}};
+    \node (msg-dec) at (0,0)
+  {\texttt{000 0\textcolor{red}{1}0 111 000 \textcolor{red}{0}11 111
+  00\textcolor{red}{1} 000 0\textcolor{red}{11} 111 0\textcolor{red}{1}0 111 000 11\textcolor{red}{0} 111 \textcolor{red}{0}11}};
+    \node (channel) at (0, 1) {Communication channel};
+    \node (msg-end) at (0,-1)
+    {\texttt{\phantom{ }0\phantom{ } \phantom{ }0\phantom{ } \phantom{
+    }1\phantom{ }  \phantom{ }0\phantom{ }  \phantom{ }1\phantom{ }  \phantom{
+    }1\phantom{ }  \phantom{ }0\phantom{ }  \phantom{ }0\phantom{ }  \phantom{
+    }\textcolor{red}{1}\phantom{ }  \phantom{ }1\phantom{ }  \phantom{ }0\phantom{ }  \phantom{
+    }1\phantom{ }  \phantom{ }0\phantom{ }  \phantom{ }1\phantom{ }  \phantom{
+    }1\phantom{ }  \phantom{ }1\phantom{ }}};
+    \draw[->] (msg-init) -- (msg);
+    \draw[->] (msg) -- (channel);
+    \draw[->] (channel) -- (msg-dec);
+    \draw[->] (msg-dec) -- (msg-end);
+  \end{tikzpicture}
+  \caption{The binary repetition code of length $3$.}
+  \label{fig:rep3}
+\end{figure}
+In order to correct more errors, we could use repetition codes with bigger
+lengths. Though, when we use a repetition code of length $n$, we have to send
+$n$ times more information in the communication channel, which comes at a cost
+in real life situations. We thus have to balance the cost coming from the length
+of the code with the number of errors we want to be able to correct. In fact,
+depending, all codes are not suitable, Claude Shannon proved in
+1948~\cite{Shannon48} that we can define a quantity called the \emph{capacity}
+of the channel that essentially measures how much information we can send
+through a communication channel. It also measures how much repetition we
+must add in our code in order to send something through the communication
+channel in a reliable way. Coding theory is still an active research field, thus
+there are plenty of open problems and the question ``What is the best code we
+can use?'' has no definitive answer. The codes used in practice
+are a bit more subtle that the repetition code, even if they follow the same
+logic. Finite fields are used to represent and manipulate codewords of error
+correction codes. For example, the Reed-Solomon codes~\cite{RS60}, that are used
+in consumer technologies like CDs, DVDs, Blu-ray discs, QR codes, but also in
+space NASA missions, use sequences of values taken in a finite field as
+codewords. In conclusion, exactly like in cryptography, finite fields are
+ubiquitous in coding theory, and efficient arithmetic in finite fields ensures
+at the same time fast coding and fast decoding.
+
 \section{Finite fields arithmetic}
 
-As stated in Section~\ref{sec:crypto}, cryptographic protocols rely on
+As stated in Sections~\ref{sec:crypto} and~\ref{sec:coding}, cryptographic
+protocols and codes rely on
 mathematical structures in order to work. The one we will study throughout this
 document is called \emph{finite field}. A \emph{field} is a mathematical
 structure (we also say \emph{algebraic structure}) composed of elements that we
