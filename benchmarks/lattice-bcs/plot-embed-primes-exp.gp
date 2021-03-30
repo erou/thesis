@@ -1,5 +1,6 @@
-set terminal post eps color enhanced font "Times, 20"
-set out "embed-primes-exp.eps"
+#set terminal post eps color enhanced font "Times, 20"
+set terminal epslatex color font "Times, 20"
+set out "embed-primes-exp.tex"
 #set lmargin 2.8
 #set rmargin 0.5 
 #set palette rgb 33,13,10 
@@ -8,7 +9,7 @@ set out "embed-primes-exp.eps"
 #unset colorbox
 set datafile separator ","
 #set xtics (200, 400, 600, 800, 1000)# font ", 12" offset 0, 0
-set xlabel "Number of bits of the characteristic" offset 0, 0
+set xlabel "$\\log_2(p)$" offset 0, 0
 set ylabel "Time (ms)" offset 0, 0 
 #set ytics font ", 12" #offset 0.9, 0
 #set yrange [0:200]

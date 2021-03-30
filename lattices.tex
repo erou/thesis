@@ -1,4 +1,4 @@
-In Chapter~\ref{chap:isomorphism}, we have seen algorithms to compute
+In Chapter~\ref{chap:isomorphism}, we have seen algorithms to comput.
 isomorphisms, or embeddings, between pairs of finite fields. Now, we want to
 integrate these algorithms in a larger global system with potentially as many
 finite fields as we want.
@@ -97,7 +97,7 @@ $\mathbb{F}_{p^b}$, with $p\in\mathbb{N}$ a prime number and
 \[
   a\,|\,b
 \]
-two integers, we would like to be able to manage more than $2$ finite fields
+two integers, we would like to manage more than $2$ finite fields
 simultaneously. In other words, given a family
 \[
   \F=\left\{ \mathbb{F}_{p^{a}}\,|\,a\in E \right\}
@@ -108,7 +108,8 @@ we want to be able to compute an embedding
   \mathbb{F}_{p^a}\emb\mathbb{F}_{p^b}
 \]
 each time that we have $\mathbb{F}_{p^a}, \mathbb{F}_{p^b}\in\F$ with $a$
-dividing $b$. On a pratical point of view, we want to build a computer algebra
+dividing $b$, while maintaining \emph{compatibility} between all these
+embeddings. From a pratical point of view, we want to build a computer algebra
 system where the users can embed the field they are working with in a bigger
 finite field, or conversely if an element is known to belong to a smaller field
 than the ambient field, project it to a smaller field. In cryptology and coding
@@ -118,7 +119,7 @@ quasi-polynomial algorithm for discrete logarithm in small characteristic by
 Granger, Kleinjung and Zumbrägel~\cite{GKZ14}, we have to work with a tower of
 finite field extensions, and thus a computer algebra system automatically
 dealing with the changes would be very convenient in order to implement their
-algorithm. On a theoretical point of view, this leads to the question of the
+algorithm. From a theoretical point of view, this leads to the question of the
 arithmetic in the algebraic closure of some finite field $\mathbb{F}_p$
 \[
   \bar{\mathbb{F}}_p=\bigcup_{j\in\mathbb{N}\setminus\left\{ 0
@@ -127,11 +128,11 @@ arithmetic in the algebraic closure of some finite field $\mathbb{F}_p$
 and its representation on a computer, a question that was for example
 investigated in~\cite{DDS14}. 
 
-If we \emph{just} want to be able to compute embeddings between two finite
+If we \emph{just} want to compute embeddings between two finite
 fields in $\F$ when it makes sense, we can use one of the algorithms presented
 in Chapter~\ref{chap:isomorphism} each time we need it. In fact, we want to
 build a data structure $\Lambda$ to represent all the extensions of
-$\mathbb{F}_p$ that we need, and additionnal sub-goals might be desirable.
+$\mathbb{F}_p$ that we need, and additional sub-goals might be desirable.
 \begin{description}
 \item[\emph{Effective embeddings:}] for any pair of extensions
   $k\subset K$ in $\Lambda$, there exists an efficiently computable
@@ -193,8 +194,8 @@ guaranty that the diagram of Figure~\ref{fig:compatibility} commutes, \ie
 If we want to achieve compatibility, we have to provide extra-work.
 The two constructions presented in Sections~\ref{sec:conway}
 and~\ref{sec:bosma-canon-steel} are both solutions oriented towards this goal.
-Conway polynomials allow \emph{uniqueness} while Bosma, Cannon and Steel
-framework allows \emph{generality}.
+Conway polynomials yield \emph{uniqueness} while the Bosma, Cannon and Steel
+framework grants \emph{generality}.
 
 \section{Conway polynomials}
 \label{sec:conway}
@@ -205,9 +206,8 @@ framework allows \emph{generality}.
 % Give a reference for the fact that Conway polynomials always exist?
 
 Conway polynomials~\cite{Parker90, Scheerhorn92} are named after J. H. Conway,
-who suggested the idea of working with norm-compatible polynomials when
-constructing extension fields. They were introduced by Parker in 1990 and
-provide embeddings that are easy to compute.
+they were introduced by Parker in 1990 and provide embeddings that are easy to
+compute.
 
 \begin{defi}[Conway polynomials]
   Let $p\in\mathbb{N}$ be a prime number. The $m$-th \emph{Conway polynomial}
@@ -236,16 +236,16 @@ n\in\mathbb{N}$ be two integers such that
 \[
   m\,|\,n
 \]
-and let $C_m, C_n\in\mathbb{F}_{p}[X]$ be the $m$-th and the $n$-th Conway
+and let $C_m\in\mathbb{F}_{p}[X], C_n\in\mathbb{F}_{p}[Y]$ be the $m$-th and the $n$-th Conway
 polynomial. Let 
 \[
   k=\mathbb{F}_{p^m}=\mathbb{F}_p(\alpha_m)\cong\mathbb{F}_{p}[X]/(C_m)
 \]
 and
 \[
-  K = \mathbb{F}_{p^n}=\mathbb{F}_p(\alpha_n)\cong\mathbb{F}_{p}[X]/(C_n)
+  K = \mathbb{F}_{p^n}=\mathbb{F}_p(\alpha_n)\cong\mathbb{F}_{p}[Y]/(C_n)
 \]
-with $\alpha_m=\bar X\in k$ and $\alpha_n=\bar X\in K$. Now, we define the
+with $\alpha_m=\bar X\in k$ and $\alpha_n=\bar Y\in K$. Now, we define the
 embedding
 \[
 \begin{array}{cccl}
@@ -286,7 +286,7 @@ Therefore, using Conway polynomials to define all finite field extensions allows
 compatibility \emph{a priori}: adding a new extension in the lattice does not
 require any computation and the form of the embedding is already known. The
 only condition is to define each extension using the Conway polynomial of the
-corresponding degree. These polynomial always exist so this is possible,
+corresponding degree. These polynomials always exist so this is possible,
 although the best known algorithm to compute Conway polynomials has exponential
 complexity~\cite{HL98} in the degree of the polynomial. Because the cost of
 computing Conway polynomials is
@@ -298,9 +298,14 @@ strategy leads to efficient lattices of compatibly embedded finite fields, at
 least in small degrees, but at the cost of generality, because the finite fields
 extensions cannot be user-defined and high degree extensions cannot be included
 in the lattice. We see in Section~\ref{sec:bosma-canon-steel} that those issues
-can be adressed by using an other method 
+can be adressed by using another method 
 defined by Bosma, Canon, and Steel~\cite{BCS97}, but the price to compute each
 embedding is higher.
+% TODO
+% ====
+%
+% Say something about the evaluation of the embeddings coming from Conway
+% polynomials
 
 \section{Bosma-Canon-Steel framework}
 \label{sec:bosma-canon-steel}
@@ -317,46 +322,46 @@ presented our software in the symbolic computation conference ISSAC in
 2018~\cite{DRR18}. In 2019, the code was also added to the official branch of
 Nemo, and Nemo can now deal with finite field extensions and compatibly embed
 them, in the case where the characteristic $p$ of the fields fits in a machine
-word. There are no theretical obstacles preventing from implementing the algorithm in arbitrary
-large characteristic, but some tools were lacking at the C level (\ie in
-Flint).
+word. There are no theretical obstacles preventing from implementing the
+algorithm in arbitrarily large characteristic, but some tools were lacking at
+the C level (\ie in Flint).
 
 \subsection{Bosma-Canon-Steel algorithm}
 \paragraph{Notations and first results.} Let $p\in\mathbb{N}$ be a prime number
-and $q$ a power of $p$. We present the results over the finite field
-$\mathbb{F}_q$, even if the applications we have in mind apply to prime field
-extensions. Given two finite fields $k$ and $K$ with cardinalities
+and $q$ a power of $p$. We present the results over the prime field
+$\mathbb{F}_p$, but they can be extended to $\mathbb{F}_q$ without any new
+difficulty. Given two finite fields $k$ and $K$ with cardinalities
 \[
-  \Card k = q^m
+  \Card k = p^m
 \]
 and
 \[
-  \Card K =  q^n
+  \Card K =  p^n
 \]
 such that $m$ divides $n$, we know that $k$ can be embedded in $K$. In other
 words, we know that $K$ contains one subfield
 \[
-  k'=\left\{ x\in K\,|\,x^{q^m}=x \right\}\subset K
+  k'=\left\{ x\in K\,|\,x^{p^m}=x \right\}\subset K
 \]
 with 
 \[
-  \Card k' = q^m.
+  \Card k' = p^m.
 \]
 There is exactly one subfield $k'$ in $K$ that has the same cardinality as $k$,
 but there exist $m$ different ways to map $k$ to $k'$. One way of seeing that is
 to say that an element $\alpha\in k$ generating $k$ has a minimal polynomial
-$\pi$ over $\mathbb{F}_q$ of degree $m$, and that $\alpha$ can be mapped to any
+$\pi$ over $\mathbb{F}_p$ of degree $m$, and that $\alpha$ can be mapped to any
 one of the $m$ roots of $\pi$ in $K$. This choice sets the embedding because any
 element in $k$ can be written as
 \[
   \sum_{j=0}^{m-1}a_j \alpha^j,
 \]
-with $a_j\in\mathbb{F}_q$. We write $k\emb K$ if an explicit embedding has been
+with $a_j\in\mathbb{F}_p$. We write $k\emb K$ if an explicit embedding has been
 chosen. Let
 \[
   k\subset K\subset L
 \]
-with $k\emb K$ and $k\emb L$, as in Figure~\ref{fig:uncomplete}. The fundations
+with $k\emb K$ and $k\emb L$, as in Figure~\ref{fig:incomplete}. The fundations
 of Bosma-Canon-Steel framework lay on the fact that we precisely know how many
 compatible embeddings from $K$ to $L$ we can find.
 \begin{figure}%[h]
@@ -374,8 +379,8 @@ compatible embeddings from $K$ to $L$ we can find.
     \node (f13) at (-0.1, 1) {$\chi$};
     %\node (f23) at (1.4, 1.65) {$\psi$};
   \end{tikzpicture}
-\caption{Uncomplete embedding diagram.}
-\label{fig:uncomplete}
+\caption{Incomplete embedding diagram.}
+\label{fig:incomplete}
 \end{figure}
 \begin{prop}[{\cite[Thm.~2.1]{BCS97}}]
   \label{prop:number-embeddings}
@@ -383,8 +388,8 @@ compatible embeddings from $K$ to $L$ we can find.
   \[
     k\subset K\subset L
   \]
-  be three finite fields extensions of $\mathbb{F}_q$, with respective
-  cardinalities $q^l$, $q^m$ and $q^n$. Assume that $k\emb K$ and $k\emb L$,
+  be three finite fields extensions of $\mathbb{F}_p$, with respective
+  cardinalities $p^l$, $p^m$ and $p^n$. Assume that $k\emb K$ and $k\emb L$,
   then there are $m/l$ compatible embeddings from $K$ to $L$.
 \end{prop}
 \begin{proof}
@@ -393,7 +398,7 @@ compatible embeddings from $K$ to $L$ we can find.
   $L$. The maps $\chi$ and $\widetilde\psi\circ\phi$ are two embeddings from
   $k$ to $L$.
   There are only $l$ such maps, because if $\alpha$ is a generating element in
-  $k$ and if $\pi$ is its minimal polynomial over $\mathbb{F}_q$, then an
+  $k$ and if $\pi$ is its minimal polynomial over $\mathbb{F}_p$, then an
   embedding from $k$ to $L$ necessarily sends $\alpha\in k$ to a root $\beta\in
   L$ of $\pi$ in $L$.
   The embedding is then uniquely defined by 
@@ -401,9 +406,9 @@ compatible embeddings from $K$ to $L$ we can find.
     \alpha\mapsto\beta
   \]
   and there are $l$ such roots, that are all conjugates, thus we know that there
-  exist
+  exists
   \[
-    \sigma\in\Gal(L/\mathbb{F}_q)
+    \sigma\in\Gal(L/\mathbb{F}_p)
   \]
   such that
   \[
@@ -434,9 +439,9 @@ its isomorphic image $\phi(k)\cong k$ in $K$, for the sake of simplicity. We
   \[
     k\subset K\subset L
   \]
-  three finite fields extensions of $\mathbb{F}_q$, with respective
-  cardinalities $q^l$, $q^m$ and $q^n$. Assume that $k\emb K$ and $k\emb L$,
-  and let $\phi=\embed{k}{K}$, $\chi=\embed{k}{L}$ the respective embeddings.
+  three finite fields extensions of $\mathbb{F}_p$, with respective
+  cardinalities $p^l$, $p^m$ and $p^n$. Assume that $k\emb K$ and $k\emb L$,
+  and let $\phi=\embed{k}{K}$, $\chi=\embed{k}{L}$ be the respective embeddings.
   Let also $\alpha\in K$ be an element that generates $K$ over $k$ and
   \[
     \pi_k=\Minpoly_k(\alpha)
@@ -444,7 +449,7 @@ its isomorphic image $\phi(k)\cong k$ in $K$, for the sake of simplicity. We
   the minimum polynomial of $\alpha$ over $k$. Let $\rho\in L$ be a root of
   $\pi_k$ in $L$. Let $\psi:K\to L$ be the map defined by
   \[
-    \psi(\sum_{j=0}^{m/l-1}x_j\alpha^j) = \sum_{j=0}^{m/l-1}x_j\rho^j,
+    \psi\left(\sum_{j=0}^{m/l-1}x_j\alpha^j\right) = \sum_{j=0}^{m/l-1}x_j\rho^j,
   \]
   using the unique representation of any element of $K$ as $\sum_j x_j
   \alpha^j$ with $x_j\in k$. Then $\psi$ is an embedding from $K$ to $L$ that
@@ -467,15 +472,15 @@ its isomorphic image $\phi(k)\cong k$ in $K$, for the sake of simplicity. We
 In fact, in our implementation and even in
 Proposition~\ref{prop:several-subfields}, this result will not be used as is and
 we will usually take $\alpha\in K$ an element generating $K$ over the base
-field $\mathbb{F}_q$ instead of over $k$. Indeed, if $\alpha$ generates $K$
-over $\mathbb{F}_q$, it also generates $K$ over $k$. We can still take a root
+field $\mathbb{F}_p$ instead of over $k$. Indeed, if $\alpha$ generates $K$
+over $\mathbb{F}_p$, it also generates $K$ over $k$. We can still take a root
 $\rho$ of $\Minpoly_{k}(\alpha)$ because
 \[
-  \Minpoly_k(\alpha)\,|\,\Minpoly_{\mathbb{F}_q}(\alpha)
+  \Minpoly_k(\alpha)\,|\,\Minpoly_{\mathbb{F}_p}(\alpha)
 \]
-and so a root of $\Minpoly_{k}(\alpha)$ is \emph{a fortiori} a root of
-$\Minpoly_{\mathbb{F}_q}(\alpha)$. As a result, we can use the
-$\mathbb{F}_q$-algebra structure of $K$ and still achieve compatibility with
+and so a root of $\Minpoly_{k}(\alpha)$ is necessarily a root of
+$\Minpoly_{\mathbb{F}_p}(\alpha)$. As a result, we can use the
+$\mathbb{F}_p$-algebra structure of $K$ and still achieve compatibility with
 the subfield $k$.
 \end{rem}
 Although the result of Proposition~\ref{prop:number-embeddings} captures only
@@ -487,8 +492,8 @@ middle of Figure~\ref{fig:triangles}), we can just set
   \embed{k}{L} = \embed{K}{L}\circ\embed{k}{K}.
 \]
 Finally the configuration on the right, where we know $\embed{k}{L}$ and
-$\embed{K}{L}$, is also unrelevant because, by construction, this case never
-happens when working with Bosma-Canon-Steel framework.
+$\embed{K}{L}$, is also irrelevant because, by construction, this case never
+happens when working with the Bosma-Canon-Steel framework.
 \begin{figure}
   \centering
   \begin{tikzpicture}
@@ -529,24 +534,21 @@ happens when working with Bosma-Canon-Steel framework.
 \paragraph{Description of the framework.} The general strategy of Bosma, Canon,
 and Steel to compute and maintain the data of several finite fields and
 compatible embeddings between them is to ensure that some properties are
-conserved at all times. In all the section, we fix $p\in\mathbb{N}$ a prime
-number and $q$ a power of $p$. The results are true for an arbitrary power of
-$p$, although the applications and the implementations we have in mind are
-relevant for $q=p$. If $k=\mathbb{F}_{q^m}$ is a finite extension of
-$\mathbb{F}_q$, we define
+conserved at all times. If $k=\mathbb{F}_{p^m}$ is a finite extension of
+$\mathbb{F}_p$, we define
 \[
-  \partial (k) = \left[ k:\mathbb{F}_q \right] = m
+  \deg (k) = \left[ k:\mathbb{F}_p \right] = m
 \]
-the extension degree over $\mathbb{F}_q$.
+the extension degree over $\mathbb{F}_p$.
 \begin{defi}[Lattice of compatibly embedded finite fields]
   \label{defi:lattice-bcs}
-  Let $q$ be a power of $p$ a prime number and $\mathbb{F}_q$ the finite field
-  with $q$ elements. The couple
+  Let $q$ be a power of $p$ a prime number and $\mathbb{F}_p$ the finite field
+  with $q$ elements. The pair
 \[
   \Lambda = (\mathcal K, \Phi),
 \]
 where $\mathcal K$ is a collection of finite fields sharing the same base field
-$\mathbb{F}_q$ and $\Phi$ is a collection of embeddings between members of
+$\mathbb{F}_p$ and $\Phi$ is a collection of embeddings between members of
 $\mathcal K$,
 is called a \emph{lattice of compatibly embedded finite fields} if the following
 conditions are satisfied:
@@ -556,15 +558,15 @@ conditions are satisfied:
     \item[CE2 (reflexivity)] For each $k\in \mathcal K$, the identity map
     $\Id_k=\embed{k}{k}$ is in $\Phi$.
   \item[CE3 (base subfield)] There is exactly one $k\in \mathcal K$ such that
-    $\partial(k)=1$, and for all $K\in \mathcal K$, there exists $\embed{\mathbb{F}_q}{K}\in\Phi$.
-  \item[CE4 (invertibility)] If $k\emb K$ and $\partial(k)=\partial(K)$, then $K\emb k$ and
+    $\deg(k)=1$, and for all $K\in \mathcal K$, there exists $\embed{\mathbb{F}_p}{K}\in\Phi$.
+  \item[CE4 (invertibility)] If $k\emb K$ and $\deg(k)=\deg(K)$, then $K\emb k$ and
     $\embed{K}{k}=\embed{k}{K}^{-1}$.
   \item[CE5 (transitivity)] For any triple $(k, K, L)$ of elements in $\mathcal
     K$, if $E\emb F\emb G$ then $E\emb G$ and
     $\embed{E}{G}=\embed{F}{G}\circ\embed{E}{F}$.
   \item[CE6 (intersections)] For each $k, K, L\in \mathcal K$ such that $K\emb L$ and
     $k\emb L$, there exists $I\in \mathcal K$ such that
-    $\partial(I)=\gcd(\partial(k), \partial(K))$
+    $\deg(I)=\gcd(\deg(k), \deg(K))$
     and $I\emb k$, $I\emb K$.
 \end{description}
 \end{defi}
@@ -575,7 +577,7 @@ elements of our fields are represented by polynomials over
 $\mathbb{F}_p=\mathbb{Z}/p\mathbb{Z}$, thus the subfield
 $\mathbb{F}_p\subset\mathbb{F}_{p^m}$ is always represented by the constant
 polynomials and the embedding is trivial. Nevertheless, Condition~CE6 is
-important both on a theoretical and on an implementation point of view: it
+important both from a theoretical and on an implementation point of view: it
 ensures that the implicit embeddings between common subfields are made explicit,
 in order to prevent any possible future incompatibility, and it forces the
 computer algebra software to compute extra embeddings that the user might not
@@ -618,7 +620,7 @@ embeddings are the common subfields of $K$ and $L$. If there is only one common
 subfield $k$, we are in the case described by
 Propositions~\ref{prop:number-embeddings}
 and~\ref{prop:number-embeddings-constructive}. Now, assume that there are many
-common subfields, like shown in Figure~\ref{fig:uncomplete-sev}.% and let
+common subfields, like shown in Figure~\ref{fig:incomplete-sev}.% and let
 %\[
 %  C = \left\{ k\in\mathcal K\,|\,k\emb K\text{ and }k\emb L \right\}
 %\]
@@ -641,8 +643,8 @@ common subfields, like shown in Figure~\ref{fig:uncomplete-sev}.% and let
       \draw[arrow] (Er) -- (G);
       \draw[dashed-arrow] (F) -- (G);
   \end{tikzpicture}
-  \caption{An uncomplete diagram with several subfields.}
-  \label{fig:uncomplete-sev}
+  \caption{An incomplete diagram with several subfields.}
+  \label{fig:incomplete-sev}
 \end{figure}
 In the same fashion as was done in Proposition~\ref{prop:number-embeddings}, we
 can abtractly describe how many compatible embeddings exist (this is done
@@ -661,23 +663,23 @@ arbitrary number of common subfields.
   \[
     k_j\emb K\text{ and }k_j\emb L.
   \]
-  Let $\alpha\in K$ be an element generating $K$ over $\mathbb{F}_q$ and
+  Let $\alpha\in K$ be an element generating $K$ over $\mathbb{F}_p$ and
   \[
     \pi = \gcd_{1\leq j\leq r}(\Minpoly_{k_j}(\alpha)).
   \]
   Let $\rho\in L$ be a root of $\pi$ in $L$ and let $\psi:K\to L$ be the map
   defined by
   \[
-    \psi(\sum_{j=0}^{\partial(K)-1}x_j\alpha^j) =
-    \sum_{j=0}^{\partial(K)-1}x_j\rho^j
+    \psi\left(\sum_{j=0}^{\deg(K)-1}x_j\alpha^j\right) =
+    \sum_{j=0}^{\deg(K)-1}x_j\rho^j
   \]
   using the unique representation of elements in $K$ as $\sum_j x_j\alpha^j$
-  with $x_j\in\mathbb{F}_q$. Then $\psi$ is an embedding from $K$ to $L$ that is
+  with $x_j\in\mathbb{F}_p$. Then $\psi$ is an embedding from $K$ to $L$ that is
   compatible with all the embeddings $\embed{k_j}{K}$ and $\embed{k_j}{L}$.
 \end{prop}
 \begin{proof}
   Let $\alpha\in K$ be an element generating $K$ over the base field
-  $\mathbb{F}_q$. Then, for all $1\leq j\leq r$, $\alpha$ also generates $K$
+  $\mathbb{F}_p$. Then, for all $1\leq j\leq r$, $\alpha$ also generates $K$
   over $k_j$. Now consider the polynomial
   \[
     \pi = \gcd_{1\leq j\leq r}(\Minpoly_{k_j}(\alpha)).
@@ -713,9 +715,9 @@ arbitrary number of common subfields.
   \]
   Indeed, we have
   \begin{align*}
-    \Gal(K/K') &= \left\{ \sigma\in\Gal(K/\mathbb{F}_q)\,|\,\forall x\in
+    \Gal(K/K') &= \left\{ \sigma\in\Gal(K/\mathbb{F}_p)\,|\,\forall x\in
   K',\,\sigma(x) = x \right\}\\
-  &= \left\{ \sigma\in\Gal(K/\mathbb{F}_q)\,|\,\forall 1\leq j\leq r,\,\forall x\in
+  &= \left\{ \sigma\in\Gal(K/\mathbb{F}_p)\,|\,\forall 1\leq j\leq r,\,\forall x\in
   k_j,\,\sigma(x) = x \right\}\\
   &= \bigcap_{1\leq j\leq r}\Gal(K/k_j),
   \end{align*}
@@ -723,14 +725,15 @@ arbitrary number of common subfields.
   \begin{align*}
     \Minpoly_{K'}(\alpha) &= \prod_{\sigma\in\Gal(K/K')}T-\sigma(\alpha)\\
     &=\prod_{\sigma\in\bigcap_{1\leq j\leq r}\Gal(K/k_j)}T-\sigma(\alpha)\\
-    &= \gcd_{1\leq j\leq r}(\prod_{\sigma\in\Gal(K/k_j)}T-\sigma(\alpha))\\.
+    &= \gcd_{1\leq j\leq
+    r}\left(\prod_{\sigma\in\Gal(K/k_j)}T-\sigma(\alpha)\right)\\
     &= \gcd_{1\leq j\leq r}(\Minpoly_{k_j}(\alpha)).
   \end{align*}
-  where $T$ is the undeterminate. In fact, in~\cite{BCS97}, it is shown that
+  where $T$ is the indeterminate. In fact, in~\cite{BCS97}, it is shown that
   there is exactly one compatible ismorphism between $K'$ and $L'$, the subfield
   of $L$ generated by the subfields $k_j$ in $L$, and that there is
   \[
-    \partial(K)/\partial(K'),
+    \deg(K)/\deg(K'),
   \]
   which is the degree of $\pi$, different compatible embeddings from $K$ to $L$.
 \end{rem}
@@ -742,48 +745,48 @@ embedding and then to ``correct'' it, we follow the method of
 Propositions~\ref{prop:number-embeddings-constructive} and~\ref{prop:several-subfields} and
 we directly compute compatible embeddings using the naive algorithm, that relies
 on polynomial factorization. The whole framework is implemented in
-Nemo~\cite{Nemo} since Automn $2019$, at least for finite fields with
+Nemo~\cite{Nemo} since Fall $2019$, at least for finite fields with
 word-sized characteristic, \ie finite fields extensions
 \[
   \mathbb{F}_{p^m}
 \]
 where $p$ is a prime number that fits in $64$ bits. The source code is available
-in Nemo's github repository\footnote{\url{https://github.com/Nemocas/Nemo.jl}}. Almost all of the code is
-directly written in the Julia library Nemo, because it is mostly high level manipulations, but the
-critical routines, such as factorization, are implemented in the C library Flint
-and are called from Nemo.
+in Nemo's github repository\footnote{\url{https://github.com/Nemocas/Nemo.jl}}.
+Almost all of the code is directly written in the Julia library Nemo, because it
+consists mostly of high level manipulations, but the critical routines, such as
+factorization, are implemented in the C library Flint and are called from Nemo.
 
 \paragraph{Types and data structures.} There are two types of finite fields in Nemo/Flint,
-those with a word-sized characteristic and those with arbitrary large
+those with a word-sized characteristic and those with arbitrarily large
 characteristic. The former have the type \texttt{fq\_nmod\_ctx\_t} in Flint and
 \texttt{FqNmodFiniteField} in Nemo, while the field elements have the type
-\texttt{fq\_nmod\_t} in Flint and \texttt{fq\_nmod} in Nemo. The corresponding types in arbitrary
-characteristic are \texttt{fq\_ctx\_t}, \texttt{FqFiniteField},
-\texttt{fq\_t} and
+\texttt{fq\_nmod\_t} in Flint and \texttt{fq\_nmod} in Nemo. The corresponding
+types in arbitrarily large characteristic are \texttt{fq\_ctx\_t},
+\texttt{FqFiniteField}, \texttt{fq\_t} and
 \texttt{fq}. We may use a Flint name for a type in Nemo or vice versa, because
 the types represent the same things: Nemo being a wrapper of Flint in this case.
 The main difference between the two types is that the polynomials representing the
 elements of these fields have different types, depending on whether they have
-arbitrary large coefficients (\texttt{fmpz\_mod\_poly\_t}) or if their
+arbitrarily large coefficients (\texttt{fmpz\_mod\_poly\_t}) or if their
 coefficients fit in a $64$ bit word (\texttt{nmod\_poly\_t}). Since the
 representation of the elements varies, so do the algorithms for manipulating
-various elements in Flint (matrices, polynomials) with word-sized or arbitrary
-coefficients. Some of the algorithms implemented for matrices with word-sized
-coefficients are not implemented for arbitrary large coefficient and in
-consequence we were only able to implement Bosma-Canon-Steel algorithm for the
-type \texttt{FqNmodFiniteField}. This type contains
+various elements in Flint (matrices, polynomials) with word-sized or arbitrarily
+large coefficients. Some of the algorithms implemented for matrices with
+word-sized coefficients are not implemented for arbitrarily large coefficient and
+as a consequence we were only able to implement Bosma-Canon-Steel algorithm for
+the type \texttt{FqNmodFiniteField}. This type contains
 \begin{itemize}
   \item the characteristic $p$ (that fits in $64$ bits);
   \item the irreducible polynomial used to define the field (of type
     \texttt{nmod\_poly\_t});
-  \item various technical information that are stored for performance;
-  \item two dictionnaries containing informations about the lattice of
+  \item various technical informations that are stored for performance;
+  \item two dictionaries containing informations about the lattice of
     compatible embeddings.
 \end{itemize}
 Let $K$ be some finite field represented by the type \texttt{FqNmodFiniteField},
-the two dictionnaries stored in the data structure representing $K$ are called
+the two dictionaries stored in the data structure representing $K$ are called
 \texttt{subfields} and \texttt{overfields}. They both map integers to lists of
-embeddings. If the \texttt{subfields} dictionnary has a key \texttt{l}, then the
+embeddings. If the \texttt{subfields} dictionary has a key \texttt{l}, then the
 associated value \texttt{subfields[l]} is a list of embeddings
 \[
   \phi_j: k_j\to K
@@ -791,7 +794,7 @@ associated value \texttt{subfields[l]} is a list of embeddings
 where all the $k_j$ are finite fields of the corresponding degree
 \texttt{l}. Note that this is a \emph{list}, because there might be several
 different finite fields of the same degree embedded in $K$. Similarly, if the
-\texttt{overfields} dictionnary has a key \texttt{m}, then the corresponding
+\texttt{overfields} dictionary has a key \texttt{m}, then the corresponding
 value \texttt{overfield[m]} is a list of embeddings
 \[
   \psi_j:K\to L_j
@@ -818,7 +821,7 @@ we must go through $3$ steps:
     embedded in $M$ and $K$, and if not, embed it. If there is not
     any finite field of degree 
     \[
-      d=\gcd(\partial(M), \partial (K)),
+      d=\gcd(\deg(M), \deg (K)),
   \]
     compute an
     arbitrary finite field $I$ of degree $d$ using Flint
@@ -840,8 +843,7 @@ we must go through $3$ steps:
       \end{tikzpicture}
     \end{center}
     This step ensures that Condition~CE6 on the
-    \emph{intersections} holds. It is important to begin with this step, in
-    order 
+    \emph{intersections} holds. It is important to begin with this step, so
     that every implicit isomorphism between the different common subfields are
     made explicit and that the compatibility conditions concerning the
     embedding $K\emb L$ include them.
@@ -850,8 +852,8 @@ we must go through $3$ steps:
   \item Compute the ``transitive closure'' of the lattice, \ie compute the
     embeddings such that Condition~CE5 on \emph{transitivity} holds. 
 \end{enumerate}
-The first step might contain a reccursive call to the embedding algorithm, thus
-one might have to compute many additionnal embeddings behind the scenes in order
+The first step might contain a recursive call to the embedding algorithm, thus
+one might have to compute many additional embeddings behind the scenes in order
 to have only one new embedding. 
 % TODO
 % ====
@@ -869,14 +871,14 @@ intersection $I = K\cap M$ is also embedded in $K$ and $M$. Different cases can
 occur, depending on the relative position of $K$ and $M$ in the lattice of
 finite fields, as described in Figure~\ref{fig:relative-positions}. If $I=K$
 (case of the left side of Figure~\ref{fig:relative-positions}), then we only
-need to check that $K$ is embedded in $M$, when
-it is done, we do not need to compute anything else because the embedding from
+need to check that $K$ is embedded in $M$. When
+this is done, we do not need to compute anything else because the embedding from
 $K$ to $L$ is then obtained via transitive closure. If $I=M$ (case in the
 middle), then we need to check that $M$ is embedded in $K$. If $I$ is neither
 $K$ or $L$ (case on the right side), then we first check if $I$ already exists
 in the lattice of compatibly embedded finite fields, we create it if necessary,
-and we finally check that it is embedded in both $K$ and $L$. In order to be
-able to know whether further computations are needed in the \texttt{embed}
+and we finally check that it is embedded in both $K$ and $L$. In order
+to know whether further computations are needed in the \texttt{embed}
 algorithm, we return a boolean that is \texttt{false} if the encountered case
 was the one where $I=K$. The \texttt{intersection} algorithm is also explained
 in Algorithm~\ref{algo:intersections}. In Algorithm~\ref{algo:find-morphism},
@@ -889,7 +891,7 @@ the lattice $\Lambda$ is transitive, we apply
 Algorithm~\ref{algo:transitive-closure} that loops through all subfields $k$ of
 $K$, and if we let $\psi:k\emb K$ be an embedding into $K$, checks that the
 embedding $\phi\circ\psi$ is
-also in the lattice. We then reccursively call the \texttt{transitive\_closure}
+also in the lattice. We then recursively call the \texttt{transitive\_closure}
 procedure on the fields that $L$ is embedded into.
 \begin{figure}
   \centering
@@ -932,7 +934,7 @@ procedure on the fields that $L$ is embedded into.
     \node (??) at (3, 1) {\textbf{?}};
   \end{tikzpicture}
   \caption{Three different configurations when computing the intersection step
-  of Bosma-Canon-Steel framework.}
+  of the Bosma-Canon-Steel framework.}
   \label{fig:relative-positions}
 \end{figure}
 
@@ -942,7 +944,7 @@ procedure on the fields that $L$ is embedded into.
   \begin{algorithmic}[1]
     \Require{$K$ and $L$ two finite fields of a lattice of compatibly embedded
     finite fields $(\mathcal K, \Phi)$}
-    \Ensure{A boolean $b$ being \False if and only if no additionnal work is
+    \Ensure{A boolean $b$ being \False if and only if no additional work is
   required}
   \State $b\gets\True$
   \ForAll{$M\emb L$}
@@ -982,7 +984,7 @@ exists in the computer algebra system}
     \State $C\gets\left\{k\in\mathcal K\,|\,k\emb K\text{ and }k\emb L \right\}$
     \State $\pi\gets\gcd_{k\in C}(\Minpoly_k(\alpha))$\Comment{$\alpha$ is a
       generator of $K$ over $\mathbb{F}_p$, the minimum polynomial is obtained
-    via Berlekamp-Massey algorithm.}
+    via the Berlekamp-Massey algorithm.}
     \State $\rho\gets$ any root of $\pi$
     \State \Return{$\phi:K\to L,\,\alpha\mapsto\rho$}
   \end{algorithmic}
@@ -1087,7 +1089,7 @@ In fact, when computing the embedding
 \[
   \mathbb{F}_{p^{m}}\emb\mathbb{F}_{p^{n}},
 \]
-one of the decisive parameter is the degree of the extension 
+one of the decisive parameters is the degree of the extension 
 \[
   \mathbb{F}_{p^{m}}/(L\cap\mathbb{F}_{p^{m}}),
 \]
@@ -1100,7 +1102,7 @@ know about it. If
 \]
 then $\mathbb{F}_{p^{m}}$ is essentially already embedded in
 $\mathbb{F}_{p^{n}}$ and there is only one compatible embedding. On the
-opposite, if 
+contrary, if 
 \[
   \left[ \mathbb{F}_{p^{m}}:(L\cap\mathbb{F}_{p^{m}})\right]=m,
 \]
@@ -1112,7 +1114,7 @@ $\mathbb{F}_{p^{m}}\emb\mathbb{F}_{p^{n}}$. We call this parameter the
 The defect depends on the state of the lattice $\Lambda$ at the moment of the
 computation and has an important impact on the timings.
 Consequently, there are several reasonable ways of measuring the timings
-of Bosma-Canon-Steel framework, which produce quite different results.
+of the Bosma-Canon-Steel framework, which produce quite different results.
 There is no major difference between two choices of characteristic $p$ so we
 arbitrarily chose $p=3$. We
 computed all the possible embeddings between finite fields of degree up to $400$
@@ -1131,7 +1133,7 @@ The second way consists in looping through the
 degrees while decreasing them, \ie starting with
 $\mathbb{F}_{p^{200}}\emb\mathbb{F}_{p^{400}}$, then
 $\mathbb{F}_{p^{199}}\emb\mathbb{F}_{p^{398}}$ and so on until
-$\mathbb{F}_{p}\emb\mathbb{F}_{p^{2}}$. Again, this two methods produce
+$\mathbb{F}_{p}\emb\mathbb{F}_{p^{2}}$. Again, these two methods produce
 different timing results because at the moment an embedding is computed, the
 state of the lattice if not the same in the two cases. For example, the
 embedding $\mathbb{F}_{p^{200}}\emb\mathbb{F}_{p^{400}}$ takes $3.5$ seconds to
@@ -1170,7 +1172,7 @@ fields of degree $360$ because it is a highly composite number, having $24$
 different divisors: $1, 2, 3, 4, 5, 6, 8, 9, 10, 12, 15, 18, 20, 24, 30, 36, 40,
 45, 60, 72, 90, 120, 180$ and $360$. In the first experiment, with increasing
 degrees, all embeddings are computed in under one second, as shown in
-Figure~\ref{fig:bcs-embed-to-360-up}. It is understandable because the defect is
+Figure~\ref{fig:bcs-embed-to-360-up}. This is understandable because the defect is
 never very high. In the second experiment, shown in
 Figure~\ref{fig:bcs-embed-to-360-down}, the timing to compute the embedding 
 \[
@@ -1236,7 +1238,8 @@ for $1\leq j\leq m$, \ie $p\approx 2^j$. The result is shown in
 Figure~\ref{fig:bcs-embed-primes}.
 \begin{figure}
   \centering
-  \includegraphics{benchmarks/lattice-bcs/embed-primes-exp.eps}
+  \input{benchmarks/lattice-bcs/embed-primes-exp.tex}
+%  \includegraphics{benchmarks/lattice-bcs/embed-primes-exp.eps}
   \caption{Timings for the computation of embeddings from $\mathbb{F}_{p^{12}}$
   to $\mathbb{F}_{p^{24}}$ with $p$ a prime number growing up to approximately
   $2^{60}$.}
@@ -1244,14 +1247,14 @@ Figure~\ref{fig:bcs-embed-primes}.
 \end{figure}
 Whether or not compatibility conditions have to be fufilled when computing an
 embedding implies different internal routines in Bosma-Canon-Steel framework,
-such as intersections computations and reccursive computations of other
+such as intersections computations and recursive computations of other
 embeddings. However, the different possible scenarios share the preponderance of the
 root finding in the timings: it is the critical routine in all cases. Although,
 for embeddings involving small degree finite fields and with a low defect (\ie
 when other embeddings have already been computed and information is known) the
 time spent dealing with high level routines can be substantial. It is not
 really a problem because in that case the computations are very fast, but it
-indicates that the julia code could be optimized some more.
+indicates that the Julia code could be optimized some more.
 
 % TODO
 % ====

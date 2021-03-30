@@ -1,8 +1,8 @@
 %!PS-Adobe-2.0 EPSF-2.0
-%%Title: embed-primes-exp.eps
+%%Title: embed-primes-exp.tex
 %%Creator: gnuplot 5.2 patchlevel 8
-%%CreationDate: Tue Jan 19 18:34:28 2021
-%%DocumentFonts: (atend)
+%%CreationDate: Tue Mar 30 22:09:12 2021
+%%DocumentFonts: 
 %%BoundingBox: 50 50 410 302
 %%EndComments
 %%BeginProlog
@@ -13,7 +13,7 @@ gnudict begin
 % The unit line width and grayscale image gamma correction may also be changed.
 %
 /Color true def
-/Blacktext false def
+/Blacktext true def
 /Solid false def
 /Dashlength 1 def
 /Landscape false def
@@ -28,7 +28,7 @@ gnudict begin
 /Gamma 1.0 def
 /BackgroundColor {-1.000 -1.000 -1.000} def
 %
-/vshift -66 def
+/vshift -133 def
 /dl1 {
   10.0 Dashlength userlinewidth gnulinewidth div mul mul mul
   Rounded { currentlinewidth 0.75 mul sub dup 0 le { pop 0.01 } if } if
@@ -429,46 +429,6 @@ Level1 {Level1PatternFill} {Level2PatternFill} ifelse
 dup length dict begin {1 index /FID eq {pop pop} {def} ifelse} forall
 currentdict end definefont pop
 %
-/Metrics {ExtendTextBox Gswidth} def
-/Lwidth {currentpoint stroke M 0 vshift R Metrics} def
-/Rwidth {currentpoint stroke M dup stringwidth pop neg vshift R Metrics} def
-/Cwidth {currentpoint stroke M dup stringwidth pop -2 div vshift R Metrics} def
-/GLwidth {currentpoint stroke M 0 vshift R {ExtendTextBox} forall} def
-/GRwidth {currentpoint stroke M dup Gwidth vshift R {ExtendTextBox} forall} def
-/GCwidth {currentpoint stroke M dup Gwidth 2 div vshift R {ExtendTextBox} forall} def
-/GLwidth2 {0 Gwidth AddGlyphWidth} def
-/GRwidth2 {Gwidth -1 mul 0 AddGlyphWidth} def
-/GCwidth2 {Gwidth 2 div dup -1 mul AddGlyphWidth} def
-/AddGlyphWidth { dup TBx2 gt {userdict /TBx2 3 -1 roll put} {pop} ifelse
-                 dup TBx1 lt {userdict /TBx1 3 -1 roll put} {pop} ifelse } def
-/MFshow {
-   { dup 5 get 3 ge
-     { 5 get 3 eq {gsave} {grestore} ifelse }
-     {dup dup 0 get findfont exch 1 get scalefont setfont
-     [ currentpoint ] exch dup 2 get 0 exch R dup 5 get 2 ne {dup dup 6
-     get exch 4 get {textshow} {Metrics pop 0 R} ifelse }if dup 5 get 0 eq
-     {dup 3 get {2 get neg 0 exch R pop} {pop aload pop M} ifelse} {dup 5
-     get 1 eq {dup 2 get exch dup 3 get exch 6 get Gswidth pop -2 div
-     dup 0 R} {dup 6 get Gswidth pop -2 div 0 R 6 get
-     textshow 2 index {aload pop M neg 3 -1 roll neg R pop pop} {pop pop pop
-     pop aload pop M} ifelse }ifelse }ifelse }
-     ifelse }
-   forall} def
-/Gswidth {dup type /stringtype eq {stringwidth} {pop (n) stringwidth} ifelse} def
-/MFwidth {0 exch { dup 5 get 3 ge { 5 get 3 eq { 0 } { pop } ifelse }
- {dup 3 get{dup dup 0 get findfont exch 1 get scalefont setfont
-     6 get Gswidth pop add} {pop} ifelse} ifelse} forall} def
-/MLshow { currentpoint stroke M
-  0 exch R
-  Blacktext {gsave 0 setgray MFshow grestore} {MFshow} ifelse } bind def
-/MRshow { currentpoint stroke M
-  exch dup MFwidth neg 3 -1 roll R
-  Blacktext {gsave 0 setgray MFshow grestore} {MFshow} ifelse } bind def
-/MCshow { currentpoint stroke M
-  exch dup MFwidth -2 div 3 -1 roll R
-  Blacktext {gsave 0 setgray MFshow grestore} {MFshow} ifelse } bind def
-/XYsave    { [( ) 1 2 true false 3 ()] } bind def
-/XYrestore { [( ) 1 2 true false 4 ()] } bind def
 Level1 SuppressPDFMark or 
 {} {
 /SDict 10 dict def
@@ -476,12 +436,12 @@ systemdict /pdfmark known not {
   userdict /pdfmark systemdict /cleartomark get put
 } if
 SDict begin [
-  /Title (embed-primes-exp.eps)
+  /Title (embed-primes-exp.tex)
   /Subject (gnuplot plot)
   /Creator (gnuplot 5.2 patchlevel 8)
 %  /Producer (gnuplot)
 %  /Keywords ()
-  /CreationDate (Tue Jan 19 18:34:28 2021)
+  /CreationDate (Tue Mar 30 22:09:12 2021)
   /DOCINFO pdfmark
 end
 } ifelse
@@ -521,316 +481,186 @@ doclip
 0.050 0.050 scale
 0 setgray
 newpath
-(Times) findfont 200 scalefont setfont
-BackgroundColor 0 lt 3 1 roll 0 lt exch 0 lt or or not {BackgroundColor C 1.000 0 0 7200.00 5040.00 BoxColFill} if
 1.000 UL
 LTb
 LCb setrgbcolor
-980 640 M
+[] 0 setdash
+1720 1280 M
 63 0 V
-5796 0 R
+4696 0 R
 -63 0 V
 stroke
-860 640 M
-[ [(Times) 200.0 0.0 true true 0 ( 0)]
-] -66.7 MRshow
-/Times findfont 200 scalefont setfont
-/vshift -66 def
-1.000 UL
 LTb
-LCb setrgbcolor
-980 1165 M
+1720 1700 M
 63 0 V
-5796 0 R
+4696 0 R
 -63 0 V
 stroke
-860 1165 M
-[ [(Times) 200.0 0.0 true true 0 ( 100)]
-] -66.7 MRshow
-/Times findfont 200 scalefont setfont
-1.000 UL
-LTb
-LCb setrgbcolor
-980 1690 M
+1720 2120 M
 63 0 V
-5796 0 R
+4696 0 R
 -63 0 V
 stroke
-860 1690 M
-[ [(Times) 200.0 0.0 true true 0 ( 200)]
-] -66.7 MRshow
-/Times findfont 200 scalefont setfont
-1.000 UL
-LTb
-LCb setrgbcolor
-980 2215 M
+1720 2540 M
 63 0 V
-5796 0 R
+4696 0 R
 -63 0 V
 stroke
-860 2215 M
-[ [(Times) 200.0 0.0 true true 0 ( 300)]
-] -66.7 MRshow
-/Times findfont 200 scalefont setfont
-1.000 UL
-LTb
-LCb setrgbcolor
-980 2740 M
+1720 2960 M
 63 0 V
-5796 0 R
+4696 0 R
 -63 0 V
 stroke
-860 2740 M
-[ [(Times) 200.0 0.0 true true 0 ( 400)]
-] -66.7 MRshow
-/Times findfont 200 scalefont setfont
-1.000 UL
-LTb
-LCb setrgbcolor
-980 3264 M
+1720 3379 M
 63 0 V
-5796 0 R
+4696 0 R
 -63 0 V
 stroke
-860 3264 M
-[ [(Times) 200.0 0.0 true true 0 ( 500)]
-] -66.7 MRshow
-/Times findfont 200 scalefont setfont
-1.000 UL
-LTb
-LCb setrgbcolor
-980 3789 M
+1720 3799 M
 63 0 V
-5796 0 R
+4696 0 R
 -63 0 V
 stroke
-860 3789 M
-[ [(Times) 200.0 0.0 true true 0 ( 600)]
-] -66.7 MRshow
-/Times findfont 200 scalefont setfont
-1.000 UL
-LTb
-LCb setrgbcolor
-980 4314 M
+1720 4219 M
 63 0 V
-5796 0 R
+4696 0 R
 -63 0 V
 stroke
-860 4314 M
-[ [(Times) 200.0 0.0 true true 0 ( 700)]
-] -66.7 MRshow
-/Times findfont 200 scalefont setfont
-1.000 UL
-LTb
-LCb setrgbcolor
-980 4839 M
+1720 4639 M
 63 0 V
-5796 0 R
+4696 0 R
 -63 0 V
 stroke
-860 4839 M
-[ [(Times) 200.0 0.0 true true 0 ( 800)]
-] -66.7 MRshow
-/Times findfont 200 scalefont setfont
-1.000 UL
-LTb
-LCb setrgbcolor
-980 640 M
+1720 1280 M
 0 63 V
-0 4136 R
+0 3296 R
 0 -63 V
 stroke
-980 440 M
-[ [(Times) 200.0 0.0 true true 0 ( 0)]
-] -66.7 MCshow
-/Times findfont 200 scalefont setfont
-1.000 UL
-LTb
-LCb setrgbcolor
-1957 640 M
+2513 1280 M
 0 63 V
-0 4136 R
+0 3296 R
 0 -63 V
 stroke
-1957 440 M
-[ [(Times) 200.0 0.0 true true 0 ( 10)]
-] -66.7 MCshow
-/Times findfont 200 scalefont setfont
-1.000 UL
-LTb
-LCb setrgbcolor
-2933 640 M
+3306 1280 M
 0 63 V
-0 4136 R
+0 3296 R
 0 -63 V
 stroke
-2933 440 M
-[ [(Times) 200.0 0.0 true true 0 ( 20)]
-] -66.7 MCshow
-/Times findfont 200 scalefont setfont
-1.000 UL
-LTb
-LCb setrgbcolor
-3910 640 M
+4100 1280 M
 0 63 V
-0 4136 R
+0 3296 R
 0 -63 V
 stroke
-3910 440 M
-[ [(Times) 200.0 0.0 true true 0 ( 30)]
-] -66.7 MCshow
-/Times findfont 200 scalefont setfont
-1.000 UL
-LTb
-LCb setrgbcolor
-4886 640 M
+4893 1280 M
 0 63 V
-0 4136 R
+0 3296 R
 0 -63 V
 stroke
-4886 440 M
-[ [(Times) 200.0 0.0 true true 0 ( 40)]
-] -66.7 MCshow
-/Times findfont 200 scalefont setfont
-1.000 UL
-LTb
-LCb setrgbcolor
-5863 640 M
+5686 1280 M
 0 63 V
-0 4136 R
+0 3296 R
 0 -63 V
 stroke
-5863 440 M
-[ [(Times) 200.0 0.0 true true 0 ( 50)]
-] -66.7 MCshow
-/Times findfont 200 scalefont setfont
-1.000 UL
-LTb
-LCb setrgbcolor
-6839 640 M
+6479 1280 M
 0 63 V
-0 4136 R
+0 3296 R
 0 -63 V
 stroke
-6839 440 M
-[ [(Times) 200.0 0.0 true true 0 ( 60)]
-] -66.7 MCshow
-/Times findfont 200 scalefont setfont
 1.000 UL
 LTb
-LCb setrgbcolor
-1.000 UL
-LTB
-LCb setrgbcolor
-980 4839 N
-980 640 L
-5859 0 V
-0 4199 V
--5859 0 V
+1720 4639 N
+0 -3359 V
+4759 0 V
+0 3359 V
+-4759 0 V
 Z stroke
 1.000 UP
 1.000 UL
-LTb
-LCb setrgbcolor
-LCb setrgbcolor
-190 2739 M
-currentpoint gsave translate -270 rotate 0 0 moveto
-[ [(Times) 200.0 0.0 true true 0 (Time \(ms\))]
-] -66.7 MCshow
-grestore
-/Times findfont 200 scalefont setfont
-LTb
-LCb setrgbcolor
-3909 140 M
-[ [(Times) 200.0 0.0 true true 0 (Number of bits of the characteristic)]
-] -66.7 MCshow
-/Times findfont 200 scalefont setfont
 LTb
 % Begin plot #1
 1.000 UP
 1.000 UL
 LTb
 0.58 0.00 0.83 C
-1078 655 CircleF
-1175 739 CircleF
-1273 700 CircleF
-1371 724 CircleF
-1468 734 CircleF
-1566 833 CircleF
-1664 787 CircleF
-1761 836 CircleF
-1859 858 CircleF
-1957 821 CircleF
-2054 915 CircleF
-2152 974 CircleF
-2249 886 CircleF
-2347 890 CircleF
-2445 1027 CircleF
-2542 1075 CircleF
-2640 1073 CircleF
-2738 1102 CircleF
-2835 1018 CircleF
-2933 1078 CircleF
-3031 1320 CircleF
-3128 1266 CircleF
-3226 1169 CircleF
-3324 1326 CircleF
-3421 1140 CircleF
-3519 1229 CircleF
-3617 1883 CircleF
-3714 1203 CircleF
-3812 1888 CircleF
-3910 1464 CircleF
-4007 1410 CircleF
-4105 1504 CircleF
-4202 1697 CircleF
-4300 1802 CircleF
-4398 1717 CircleF
-4495 2003 CircleF
-4593 1646 CircleF
-4691 1784 CircleF
-4788 1792 CircleF
-4886 2408 CircleF
-4984 2346 CircleF
-5081 2031 CircleF
-5179 1908 CircleF
-5277 2815 CircleF
-5374 2294 CircleF
-5472 2005 CircleF
-5570 2033 CircleF
-5667 2974 CircleF
-5765 2052 CircleF
-5863 2293 CircleF
-5960 4340 CircleF
-6058 2131 CircleF
-6155 3441 CircleF
-6253 2349 CircleF
-6351 4122 CircleF
-6448 2807 CircleF
-6546 3596 CircleF
-6644 2815 CircleF
-6741 2858 CircleF
-6839 2380 CircleF
+1799 1292 CircleF
+1879 1359 CircleF
+1958 1328 CircleF
+2037 1347 CircleF
+2117 1355 CircleF
+2196 1434 CircleF
+2275 1398 CircleF
+2355 1436 CircleF
+2434 1454 CircleF
+2513 1425 CircleF
+2592 1500 CircleF
+2672 1547 CircleF
+2751 1477 CircleF
+2830 1480 CircleF
+2910 1590 CircleF
+2989 1628 CircleF
+3068 1626 CircleF
+3148 1650 CircleF
+3227 1583 CircleF
+3306 1631 CircleF
+3386 1824 CircleF
+3465 1781 CircleF
+3544 1703 CircleF
+3624 1829 CircleF
+3703 1680 CircleF
+3782 1751 CircleF
+3862 2275 CircleF
+3941 1730 CircleF
+4020 2279 CircleF
+4100 1939 CircleF
+4179 1896 CircleF
+4258 1972 CircleF
+4337 2126 CircleF
+4417 2210 CircleF
+4496 2142 CircleF
+4575 2371 CircleF
+4655 2085 CircleF
+4734 2195 CircleF
+4813 2202 CircleF
+4893 2694 CircleF
+4972 2645 CircleF
+5051 2393 CircleF
+5131 2295 CircleF
+5210 3020 CircleF
+5289 2603 CircleF
+5369 2372 CircleF
+5448 2395 CircleF
+5527 3147 CircleF
+5607 2410 CircleF
+5686 2602 CircleF
+5765 4240 CircleF
+5844 2472 CircleF
+5924 3520 CircleF
+6003 2647 CircleF
+6082 4065 CircleF
+6162 3013 CircleF
+6241 3645 CircleF
+6320 3020 CircleF
+6400 3054 CircleF
+6479 2672 CircleF
+LTw
 % End plot #1
 2.000 UL
 LTb
 LCb setrgbcolor
+[] 0 setdash
 1.000 UL
-LTB
-LCb setrgbcolor
-980 4839 N
-980 640 L
-5859 0 V
-0 4199 V
--5859 0 V
+LTb
+1720 4639 N
+0 -3359 V
+4759 0 V
+0 3359 V
+-4759 0 V
 Z stroke
 1.000 UP
 1.000 UL
 LTb
-LCb setrgbcolor
 stroke
 grestore
 end
 showpage
 %%Trailer
-%%DocumentFonts: Times
