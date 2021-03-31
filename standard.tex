@@ -1,32 +1,34 @@
 We have seen in Chapter~\ref{chap:lattice} two independant methods to create
 lattices of compatibly embedded finite fields. In this chapter, we present a new
-framework, inspired by both Conway polynomials and Bosma-Canon-Steel, that we
-call \emph{standard lattice of compatibly embedded finite fields}.
+framework, inspired by both Conway polynomials and the Bosma-Canon-Steel
+framework, that we call \emph{standard lattice of compatibly embedded finite
+fields}.
 \minitoc
 
 % TODO: Figure
 
 \clearpage
 
-\section{Lenstra-Allombert algorithm and lattices of embeddings}
+\section{The Lenstra-Allombert algorithm and lattices of embeddings}
 \label{sec:lenstra-allombert-embeddings}
 
 The two methods of Chapter~\ref{chap:lattice} both have their drawbacks: Conway
 polynomials are expensive to compute and thus need to be precomputed, making
-them inefficient for large extensions, while Bosma-Canon-Steel needs more
-computation each time an embedding is added in the lattice. % Not precise enough/!\
+them inefficient for large extensions, while the Bosma-Canon-Steel framework
+needs more computation each time an embedding is added to the lattice.
 Our starting point in order to propose an alternative framework for lattices of
-compatibly embedded finite fields is Lenstra-Allombert algorithm and the study
-of Kummer algebras done in Section~\ref{sec:kummer-algebras}. In all this
-chapter, $\K=\mathbb{F}_p$ is a prime field of cardinality $p$, where
-$p\in\mathbb{N}$ is a prime number.
+compatibly embedded finite fields is the Lenstra-Allombert algorithm and the
+study of Kummer algebras done in Section~\ref{sec:kummer-algebras}. In all this
+chapter, $\K=\mathbb{F}_p$ is a finite field of size $p$, where
+$p$ is a prime number.
 
 \subsection{From isomorphism to embedding}
 \label{sec:iso-to-emb}
 
-Let us first recall Lenstra-Allombert \emph{isomorphism} algorithm. We keep the
-notations of Section~\ref{sec:allombert}, where the details can be found. Let $K$ and
-$L$ be two finite fields with $p^n$ elements, where $\gcd(p, n) = 1$, \ie
+Let us first recall the Lenstra-Allombert \emph{isomorphism} algorithm. We keep
+the notations of Section~\ref{sec:allombert}, where the details can be found.
+Let $K$ and $L$ be two finite fields with $p^n$ elements, where $\gcd(p, n) =
+1$, \ie
 \[
   p\nmid n.
 \]
@@ -63,7 +65,7 @@ computation. Assume that $m, n\in\mathbb{N}$ are two integers such that
   m\mid n
 \]
 and $\gcd(p, m)=\gcd(p, n)=1$. Let $K$ be a finite field with $p^m$ elements and
-$L$ a finite fields with $p^n$ elements. We know that $K$ is isomorphic to a
+$L$ a finite field with $p^n$ elements. We know that $K$ is isomorphic to a
 subfield of $L$, \ie we have an embedding
 \[
   K\emb L.
@@ -76,7 +78,7 @@ $\alpha_{K, m}, \alpha_{L, m}$ of~\eqref{eq:h90-kummer} and the constant
 $\kappa=\kappa_{K\emb L}$. This solution is satisfying as long as we only want
 to compute a \emph{single} embedding in $L$. Indeed, assume we also have an
 integer $l\in\mathbb{N}$ that divides $n$, such that $\gcd(p, l)=1$, and a
-finite field $H$ of cardinality $p^l$. Then there is an embedding
+finite field $H$ of size $p^l$. Then there is an embedding
 \[
   H\emb L,
 \]
@@ -86,7 +88,7 @@ $\alpha_{L, l}$ of~\eqref{eq:h90-kummer} for $\zeta_l$ and the associated
 constant $\kappa_{H\emb L}$. Therefore, each new embedding comes with the
 computation of a new Kummer algebra, a new solution of~\eqref{eq:h90-kummer}, and a
 new element $\kappa$. We must also store the elements $\kappa$ and the elements
-defining the embeddings. Now, recall that if we want to use Bosma-Canon-Steel
+defining the embeddings. Now, recall that if we want to use the Bosma-Canon-Steel
 framework in order to compatibly embed $K$ in $L$, we must reccursively embed
 the intersection $K\cap M$ in both fields $K$ and $M$, for each already
 embedded subfield $M$ of $L$. 
@@ -156,7 +158,7 @@ roots of unity $\zeta$. When we write a compatibility condition like
 \[
   \zeta_m = (\zeta_n)^{n/m},
 \]
-we implicitly states that there is a natural inclusion 
+we implicitly state that there is a natural inclusion 
 \[
   \mathbb{F}_p(\zeta_m)\subseteq\mathbb{F}_p(\zeta_n)
 \]
@@ -172,7 +174,7 @@ embedding
 \[
   \mathbb{F}_{p^a}\emb \mathbb{F}_{p^b}
 \]
-is not trivial. In the general case, if we want to use Lenstra-Allombert
+is not trivial. In the general case, if we want to use the Lenstra-Allombert
 embedding algorithm, what we need is a \emph{cyclotomic
 lattice}, given by Definition~\ref{defi:cyclotomic-lattice}.
 \begin{defi}[Cyclotomic lattice]
@@ -251,9 +253,9 @@ lattice of compatibly embedded finite fields, precisely to construct a lattice
 of compatibly embedded finite fields. In fact, we will see in the next sections
 that with a fairly small cyclotomic lattice, we are able to construct a much larger
 lattice of compatibly embedded finite fields, thus making the whole construction
-interesting, above all if the cyclotomic lattice is incrementable, like with
+interesting, above all if the cyclotomic lattice is incremental, like with
 Conway polynomials. In the next sections, we consider that we have an abstract
-cyclotomic lattice, without precising any particular construction. We only
+cyclotomic lattice, without specifying any particular construction. We only
 assume that we have a collection $\mathcal S^I$ satisfying the conditions of
 Definition~\ref{defi:cyclotomic-lattice}.
 
@@ -264,7 +266,7 @@ As we have seen in the last sections, asking for a compatibility condition
 \[
   \zeta_m = (\zeta_n)^{n/m}
 \]
-each time we want to use Lenstra-Allombert embedding algorithm to embed
+each time we want to use the Lenstra-Allombert embedding algorithm to embed
 $\mathbb{F}_{p^m}$ in $\mathbb{F}_{p^n}$, in a compatible way, is not trivial:
 it requires the availability of a cyclotomic lattice. Moreover, this equation
 implies that there is a natural inclusion
@@ -272,14 +274,15 @@ implies that there is a natural inclusion
   \mathbb{F}_{p}(\zeta_m)\subset\mathbb{F}_{p}(\zeta_n),
 \]
 which is not the case in general. In order to be as thorough as possible, we
-will thus write
+will thus write the image of $\zeta_m$ in the larger field
+$\mathbb{F}_p(\zeta_n)$ as $\iota_{m, n}(\zeta_m)$. By definition, we have
 \[
-  \iota_{m, n}(\zeta_m) = (\zeta_{n})^{n/m}
+  \iota_{m, n}(\zeta_m) = (\zeta_{n})^{n/m}.
 \]
-and generalize the discussion of Section~\ref{sec:iso-to-emb} and the results of
-Section~\ref{sec:lenstra-allombert-isomorphism} in this setting. We keep the
-``Kummer algebra'' terminology, already used in
-Section~\ref{sec:kummer-algebras}, that is based on~\cite{DRR19}. We know assume
+We then generalize the discussion of Section~\ref{sec:iso-to-emb} and the
+results of Section~\ref{sec:lenstra-allombert-isomorphism} in this setting. We
+keep the ``Kummer algebra'' terminology, already used in
+Section~\ref{sec:kummer-algebras}, that is based on~\cite{DRR19}. We now assume
 that a cyclotomic lattice $\mathcal S^I$ is available. Let
 \[
   m\mid n
@@ -300,7 +303,7 @@ and
   A_n=\mathbb{F}_{p^n}\otimes\mathbb{F}_{p}(\zeta_n)
 \]
 be two Kummer algebras. As was the case for
-Lenstra-Allombert \emph{isomorphism} algorithm, we want to deduce a field
+the Lenstra-Allombert \emph{isomorphism} algorithm, we want to deduce a field
 embedding from an algebra embedding between $A_m$ and $A_n$, using the
 properties of the solutions of~\eqref{eq:h90-kummer}. We are thus
 interested in a special class of morphisms that are closely linked with
@@ -334,7 +337,14 @@ of~\eqref{eq:h90-kummer}.
   \[
     \phi:\mathbb{F}_{p^m}\emb\mathbb{F}_{p^n},
   \]
-  given by:
+  given by
+  \[
+    \Phi=\phi\otimes\iota_{m, n}\longleftrightarrow \phi.
+  \]
+  Moreover, this correspondence commutes with composition of embeddings.
+\end{prop}
+\begin{proof}
+  We will prove that the correspondence is given by:
   \begin{itemize}
     \item if $\Phi$ is a Kummer embedding, then $\Phi$ maps
       $\mathbb{F}_{p^m}\otimes1$ into $\mathbb{F}_{p^n}\otimes1$. Thus the
@@ -345,13 +355,6 @@ of~\eqref{eq:h90-kummer}.
       embedding of finite fields, then $\Phi=\phi\otimes\iota_{m, n}$ is a
       Kummer embedding.
   \end{itemize}
-  In conclusion, the correspondence is given by
-  \[
-    \Phi=\phi\otimes\iota_{m, n}\longleftrightarrow \phi.
-  \]
-  Moreover, this correspondence commutes with composition of embeddings.
-\end{prop}
-\begin{proof}
  Let $\Phi:A_m\emb A_n$ be a Kummer embedding. Since $\Phi$ is an algebra
  morphism, we have 
  \[
@@ -372,7 +375,7 @@ to Remark~\ref{rem:fixed-elems} that it is fixed by $1\otimes\sigma$, thus we ha
 \end{align*}
 Again, using Remark~\ref{rem:fixed-elems}, we then know that
 $\Phi(\beta)\in\mathbb{F}_{p^n}\otimes1$. This proves that
-$\mathbb{F}_{p^m}\otimes1$ is mapped into $\mathbb{F}_{p^n}\otimes1$. Now, it
+$\mathbb{F}_{p^m}\otimes1$ is mapped into $\mathbb{F}_{p^n}\otimes1$. Now, this
 means that every element of the form $x\otimes1$ with $x\in\mathbb{F}_{p^m}$ is
 mapped to an element of the form $\Phi(x\otimes1)=y\otimes1$ with $y\in\mathbb{F}_{p^m}$.
 Because $\Phi$ is a morphism of algebras, if we
@@ -472,7 +475,7 @@ thus the correspondence commutes with compositions of embeddings.
   \]
   The correspondence is given by
   \[
-    \Phi(\alpha_m)\longleftrightarrow \hat\alpha.
+    \Phi(\alpha_m) = \hat\alpha.
   \]
 \end{prop}
 \begin{proof}
@@ -670,14 +673,14 @@ algorithm of Allombert.
 
 We discussed in Section~\ref{sec:iso-to-emb} the 
 obstacles when constructing a lattice of compatibly embedded finite fields using
-Lenstra-Allombert algorithm. The first one is that we need to have compatibility
+the Lenstra-Allombert algorithm. The first one is that we need to have compatibility
 between the roots of unity that we use, and that can be hard to obtain in
 practice. We solved that problem by assuming the availability of a
 cyclotomic lattice $\mathcal S^I$, and we proved that all the results concerning
-Lenstra-Allombert can be expressed in that setting in
+the Lenstra-Allombert algorithm can be expressed in that setting in
 Section~\ref{sec:kummer-embeddings}. Now, we can obtain compatibility by
-replacing the naive embedding algorithm by Lenstra-Allombert algorithm in
-Bosma-Canon-Steel framework. This solutions immediately gives a compatible
+replacing the naive embedding algorithm by the Lenstra-Allombert algorithm in
+the Bosma-Canon-Steel framework. This solutions immediately gives a compatible
 lattice of embedded finite fields. Still, among the sub-goals presented in
 Section~\ref{sec:compatibility-problem} that such a lattice may achieve, there
 are two of them on which we would like to improve.
@@ -699,7 +702,7 @@ are two of them on which we would like to improve.
     \]
     in the
     lattice, which grow quadratically with the number of fields, because of the
-    common subfield compatibility condition in Bosma-Canon-Steel framework.
+    common subfield compatibility condition in the Bosma-Canon-Steel framework.
 \end{description}
 In this section and in Section~\ref{sec:standard-embeddings}, we will see how to
 choose special solutions of \eqref{eq:h90-kummer}, in order to manage these
@@ -736,7 +739,7 @@ Therefore, the complete Kummer algebra of level $a$ is the Kummer algebra
   \mathbb{F}_{p^{p^a-1}}\otimes\mathbb{F}_p(\zeta_{p^a-1})\\
   &=\mathbb{F}_{p^{p^a-1}}\otimes\mathbb{F}_{p^{a}}
 \end{align*}
-with field of scalar
+with field of scalars
 \[
   \mathbb{F}_{p^{a}}\cong \mathbb{F}_p(\zeta_{p^a-1}).
 \]
@@ -806,7 +809,7 @@ behind the notion of \emph{standard} elements.
 \end{defi}
 \begin{defi}[Decorated Kummer algebra]
   Let $m$ be an integer prime to $p$. We define a \emph{decorated Kummer
-  algebra} as a couple
+  algebra} as a pair
   \[
     (A_m, \alpha_m),
   \]
@@ -819,7 +822,7 @@ no longer the case in a non complete Kummer algebra, but we can still find
 standard solutions.
 \begin{prop}
   \label{prop:decoration}
- Let $m$ an integer prime to $p$. Then $A_m$ can be decorated, \ie it admits a
+ Let $m$ be an integer prime to $p$. Then $A_m$ can be decorated, \ie it admits a
  standard solution $\alpha_m$. Moreover, this solution $\alpha_m$ is unique up
  to a $m$-th root of unity. 
 \end{prop}
@@ -906,7 +909,7 @@ prime to $p$, we can define $\mathbb{F}_{p^{m}}$ in a standard way.
 \end{defi}
 \begin{defi}[Decorated finite field]
   Let $m\in\mathbb{N}$ an integer prime to $p$. A \emph{decorated finite field}
-  is a couple $(\mathbb{F}_{p^{m}}, s_m)$ where $s_m\in\mathbb{F}_{p^{m}}$ is a
+  is a pair $(\mathbb{F}_{p^{m}}, s_m)$ where $s_m\in\mathbb{F}_{p^{m}}$ is a
   standard generating element.
 \end{defi}
 \begin{rem}
@@ -940,7 +943,7 @@ induced by the cyclotomic lattice given by the Conway polynomials with $p=2$.
     polynomials for $p=2$.}
   \label{tab:std-polys}
 \end{table}
-A small variation of Lenstra-Allombert algorithm, given by
+A small variation of the Lenstra-Allombert algorithm, given by
 Algorithm~\ref{algo:decoration}, allows us to compute all these standard
 elements.
 \begin{algorithm}
@@ -1422,7 +1425,7 @@ provides embeddings that are compatible.
   \State Recover $\alpha_m$ from $s_m$ and $\alpha_n$ from $s_n$ using
   Remark~\ref{rem:recover-alpha}.%\vspace{-.7\baselineskip}
   \State Compute
-  $\kappa_{m,n}=(\iota_{n,p^b-1})^{-1}((\zeta_{p^b-1})^{-\frac{(b-a)p^{b+a}-bp^b+ap^a}{(p^a-1)m}})$
+  $\kappa_{m,n}=(\iota_{n,p^b-1})^{-1}\left((\zeta_{p^b-1})^{-\frac{(b-a)p^{b+a}-bp^b+ap^a}{(p^a-1)m}}\right)$
   where $a=\nu(m)$, $b=\nu(n)$.
   \State Return
   $\first{(1\otimes\kappa)(\alpha_n)^{\frac{n}{m}}}{(\zeta_n)^{\frac{n}{m}}}$.
@@ -1612,7 +1615,7 @@ the field of scalar $\mathbb{F}_{p}(\zeta_n)$ to
 \[
   \mathbb{F}_p( (\zeta_n)^{\frac{n}{m}}) \cong \mathbb{F}_p(\zeta_m),
 \]
-which cost $O(n^{\frac{\omega+3}{2}})$. Instead, we note that we only need
+which costs $O(n^{\frac{\omega+3}{2}})$. Instead, we note that we only need
 \[
   \first{\hat\alpha}{(\zeta_n)^{\frac{n}{m}}},
 \]
@@ -1817,7 +1820,7 @@ with $d\mid880$. The number $880$ was chosen because it is not divisible by
 $p=3$ and because it has 20 different divisors, which is the maximum we can
 obtain for numbers coprime to $3$ and less than $1000$. The number $560$ is
 also suitable and produces similar results. We use logarithmic scale on the
-abcissa axis because there is a greater number of small divisors.
+$x$-axis because there is a greater number of small divisors.
 \begin{figure}
   \centering
   \includegraphics{benchmarks/lattice-h90/embed-to-degree-880.eps}
@@ -1848,9 +1851,10 @@ characteristic $p$ on the timings is minimal, compared to the other parameters.
 \section{Conclusion and perspectives}
 
 In this chapter, we introduced a new idea to produce a lattice of compatibly
-embedded finite fields, based on both Conway polynomials and Bosma-Canon-Steel
+embedded finite fields, based on both Conway polynomials and the Bosma-Canon-Steel
 framework. Conway polynomials are used in many computer algebra systems, and
-Bosma-Canon-Steel is used in Magma. Our idea exploits new techniques and is thus
+the Bosma-Canon-Steel framework is used in Magma. Our idea exploits new
+techniques and is thus
 interesting in itself. Furthermore, it also leads to a new family of (standard)
 polynomials that can be used to define finite fields. Nevertheless, this new
 family has no practical impact at the moment. Indeed, we can prove that
@@ -1869,7 +1873,7 @@ such an algorithm, however the implemention presented in
 Section~\ref{sec:implementation-std-lattices} is not the only possible way to
 exploit our definitions. Indeed, it could be possible to loosen the assumption
 that a cyclotomic lattice exists, and thus find a middle ground between the
-rigidity of Conway polynomials and the flexibility of Bosma-Canon-Steel
+rigidity of Conway polynomials and the flexibility of the Bosma-Canon-Steel
 framework, for example by lazily computing the roots of unity only when needed.
 An orthogonal line of work would be to construct a complete lattice of
 compatibly embedded finite fields, \ie working even with degrees that are not
