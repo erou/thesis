@@ -254,6 +254,13 @@ operations with these objects: the science studying how to do so is called
 \emph{arithmetic}. In conclusion, it is necessary to have efficient arithmetic
 for cryptography and cryptanalysis.
 
+Examples of cryptographic protocols relying on finite field extension include
+the quasi-polynomial algorithm for discrete logarithm in small characteristic by
+Granger, Kleinjung and Zumbrägel~\cite{GKZ14}, where a tower of finite field
+extensions is used. In the domain of curve-based cryptography, pairing friendly
+curves~\cite{Joux00, FST10} are also defined on some finite field extension
+$\mathbb{F}_{q^k}$.
+
 \subsection{Coding theory}
 \label{sec:coding}
 
@@ -365,7 +372,10 @@ logic. Finite fields are used to represent and manipulate codewords of error
 correction codes. For example, the Reed-Solomon codes~\cite{RS60}, that are used
 in consumer technologies like CDs, DVDs, Blu-ray discs, QR codes, but also in
 space NASA missions, use sequences of values taken in a finite field as
-codewords. In conclusion, exactly like in cryptography, finite fields are
+codewords. Some other codes, like the geometric Goppa codes~\cite{Goppa81}, are
+based on algebraic function fields, a mathematical structure that is based on
+top of finite fields and involves finite field extensions.
+In conclusion, exactly like in cryptography, finite fields are
 ubiquitous in coding theory, and efficient arithmetic in finite fields ensures
 at the same time fast coding and fast decoding.
 
