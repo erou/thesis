@@ -9,6 +9,118 @@ fields}.
 
 \clearpage
 
+\paragraph{Outline of Chapter~\ref{chap:standard}.} In this chapter, we
+construct new theoretic tools in order to build a new framework to manage finite
+field extensions. Before studying these objects in details in the following
+sections, we briefly explain our general strategy. If we have three integers
+\[
+  l\mid m\mid n,
+\]
+we can define embeddings between the finite fields
+$\mathbb{F}_{p}(\zeta_l), \mathbb{F}_{p}(\zeta_m)$ and
+$\mathbb{F}_{p}(\zeta_n)$, where $\zeta_l$ (resp. $\zeta_m, \zeta_n$) is a
+primitive $l$-th (resp. $m$-th, $n$-th) root of unity.
+\begin{center}
+  \begin{tikzpicture}
+    \node (d) at (0, 0) {$\mathbb{F}_{p}(\zeta_l)$};
+    \node (m) at (1.5, 1) {$\mathbb{F}_{p}(\zeta_m)$};
+    \node (n) at (0.5, 2) {$\mathbb{F}_{p}(\zeta_n)$};
+
+    \draw[arrow] (m) to (n);
+    \draw[arrow] (d) to (m);
+    \draw[arrow] (d) to (n);
+  \end{tikzpicture}
+\end{center}
+Indeed, one can send $\zeta_l$ to $(\zeta_m)^{m/l}$ or to $(\zeta_n)^{n/l}$ to
+embed $\mathbb{F}_p(\zeta_l)$ in either $\mathbb{F}_{p}(\zeta_m)$ or
+$\mathbb{F}_p(\zeta_n)$. Similarly, one can send $\zeta_m$ to
+$(\zeta_n)^{n/m}$ to obtain an embedding from $\mathbb{F}_{p}(\zeta_m)$ to
+$\mathbb{F}_p(\zeta_n)$. In order to achieve compatibility between these
+embeddings, one must have
+\[
+  ((\zeta_n)^{n/m})^{m/l} = (\zeta_m)^{m/l} = \zeta_l.
+\]
+This is essentially how Conway polynomials work: one
+ensures that every finite field can be described as $\mathbb{F}_{p}(\zeta)$ for
+some primitive root $\zeta$ that is compatible with every other primitive root.
+A simple way of obtaining such a compatible configuration is to start from the root
+$\zeta_n$ and compute $\zeta_l$ and $\zeta_m$ from $\zeta_n$.
+
+We see in Section~\ref{sec:lenstra-allombert-embeddings} that this situation can
+be generalized to arbitrary extensions $\mathbb{F}_{p^{l}}, \mathbb{F}_{p^{m}},
+\mathbb{F}_{p^{n}}$ using the Lenstra-Allombert algorithm. Starting from a
+primitive $n$-th root $\zeta_n$, one can compute the roots $\zeta_l, \zeta_m$
+and construct the algebra $A_n =
+\mathbb{F}_{p^{n}}\otimes\mathbb{F}_{p}(\zeta_n)$, and the corresponding
+algebras $A_l$ and $A_m$. Then, from a solution $\alpha_n\in A_n$
+of~\eqref{eq:h90-kummer} for $\zeta_n$, we can compute solutions $\alpha_l,
+\alpha_m$ of~\eqref{eq:h90-kummer} in $A_l$ and $A_m$, and deduce compatible
+embeddings between the finite fields $\mathbb{F}_{p^{l}},
+\mathbb{F}_{p^{m}}, \mathbb{F}_{p^{n}}$.
+\begin{center}
+  \begin{tikzpicture}
+    \node (d) at (0, 0) {$\mathbb{F}_{p^l}$};
+    \node (m) at (1.5, 1) {$\mathbb{F}_{p^m}$};
+    \node (n) at (0.5, 2) {$\mathbb{F}_{p^n}$};
+
+    \draw[arrow] (m) to (n);
+    \draw[arrow] (d) to (m);
+    \draw[arrow] (d) to (n);
+
+    \draw[arrow] (3, 1) to (4, 1);
+
+    \node (ad) at (6, 0) {$\mathbb{F}_{p^{l}}\otimes\mathbb{F}_{p}(\zeta_l)$};
+    \node (am) at (7.5, 1) {$\mathbb{F}_{p^{m}}\otimes\mathbb{F}_{p}(\zeta_m)$};
+    \node (an) at (6.5, 2) {$\mathbb{F}_{p^{n}}\otimes\mathbb{F}_{p}(\zeta_n)$};
+
+    \draw[arrow] (am) to (an);
+    \draw[arrow] (ad) to (am);
+    \draw[arrow] (ad) to (an);
+
+  \end{tikzpicture}
+\end{center}
+Because we can deduce compatible embeddings from a solution $\alpha$
+of~\eqref{eq:h90-kummer} in a big algebra, we study the biggest algebra for a
+given field of scalars $\mathbb{F}_{p^{a}}=\mathbb{F}_p(\zeta_{p^a-1})$, that we
+call \emph{complete algebra}, and that is given by
+\[
+  A_{p^a-1} = \mathbb{F}_{p^{p^a-1}}\otimes \mathbb{F}_p(\zeta_{p^a-1}).
+\]
+These algebras are also the biggest algebras for a given level $a$.
+We see in Section~\ref{sec:standardization} that the solutions $\alpha$
+of~\eqref{eq:h90-kummer} for $\zeta_{p^a-1}$ in complete algebras all share a
+very special property: they satisfy
+\[
+  \alpha^{p^a-1} = (\zeta_{p^a-1})^a,
+\]
+\ie they all have the same Kummer constant. We also see that the solutions
+$\beta$ of~\eqref{eq:h90-kummer} in smaller Kummer algebras of the same level
+$a$ that are computed from $\alpha$ also share the same Kummer constant.
+Conversely, we can prove that the solutions that have the desired Kummer
+constant 
+\[
+  c = (\zeta_{p^a-1})^a
+\]
+are linked with a solution $\alpha$ in the complete algebra of level $a$.
+We thus call these special solutions \emph{standard}, and we show in
+Section~\ref{sec:towards-standard-embeddings} how to construct compatible
+embeddings from them, that we call \emph{standard embeddings}. Given a Kummer
+algebra $A_n = \mathbb{F}_{p^{n}}\otimes \mathbb{F}_{p}(\zeta_n)$ of degree $a$,
+we do not have to compute the complete algebra of degree $a$ in order to find a
+standard solution in $A_n$, we can directly compute it in the smaller algebra
+$A_n$. We call the pair $(A_n, \alpha_n)$, where $\alpha_n$ is a \emph{standard}
+solution, a \emph{decorated algebra}. Decorated algebras allow us to compute
+embeddings in an \emph{incremental} way, which is important when managing
+finite field extensions. We finally show how to link complete algebras of
+different levels in Section~\ref{sec:standard-embeddings}, so that two standard
+solutions of~\eqref{eq:h90-kummer} in two arbitrary Kummer algebras can always
+be used to compute a compatible embedding between the associated finite fields.
+Again, in the general case of two arbitrary Kummer algebra, the computed
+embedding is called \emph{standard}, and it is also compatible with future
+embeddings, meaning that the framework is incremental. We then discuss the
+implementation of the framework in
+Section~\ref{sec:implementation-std-lattices}.
+
 \section{The Lenstra-Allombert algorithm and lattices of embeddings}
 \label{sec:lenstra-allombert-embeddings}
 

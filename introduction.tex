@@ -30,8 +30,8 @@ we begin by explaining what it is.
 
 As we are social animals, we often need to communicate with each other.
 Sometimes, we want our communications to be secret: the reasons behind this
-wish are multiple: military informations, business, secret love stories, banking
-informations, personal medical informations, and so on... Cryptography is the
+wish are multiple: military information, business, secret love stories, banking
+information, personal medical information, and so on... Cryptography is the
 practice and study of the techniques used to secure communications, in the
 presence of third parties called \emph{adversaries}. Historically, cryptography
 focused on \emph{encryption} of messages (message confidentiality), \ie making
@@ -260,7 +260,7 @@ for cryptography and cryptanalysis.
 Another very elegant (and useful) application of finite fields is
 \emph{coding theory}. Like cryptography, it is linked with communication,
 although it adresses a different issue entirely. We now assume that Alice and
-Bob want to communicate, and that the informations they send go through a
+Bob want to communicate, and that the information they send go through a
 channel. In practice, this channel could be optical fiber, electrical wires, radio
 waves, and many more things. Assume that Alice wants to send the message ``Hi!
 How are you?'' to Bob. In fact these letters would probably first be translated
@@ -351,7 +351,8 @@ lengths. Though, when we use a repetition code of length $n$, we have to send
 $n$ times more information in the communication channel, which comes at a cost
 in real life situations. We thus have to balance the cost coming from the length
 of the code with the number of errors we want to be able to correct. In fact,
-depending, all codes are not suitable, Claude Shannon proved in
+depending on the quality of the communication channel, all codes are not
+suitable. Claude Shannon proved in
 1948~\cite{Shannon48} that we can define a quantity called the \emph{capacity}
 of the channel that essentially measures how much information we can send
 through a communication channel. It also measures how much repetition we
