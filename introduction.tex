@@ -194,7 +194,7 @@ cryptography, hence another solution for Bob is to encrypt a secret and send it
 to Alice, in order to be able to use symmetric encryption with that secret. This
 is what is done in practice: only a \emph{key exchange} is performed using
 public-key cryptography, the rest being handled by symmetric cryptography.
-Still, public-key cryptography is fundamental, since it allows us to use
+Still, public-key cryptography is foundamental, since it allows us to use
 symmetric cryptography.
 
 The first key exchange protocol was invented by Diffie and Hellman in
@@ -431,6 +431,7 @@ field is still unknown. This is the subject of this thesis: the study of the
 finite field arithmetic.
 
 \section{Organization of the document}
+\subsection{Efficient arithmetic in a single finite field}
 
 This work is composed of two parts, that are essentially independent. In
 Part~\ref{part:single}, we study the arithmetic of one fixed finite field
@@ -438,66 +439,295 @@ extension
 \[
   \mathbb{F}_{p^k}.
 \]
-We begin in Chapter~\ref{chap:preliminary} by recalling fundamental
+\paragraph{Preliminaries.} We begin in Chapter~\ref{chap:preliminary} by
+recalling foundamental
 facts about the mathematical objects that we use in the rest of the document. We
-review \emph{finite fields}, that are at the center of this thesis, and
-\emph{algebraic function fields}, a concept that we use in proofs in
-Chapters~\ref{chap:bilinear} and~\ref{chap:hypersymmetric}. We also
-present the algebraic complexity model and some classic routines, that are
-especially used in Chapters~\ref{chap:isomorphism} and~\ref{chap:standard}.
+present some properties about \emph{finite fields}, that are at the center of
+this thesis. In particular, we recall the structure of finite fields, and how to
+construct them as quotients of polynomial rings
+\[
+  \mathbb{F}_p[x]/(P(x)).
+\]
+We also give some properties of finite field extensions concerning their vector
+space structure and their group of automorphisms.
 
-In Chapter~\ref{chap:bilinear}, we present the theory of \emph{bilinear
-complexity}, an
-alternative model of complexity used to measure the cost of computing bilinear
-maps. We are in particular interested in the multiplication in finite field
-extensions. We present an algorithm due to Chudnovsky and Chudnovsky~\cite{CC88}
-that gives an asymptotic bound on the bilinear complexity of the product in
-finite field extensions. Since this algorithm is not practical, we also give an
-algorithm due to Barbulescu, Detrey, Estibal and Zimmermanm~\cite{BDEZ12} to
-compute the bilinear complexity in small dimension.
+In Section~\ref{sec:algebraic-function-fields}, we present \emph{algebraic
+function fields}, an algebraic structure that we use in some proofs in
+Chapters~\ref{chap:bilinear} and~\ref{chap:hypersymmetric}. We briefly recall
+what \emph{places} are, and that they are essentially equivalent to a discrete
+valuation or a valuation ring. We describe how to evaluate an element
+$z$ of the algebraic function field to a place $P$, and give the definition of
+zero and pole, justifying the name of ``function'' field. We finally give the
+definition of \emph{divisors} and recall the usual results of the theory: the
+link between the degree and the dimension of a divisor, the definition of the
+\emph{genus} of an algebraic function field, and the Riemann-Roch theorem.
 
-In Chapter~\ref{chap:hypersymmetric}, we generalize the notion of bilinear
+In Section~\ref{sec:complexity-models}, we give the model of \emph{algebraic
+complexity} and explain why it is suitable in our work. We also give the usual
+asymptotic notations \emph{big O} and \emph{little o}, that are used in the
+thesis to express asymptotic results.
+
+Finally in Section~\ref{sec:foundamental-algos}, we give references and recall
+the complexity of some classic and very important routines: the Brent-Kung
+algorithm for modular composition, minimal polynomial computation, and the
+Berlekamp-Massey algorithm. These routines are used in some
+algorithms that are presented in this thesis, especially
+in Chapters~\ref{chap:isomorphism} and~\ref{chap:standard}.
+
+\paragraph{Bilinear complexity and Chudnosky$^2$-type algorithms.} In
+Chapter~\ref{chap:bilinear}, we present the theory of \emph{bilinear
+complexity}, an alternative model of complexity used to measure the cost of
+computing bilinear maps. In this model, only multiplications are counted, which
+is justified because in practice multiplications are harder to compute than
+additions. The bilinear complexity of a map is then given by the minimal number
+of needed multiplications. Karatsuba's algorithm is a practical example of the
+interest of this complexity model. Indeed, the idea behind this algorithm is to
+multiply two degree $1$ polynomials
+\[
+  A = a_1 X + a_0\text{ and }B = b_1 X + b_0
+\]
+with only three products
+\[
+  c_0 = a_0b_0,
+\]
+\[
+  c_1 = (a_0+a_1)(b_0+b_1),
+\]
+and
+\[
+  c_\infty = a_1b_1,
+\]
+instead
+of the four classic ones $a_0b_0$, $a_0b_1$, $a_1b_0$ and $a_1b_1$ as follows:
+\[
+  AB = c_\infty X^2 + (c_1-c_\infty-c_0) X + c_0.
+\]
+In Section~\ref{sec:bilinear-complexity}, after rigorously defining the bilinear
+complexity for a bilinear map $\Phi$ using \emph{bilinear formulas}, we explain
+how it is equivalent to the rank of the tensor corresponding to $\Phi$. We also
+present the \emph{symmetric} version of the bilinear complexity, which counts
+the minimal number of symmetric multiplications that we need in order to compute
+$\Phi$, and that is also studied in the litterature. We are in particular
+interested in the multiplication in finite field extensions and on understanding
+the (symmetric) bilinear complexity of this bilinear map.
+
+In Section~\ref{sec:chudchud-algo}, we recall the principle of evaluation and
+interpolation and present an algorithm due to Chudnovsky and
+Chudnovsky~\cite{CC88} based on evaluation and interpolation on the places of an
+algebraic function field. This seminal algorithm gives an asymptotic
+\emph{linear} bound on
+both the bilinear complexity and the symmetric bilinear complexity of the
+product in finite field extensions. It was extensively studied, giving birth to
+many improvements~\cite{BR04, CO10, Randriam12} that we succinctly present.
+
+However, since Chudnovsky and Chudnovsky's algorithm is not practical, we also
+give in Section~\ref{sec:algorithmic-searches} an algorithm due to Barbulescu,
+Detrey, Estibal and Zimmermanm~\cite{BDEZ12} to compute the bilinear complexity
+in small dimension. Their algorithm enumerates all bilinear formulas of a given
+length, and can thus be used to find the minimal length of a formula for some
+bilinear map $\Phi$, \ie the bilinear complexity of $\Phi$. The
+algorithm is explained in details, and some improvements due to
+Covanov~\cite{Covanov19} are mentionned.
+
+\paragraph{Hypersymmetric bilinear complexity.}
+In Chapter~\ref{chap:hypersymmetric}, we investigate new types of interesting
+complexities, and provide results both in small dimension and asymptotically.
+In Section~\ref{sec:sym-and-hypersym}, we generalize the notion of bilinear
 complexity to the product of $s\geq2$ variables
 \[
   x_1\times x_2\times\dots\times x_{s-1}\times x_s
 \]
-in a finite field extension $\mathbb{F}_{p^k}$. We also generalize the fact
+in a finite field extension $\mathbb{F}_{p^k}$. Adapting the algorithm of
+Chudnovsky and Chudnovsky to this case, we show in Section~\ref{sec:asymptotic}
 that this so called \emph{multilinear complexity} is still linear in the degree
-$k$ of the extension~\cite{RR21}, as is the case with
-the classic bilinear complexity. We define a new kind of complexity called the
-\emph{hypersymmetric bilinear complexity}, that is inspired by the usual
-symmetric bilinear complexity. We provide an \emph{ad hoc} algorithm to compute
-this complexity in small dimension, and prove that it is still asymptotically
-linear in the degree of the extension.
+$k$ of the extension~\cite{RR21}, as is the case with the classic bilinear
+complexity.
 
+In this chapter, we define a new kind of complexity called the
+\emph{hypersymmetric bilinear complexity}, that is inspired by the usual
+symmetric bilinear complexity, where an additional symmetry property is asked.
+We provide an \emph{ad hoc} algorithm, inspired by the algorithm of Barbulescu,
+Detrey, Estibal and Zimmermanm, to compute this complexity in small dimension.
+We explain our algorithm in details and provide experimental results concerning
+the hypersymmetric bilinear complexity of the multiplication in finite field
+extensions in Section~\ref{sec:algo-small-dim}. Using \emph{universal formulas},
+\ie formulas that are true for almost all prime $p$, we also give theoretical
+results on the hypersymmetric complexity in finite field extensions
+\[
+  \mathbb{F}_{p^{k}}
+\]
+and truncated polynomials algebras
+\[
+  \mathbb{F}_p[T]/(T^k)
+\]
+in small dimension $k$, that generalize known results for the bilinear
+complexity. Aditionally, we obtain the asymptotic linearity in $k$ of the
+hypersymmetric complexity of the multiplication in a finite field extension
+$\mathbb{F}_{p^k}$ as a corollary of the same result for multilinear
+complexity.
+
+\subsection{Efficient arithmetic in a lattice of finite fields}
 In Part~\ref{part:lattice}, we study how to deal with multiple finite fields
 at once, in what we call a \emph{lattice of compatibly embedded finite fields}.
 This is the equivalent as wondering how to compute in the algebraic closure
 \[
   \bar{\mathbb{F}}_{p} = \bigcup_{k\geq1}\mathbb{F}_{p^k}
 \]
-of the base field $\mathbb{F}_p$. In Chapter~\ref{chap:isomorphism}, we review
-the isomorphism problem, which asks how to efficiently compute an isomorphism
-(or more generally an embedding)
+of the base field $\mathbb{F}_p$.
+
+\paragraph{Isomorphism algorithms.}
+Chapter~\ref{chap:isomorphism} is dedicated to the isomorphism problem, which
+asks how to efficiently compute an isomorphism (or more generally an embedding)
 \[
   K \emb L
 \]
-between two finite fields $K$ and $L$. We present the naive algorithm and the
-Lenstra-Allombert algorithm~\cite{Lenstra91, Allombert02}. These algorithms will
-respectively serve as the building blocks of the algorithms in
-Chapters~\ref{chap:lattice} and~\ref{chap:standard}.
+between two finite fields $K$ and $L$. In Section~\ref{sec:prelim-naive-algo},
+we present the isomorphism problem and, following~\cite{BDDFS17}, we divide it
+in two parts, the \emph{embedding description problem} and the \emph{embedding
+evaluation problem}. The embedding description problem consists in finding
+elements $\alpha\in K$ and $\beta\in L$ such that
+\[
+  K = \mathbb{F}_{p}(\alpha)
+\]
+and such that there exists an embedding $\phi:K\emb L$ mapping $\alpha$ to
+$\beta$. Then, knowing $\alpha$ and $\beta$, the embedding evaluation problem
+consists in efficiently evaluating $\phi$. We first deal with the description
+problem and present the naive algorithm, based on polynomial factorization, in
+Section~\ref{sec:embedding-description}. This algorithm plays an important role
+in Chapter~\ref{chap:lattice}.
 
-In Chapter~\ref{chap:lattice}, we present \emph{the compatibility problem}, that
-asks how to compute embeddings between potentially much more that two finite
-fields, in a compatible way, \ie so that the diagrams made of the embeddings
-always commute. We present the Conway polynomials~\cite{Parker90, Scheerhorn92}
-and the Bosma-Canon-Steel~\cite{BCS97}
-framework, two different solutions for the compatibility problem. We also
-provide an implementation~\cite{DRR18} of Bosma-Canon-Steel framework in
-Nemo~\cite{Nemo}, a library of the Julia~\cite{Julia} programming language.
+In Section~\ref{sec:allombert}, we present a more elaborate algorithm due to
+Allombert~\cite{Allombert02} and inspired by Lenstra's work~\cite{Lenstra91},
+that we call the Lenstra-Allombert algorithm. The Lenstra-Allombert algorithm is
+based on Kummer theory, the study of certain field extensions, and works with
+primitive roots of unity. If a primitive $n$-th root of unity $\zeta_n$ is in
+$\mathbb{F}_{p^n}$, then the description of the algorithm is simpler and is
+given in Section~\ref{sec:preliminaries}. Otherwise, we need to artificially add
+$\zeta_n$ to $\mathbb{F}_{p^n}$, and this leads to the study of the algebras
+\[
+  A_n = \mathbb{F}_{p^{n}}\otimes\mathbb{F}_{p}(\zeta_n),
+\]
+that we call \emph{Kummer algebras}. The elements $\alpha$ and $\beta$
+describing the embedding given by the Lenstra-Allombert algorithm are deduced
+from the solutions of equations of the form
+\[
+  (\sigma\otimes 1)(x) = (1\otimes\zeta)x
+\]
+in Kummer algebras. We call these equations~\eqref{eq:h90-kummer}.
+Kummer algebras, together with the solutions of~\eqref{eq:h90-kummer}, are
+extensively studied in Section~\ref{sec:kummer-algebras}, because they are also
+of central importance in Chapter~\ref{chap:standard}.
 
+Using the results of Section~\ref{sec:kummer-algebras}, we explain in
+Section~\ref{sec:lenstra-allombert-isomorphism} how to derive the elements
+$\alpha$ and $\beta$ from the solutions of~\eqref{eq:h90-kummer}. Finally, we
+present the known techniques to compute solutions of~\eqref{eq:h90-kummer} in
+Section~\ref{sec:computing-h90}. The Lenstra-Allombert algorithm serves as the
+building block of the algorithms in Chapter~\ref{chap:standard}. Finally, the
+standard techniques that are used to answer the embedding evaluation problem are
+presented in Section~\ref{sec:evaluation}.
+
+\paragraph{From a single finite field to plenty: lattice of embeddings.}
+In Chapter~\ref{chap:lattice}, we investigate \emph{the compatibility problem},
+that asks how to compute embeddings between potentially much more that two
+finite fields, in a compatible way, \ie so that the diagrams made of the embeddings
+always commute. This can be expressed in other words: given any three finite
+field extensions 
+\[
+  k \subset K\subset L
+\]
+and embeddings $\phi:k\to K$, $\psi:K\to L$, $\chi:k\to L$ between them, we want
+the equality
+\[
+  \chi=\psi\circ\phi.
+\]
+\begin{center}
+\begin{tikzpicture}
+  \node (E) at (0, 0) {$k$};
+  \node (F) at (1.5, 1) {$K$};
+  \node (G) at (0.5, 2) {$L$};
+
+  \draw[arrow] (E) -- (F);
+  \draw[arrow] (E) -- (G);
+  \draw[arrow] (F) -- (G);
+
+  \node (f12) at (1, 0.25)
+  {$\phi$};
+  \node (f13) at (-0.1, 1)
+  {$\chi$};
+  \node (f23) at (1.4, 1.65)
+  {$\psi$};
+\end{tikzpicture}
+\end{center}
+The general problem, as well as additional sub-goals, are presented in
+Section~\ref{sec:compatibility-problem}.
+
+In Section~\ref{sec:conway}, we present a first solution, based on the Conway
+polynomials~\cite{Parker90, Scheerhorn92}. These polynomials are used to define
+the finite field extensions and possess the very interesting property of being
+\emph{norm-compatible}, meaning that taking the norm of the root of a Conway
+polynomial sends it to the root of another Conway polynomial. This provides
+easy-to-compute embeddings: indeed the embedding description problem is solved
+by computing a norm. Naturally, before using Conway polynomials, we first need
+to compute them. This is a problem because we do not know any efficient
+algorithm to compute Conway polynomials. As a consequence, Conway polynomials
+are usually precomputed up to some degree $d$ in most computer algebra systems,
+and it is no longer possible to compute embeddings with finite field extensions
+that have a degree larger than this given degree $d$.
+
+In Section~\ref{sec:bosma-canon-steel}, we introduce another solution to the
+compatibility problem, called the Bosma-Canon-Steel framework~\cite{BCS97}.
+This framework allows us to use any given polynomial to define our finite field
+extensions, and is \emph{incremental}, meaning that we can always add more
+extensions to our data structure, without having to recompute anything. It is
+much more flexible than Conway polynomials, and is thus a very interesting
+alternative to them. We describe it in details in Section~\ref{sec:bcs-alg}.
+This framework was first available in the computer algebra system
+Magma~\cite{Magma} since at least 1997. To the best of my knowledge, the only
+additional computer algebra system using the Bosma-Canon-Steel framework is
+Nemo~\cite{Nemo}. The framework was implemented in Fall 2019 and all the
+implementation details, as well as experimental results, are given in
+Section~\ref{sec:bcs-implem}.
+
+\paragraph{Standard lattice of compatibly embedded finite field.}
 Finally, in Chapter~\ref{chap:standard}, we construct a new method~\cite{DRR19}
 for computing lattices of compatibly embedded finite fields, that is halfway
-between the Conway polynomials and the Bosma-Canon-Steel framework, and is
-inspired by the Lenstra-Allombert embedding algorithm. We explain the benefits
-of using this new method and provide an implementation in Julia, using Nemo.
+between the Conway polynomials and the Bosma-Canon-Steel framework. The central
+element of this construction is the Lenstra-Allombert embedding algorithm. In
+Section~\ref{sec:lenstra-allombert-embeddings}, we explain how this algorithm
+can be used to produce compatible embeddings, by choosing compatible solutions
+of~\eqref{eq:h90-kummer}, and the new challenges it raises.
+
+In Section~\ref{sec:standard-solution}, we show that some large Kummer algebras
+called \emph{complete Kummer algebras}, that can be described by
+\[
+  A_{p^a-1} = \mathbb{F}_{p^{p^a-1}}\otimes\mathbb{F}_{p}(\zeta_{p^a-1})
+  = \mathbb{F}_{p^{p^a-1}}\otimes \mathbb{F}_{p^a},
+\]
+admit special solutions of~\eqref{eq:h90-kummer}, that we call \emph{standard
+solutions}. We then prove that from these standard solutions in the complete
+algebra $A_{p^a-1}$, we can deduce solutions of~\eqref{eq:h90-kummer} in every
+Kummer algebra
+\[
+  A_n = \mathbb{F}_{p^n}\otimes \mathbb{F}_{p}(\zeta_n)
+\]
+such that $\mathbb{F}_{p}(\zeta_n)$ is an extension of degree $a$. We see that
+the solutions derived from the standard solution also share some special
+properties, and that all these solutions can be used to obtain
+compatible embeddings between all the associated finite field extension
+$\mathbb{F}_{p^n}$.
+
+In Section~\ref{sec:towards-standard-embeddings}, we show that if $a\mid b$, the solutions
+of~\eqref{eq:h90-kummer} in the complete Kummer algebras $A_{p^a-1}$ and
+$A_{p^b-1}$ can also be linked by some operator that we call \emph{scalar norm
+operator} and that essentially acts like the usual norm of finite fields.
+We use these results in Section~\ref{sec:standard-embeddings} to obtain
+compatible embeddings between arbitrary finite field extensions
+$\mathbb{F}_{p^m}$ and $\mathbb{F}_{p^n}$, provided that $m\mid n$.
+
+We analyze the complexity of this new framework in
+Section~\ref{sec:implementation-std-lattices} and provide an implementation in
+the Julia programming language~\cite{Julia}, using Nemo. We see that our
+construction is practical, and that embeddings are computed in a reasonable
+time. In Section~\ref{sec:perspectives}, we discuss the limitations of our
+approach and propose new perspectives of research.
