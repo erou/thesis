@@ -1,444 +1,122 @@
-This introduction is intended to all readers, not only mathematicians. We
-first present some applications of the concept at the center of this thesis, the
-\emph{finite field} structure, in order to grasp how useful it is in real life.
-Those eager to learn more about the technical details or the mathematics behind
-the exposed subjects can do so by reading the articles and books for which we
-give references. Of course, this thirst for mathematics can also be fulfilled
-(up to a point) by reading the next chapters of this thesis.
-
+In this Chapter, we briefly recall the special role of finite fields in computer
+computer algebra. We explain some challenges, as well as our contributions in
+understanding them. We also give an overview of the whole document and specify
+what to expect in each chapter.
 \minitoc
-% TODO
-% ====
-%
-% Find an illustration (something linked with crypto preferably)
 \clearpage
 
-\section{Applications of finite fields}
+\section{Finite fields in computer algebra}
 
-During my PhD, I would always explain to non-mathematicians that I was doing a
-PhD in \emph{cryptography}. This is in fact a lie, because even if
-the words ``cryptography'' and ``cryptanalysis'' were initially among those composing
-the title of this project, that was first called \emph{Efficient arithmetic for
-cryptography and cryptanalysis}, the thesis is definitely more oriented
-towards the two first words: \emph{efficient arithmetic}. Still, cryptography
-is one of the motivations and sometimes inspiration for this work. The problems
-we focus on either have their roots or have applications in cryptography, thus
-we begin by explaining what it is.
-
-\subsection{Cryptography}
-\label{sec:crypto}
-
-As we are social animals, we often need to communicate with each other.
-Sometimes, we want our communications to be secret: the reasons behind this
-wish are multiple: military information, business, secret love stories, banking
-information, personal medical information, and so on... Cryptography is the
-practice and study of the techniques used to secure communications, in the
-presence of third parties called \emph{adversaries}. Historically, cryptography
-focused on \emph{encryption} of messages (message confidentiality), \ie making
-the message unreadable for someone intercepting or eavesdropping it. For the
-rightful recipient of the message to be able to read the message, he or she had
-to be able to \emph{decrypt} (we also say \emph{decipher}) the message. It was
-only possible when both the sender and the receiver of the message shared a
-secret beforehand, the secret was then used to both cipher and decipher the
-message. In a cryptographic protocol, the common secret is called a
-\emph{key}, because the encryption is viewed as some padlock. This encryption
-method is called \emph{symmetric cryptography} because both participants share
-the same key. The situation is summed up in Figure~\ref{fig:crypto-sym}.
-\begin{figure}[h]
-  \centering
-  \begin{tikzpicture}
-    \node (msg) at (0,0) {Message};
-    \node (msg-enc) at (6,0) {Encrypted message};
-    \node (msg-rec) at (12,0) {Message};
-    \node (secret) at (6, 2) {Secret};
-    \node (enc) at (2.15,1.8) {Encryption};
-    \node (dec) at (9.75,1.8) {Decryption};
-
-    \draw[->] (msg) -- (msg-enc);
-    \draw[->] (msg-enc) -- (msg-rec);
-    \draw[->] (secret) to[bend right] (2.2,0);
-    \draw[->] (secret) to[bend left] (9.8,0);
-    \node (a) at (2.2,1) {\includegraphics[scale=0.3]{img/key-128.png}};  
-    \node (b) at (9.8,1) {\includegraphics[scale=0.3]{img/key-128.png}};  
-    \node (c) at (6,-1) {\includegraphics[scale=0.05]{img/lock-128.png}};  
-  \end{tikzpicture}
-  \caption{The general strategy of a symmetric cryptography protocol.}
-  \label{fig:crypto-sym}
-\end{figure}
-One famous example of an old cryptography protocol is the Caesar cipher, in
-which each letter of the message is replaced by another letter. All the letters
-are shifted by a constant number $n$ of positions down the alphabet. For
-example, with $n=3$, the letter \texttt{D} becomes \texttt{A}, the letter
-\texttt{E} becomes \texttt{B}, the letter \texttt{F} becomes \texttt{C}, and so
-on. This encryption protocol is named after Julius Caesar,
-who was using it to communicate with his generals with the shift $n=3$. In
-Figure~\ref{fig:caesar}, we draw the correspondence between the letters using
-the shift $n=3$. The outer ring represent the letters in the \emph{plaintext}
-(the original text, without encryption) while the inner ring represent the
-letters in the \emph{ciphertext} (the text after the encryption).
-\begin{figure}[h]
-  \centering
-  \begin{tikzpicture}[x=1em,y=1em]
-%   set up
-    \pgfmathsetmacro\angdiv{360/26}
-    \pgfmathtruncatemacro\caeser{3} % Input Caeser shift here! (positive for clockwise)
-    \coordinate (n-0) at (90+\angdiv/2:7) {};
-    \coordinate (m-0) at (90-\caeser*\angdiv+\angdiv/2:5) {};
-%   draw Caeser diagram
-    \draw circle [radius=8] circle [radius=6.5] circle [radius=6]  circle [radius=4.5]
-        \foreach \i in {0,...,25}{%
-            ($({90-(\i-1/2)*\angdiv}:8)$) -- ($(({90-(\i-1/2)*\angdiv}:6.5)$)
-            ($({90-(\i-1/2)*\angdiv}:4.5)$) -- ($(({90-(\i-1/2)*\angdiv}:6)$)
-        };
-    \foreach [count=\a from 0] \text in {A,B,...,Z}{
-        \pgfmathtruncatemacro\b{\a+1}%
-        \path [curved text=\text] (n-\a) arc [start angle=90-(\a-1/2)*\angdiv, delta angle=-\angdiv, radius=7] node (n-\b) {};
-        \path [curved text=\text] (m-\a) arc [start angle=90-(\a+\caeser-1/2)*\angdiv, delta angle=-\angdiv, radius=5] node (m-\b) {}; % Inner circle
-    }
-%   draw arrow
-    \draw [-latex, thick] (65:9.5) to[bend left=20,edge label=$+3$] (40:9.5);
-    \end{tikzpicture}
-  \caption{Representation of the Caesar cipher with a shift $n=3$.}
-  \label{fig:caesar}
-\end{figure}
-In this example, the secret key of the protocol is the shift parameter $n$: if
-you know $n$, you know both how to encrypt a message and how to decrypt one.
-Caesar cipher is simple enough to be executed by a machine, but it is not used
-nowadays. Indeed, the number of keys one can choose when using Caesar cipher is
-rather small, so an adversary (a spy, an enemy...) can easily guess what it is
-after spending enough time trying all the possibilities. One could even ask a
-computer to search for all the possible keys, thus recovering it even faster.
-That is why, in modern cryptography, the number of possible keys must be way
-bigger than this. For example, the standard protocol for symmetric encryption,
-called AES (for Advanced Encryption Standard), was designed in 1999~\cite{DR99,
-DR02} and can be used with $2^{128}, 2^{192}$ or $2^{256}$ different possible
-keys, depending on the version used. The smallest of these number can also be
-written as
+Finite fields are the central object of this thesis. They play a special role in
+computer algebra, since they are the building block of more complex structures
+like for example vector spaces of matrices or of polynomials. Other useful
+objects, like agebraic curves, are also built upon them. In consequence, the
+applications of finite fields are abundant. There are especially important in
+modern communication, since they are ubiquitous in coding theory and
+cryptography. Because of their special role, it is crucial to
+understand how to efficiently compute in finite fields, and there has been
+extensive research on how to do so. Let 
 \[
-  2^{128} = 340282366920938463463374607431768211456,
+  \K = \mathbb{F}_{p}
 \]
-when a billion looks like
+be a finite field of size $p$ and let 
 \[
-  10^{9} = 1000000000,
+  \mathbb{F}_{p^k}
 \]
-so they are really big numbers.
-
-The number of possible keys is not the only thing that changed since Julius
-Caesar. First, communication is now essentially digital, thus cryptography is
-now a part of computer science. This is very important because it means that the
-work in this thesis is also oriented towards computer science: we want to obtain
-mathematical results that are effective, \ie usable by a computer.
-Second, the scope of cryptography is now larger.
-In modern cryptography, symmetric encryption is only one field of
-cryptography, and there are many more aspects, such as asymmetric
-encryption (also called \emph{public-key} encryption), data integrity,
-anthentification, digital signatures (the list is not exhaustive). We will not
-explain all these terms, but the interested reader can look at the introductions
-on each of these subjects in~\cite{MVOV18}, for example. An important change in
-cryptography occured in 1976 with the seminal article \emph{New Directions in
-Cryptography}~\cite{DH76} by Diffie and Hellman, with the invention of so called
-public key cryptography. We briefly present public key encryption, in order to
-compare it to symmetric encryption.
-
-One of the main drawback about symmetric encryption is that the two
-protagonists must have a secret in common in order to be able to securely
-communicate. They can meet in person and agree on a secret, but this is not
-always possible, for example if they live very far away of each other. They
-could also find another way of communication, but then they cannot encrypt their
-communication, because they do not share a secret yet and they want to
-communicate precisely in order to share one. Thus, the problem of sharing a
-secret seems to be unsolvable. In fact, public key encryption is an answer to
-this problem, because it allows to encrypt messages without the need for a
-common secret. The elegant idea of Diffie and Hellman is to break the symmetry
-between the participants (we will call them Alice and Bob, since it is
-traditional to do so in cryptography). Instead of agreeing on a common key, only
-one participant (for example Alice) creates a \emph{pair} of keys: one of them
-is public and can be transmitted to anyone, while the other is private and must
-be known by Alice only. With the public key, one can encrypt a message, while
-the private key is necessary in order to decrypt an encrypted message. Using
-such a system, everyone is able to send encrypted messages to Alice, because the
-key used to do so is public, but only Alice can decrypt them. Thus, the
-communications are secure.
-\begin{figure}[h]
-  \centering
-  \begin{tikzpicture}
-    \node (msg) at (0,0) {Message};
-    \node (msg-enc) at (6,0) {Encrypted message};
-    \node (msg-dec) at (12,0) {Decrypted message};
-    \node (bob) at (0,2) {Bob};
-    \node (alice) at (12, 2) {Alice};
-    \node (key-pub) at (5, 2) {\includegraphics[scale=0.3]{img/key-128.png}};
-    \node (key-pub-txt) at (5, 3) {Public key};
-    \node (key-pri) at (7, 2) {\includegraphics[scale=0.065]{img/key-512.png}};
-    \node (key-pri-txt) at (7, 3) {Private key};
-    \node (lock) at (6,-1) {\includegraphics[scale=0.05]{img/lock-128.png}};  
-    \draw[->] (msg) -- (msg-enc);
-    \draw[->] (msg-enc) -- (msg-dec);
-    \draw[->] (bob) to[bend left, edge label=Encrypts] (2.5,0);
-    \node (key-pub2) at (2.2, .8) {\includegraphics[scale=0.3]{img/key-128.png}};
-    \draw[->] (alice) to[bend right, edge label = Decrypts] (9,0);
-    \node (key-pri2) at (9.4, .8) {\includegraphics[scale=0.065]{img/key-512.png}};
-    \draw[->] (alice) to (8,2);
-    \node (c) at (9.5, 2.3) {Creates};
-  \end{tikzpicture}
-  \caption{General concept of public-key encryption.}
-  \label{fig:crypto-asym}
-\end{figure}
-We draw a diagram of the general idea in Figure~\ref{fig:crypto-asym}. With such
-a system, only Bob can send messages to Alice. If Alice wants to send a message
-to Bob using public-key cryptography, then Bob has to create his own pair of
-keys. He then gives his public key to Alice, who can then encrypt her message
-using this key and send it to Bob. Bob decrypts the message using his private
-key. Public-key cryptography is somewhat heavier than symmetric
-cryptography, hence another solution for Bob is to encrypt a secret and send it
-to Alice, in order to be able to use symmetric encryption with that secret. This
-is what is done in practice: only a \emph{key exchange} is performed using
-public-key cryptography, the rest being handled by symmetric cryptography.
-Still, public-key cryptography is foundamental, since it allows us to use
-symmetric cryptography.
-
-The first key exchange protocol was invented by Diffie and Hellman in
-1976~\cite{DH76}, and an example of public-key encryption is given by the RSA
-(named after Rivest, Shamir, and Adleman) protocol~\cite{RSA78} that was
-described in 1977. These two protocols are both based on mathematical algebraic
-structures. Indeed, mathematics are a handy way of studying and explaining
-cryptography, for example Caesar cipher with $n=3$ can be explained by
-representing all letters by the numbers between $0$ and $25$
+be an extension of $\K$ of degree $k$. There are several ways of representing
+the extension $\mathbb{F}_{p^{k}}$, and a very common one is to represent the
+elements of $\mathbb{F}_{p^{k}}$ by polynomials over $\K$ modulo some
+irreducible polynomial of degree $k$, \ie we construct $\mathbb{F}_{p^{k}}$ as
 \[
-  \texttt{A}\to 0, \texttt{B} \to 1, \dots,\texttt{Y}\to24, \texttt{Z}\to25
+  \mathbb{F}_{p^{k}} = \K[T]/(P(T)),
 \]
-and by defining the encryption as the substraction by $3$. With this
-representation, we have to agree that the number $-1$ is equivalent to the
-number $25$, \ie before \texttt{A} comes \texttt{Z}, that $-2$ is equivalent to
-$24$, \ie two times before \texttt{A} comes \texttt{Y}, and so on. In fact a
-subpart of mathematics called \emph{number theory} is dedicated to the study of
-this kind of numbers, together with some rules like the one that we just stated:
-$-1=25$. These sets of numbers are called \emph{cyclic groups}, because they can
-be represented on a circle, the one we spoke about is denoted by
+where $P\in\K[T]$ is an irreducible polynomial of degree $k$. With this
+representation, addition between two elements $x$ and $y$ in
+$\mathbb{F}_{p^{k}}$ is done by adding the coefficients of the polynomials
+representing $x$ and $y$, thus addition in $\mathbb{F}_{p^{k}}$ costs up to $k$
+additions in $\K$. The situation for multiplication is not so clear, since it is
+linked with polynomial multiplication, which is a more complex operation. The
+optimal way of multiplying two polynomials over a finite field is not known, and
+there was even some progress on that question quite recently~\cite{HVDH19ff}.
+Depending on the size of $k$, the fastest way of multiplying elements in
+$\mathbb{F}_{p^k}$ is different, thus computer algebra systems typically change
+which algorithm is used depending on the size of $k$. For very small $k$, the
+naive multiplication algorithm for polynomials, that has an asymptotic
+(algebraic) complexity of $O(k^2)$, is the best. Then Karatsuba's
+algorithm~\cite{Karatsuba63} is used, with a complexity of $O(k^{\log_2(3)})$
+and $\log_2(3)\approx1.58$. Finally the best option for
+large $k$ is to use Fast Fourier Transform (FFT)~\cite{CT65, SS71}, with a
+complexity of $O(k\log(k)\log\log(k))$.
+
+All these costs are measured using the algebraic complexity model, where all operations
+are assumed to cost the same unit amount. However, as suggested by the
+efficiency of Karatsuba's algorithm, that minimizes the number of
+multiplications, and by timings in practice, the multiplication operation in $\K$
+is more expensive (\ie takes more time) than addition. Thus, in order to obtain
+efficient multiplication algorithms in finite field extensions
+$\mathbb{F}_{p^{k}}$, research has been done on the minimal number of
+multiplications in $\K$ needed to multiply two elements in
+$\mathbb{F}_{p^{k}}$. This quantity, known as the \emph{bilinear complexity}, is
+hard to compute in general and is only known for small extensions. Even when it
+is known that two elements in $\mathbb{F}_{p^{k}}$ car be multiplied using $n$
+multiplications in $\K$, actual formulas using $n$ multiplications are not
+always known. There is still a lot to discover in bilinear complexity theory.
+
+Since the cost of addition is linear in the extension degree, and the cost of
+multiplication is quasi-linear, computer algera systems handle finite field
+extensions arithmetic quite well. The links between finite
+field extensions are well understood, \eg we know that
 \[
-  \mathbb{Z}/26\mathbb{Z}
+  \mathbb{F}_{p^{k}}\subset\mathbb{F}_{p^{l}}
 \]
-and is represented in Figure~\ref{fig:cyclic-group}.
-\begin{figure}[h]
-  \centering
-  \begin{tikzpicture}
-    \foreach \x in {0, 1,...,25} \coordinate (\x) at (13.85*\x:3);
-    \draw[additive-structure] (0,0) circle (3);
-    \foreach \x in {0, 1,...,25} \draw[fill] (13.85*\x:3) circle (.1);
-    \foreach \x in {0, 1,...,25} \node (p) at (13.85*\x:3.4) {$\x$};
-  \end{tikzpicture}
-  \caption{The cyclic group $\mathbb{Z}/26\mathbb{Z}$ represented on a circle.}
-  \label{fig:cyclic-group}
-\end{figure}
-Many other interesting structures exist, see for example~\cite{Lang04, Perrin96}
-for a course in algebra. With the growth of public-key cryptography, number
-theory became its corner stone, and more advanced mathematical concepts were
-used, like finite fields, elliptic curves or isogenies. Without entering into
-the details of what these objects are, what is important is that the security of
-cryptographic protocols relies on hard mathematical problems involving these
-concepts. Thus, a better understanding of them means a better understanding of
-the security of our cryptographic protocols. The part of cryptography that is
-dedicated to the study of the security of cryptographic protocols (\ie how to
-``break'' them) is called \emph{cryptanalysis}.
-
-At the same time, since the protocols are based on the manipulation of these
-objects, a better understanding of them also means better (in particular,
-faster) cryptographic protocols. Since cryptography is everywhere in modern
-communications (on the Internet, when you use your credit card, on messaging
-applications on your smartphone, ...), efficient protocols are crucial. It is
-thus necessary to be able to efficiently manipulate the mathematical concepts
-behind our protocols both for cryptography (making efficient protocols) and
-cryptanalysis (being able to analyze their security). By ``manipulate'', we mean
-being able to do additions, multiplications, and sometimes more complicated
-operations with these objects: the science studying how to do so is called
-\emph{arithmetic}. In conclusion, it is necessary to have efficient arithmetic
-for cryptography and cryptanalysis.
-
-Examples of cryptographic protocols relying on finite field extension include
-the quasi-polynomial algorithm for discrete logarithm in small characteristic by
-Granger, Kleinjung and Zumbrägel~\cite{GKZ14}, where a tower of finite field
-extensions is used. In the domain of curve-based cryptography, pairing friendly
-curves~\cite{Joux00, FST10} are also defined on some finite field extension
-$\mathbb{F}_{q^k}$.
-
-\subsection{Coding theory}
-\label{sec:coding}
-
-Another very elegant (and useful) application of finite fields is
-\emph{coding theory}. Like cryptography, it is linked with communication,
-although it adresses a different issue entirely. We now assume that Alice and
-Bob want to communicate, and that the information they send go through a
-channel. In practice, this channel could be optical fiber, electrical wires, radio
-waves, and many more things. Assume that Alice wants to send the message ``Hi!
-How are you?'' to Bob. In fact these letters would probably first be translated
-into some stream of bits \texttt{0} and \texttt{1}, thus we will imagine that
-Alice sends the message
+if and only if $k\mid l$, we know how to construct extensions
 \[
-  m = \texttt{0010110001010111}
+  \mathbb{F}_{q^k}/\mathbb{F}_{q}
 \]
-through the cannel. Very often, in real conditions, the communication channel is
-not perfect and is subject to \emph{channel noise}, \ie because of the quality of
-the channel, or because of the environment, some errors can appear and change
-the message sent by Alice into something else, as shown in
-Figure~\ref{fig:communication-channel}.
-\begin{figure}[h]
-  \centering
-  \begin{tikzpicture}
-    \node (msg) at (0,2) {\texttt{0010110001010111}};
-    \node (msg-dec) at (0,0)
-    {\texttt{0010\textcolor{red}{0}10\textcolor{red}{1}0101011\textcolor{red}{0}}};
-    \node (channel) at (0, 1) {Communication channel};
-    \draw[->] (msg) -- (channel);
-    \draw[->] (channel) -- (msg-dec);
-  \end{tikzpicture}
-  \caption{An imperfect communication channel.}
-  \label{fig:communication-channel}
-\end{figure}
-Without any tool or context, it can be hard (or impossible) for Bob to guess
-what was the initial message coming from Alice. Coding theory studies how to
-make sure that Bob can recover the original message, even with some errors. The
-goal is to build so-called \emph{codes} that can correct errors,
-thus they are called \emph{error correcting codes} or \emph{error correction
-codes}. The intuition is that in order to make sure that some
-information, that is elementary reprensented by a \texttt{0} or a
-\texttt{1}, arrives without error to Bob, Alice can just repeat it multiple
-times. For example, if Alice repeats every bit three times, making words of
-three symbols:
+over a non-prime field $\mathbb{F}_{q}$, with $q=p^l$ and $l>1$. Nevertheless,
+these links are often not handled by computer algebra system, \eg the number
+theory library FLINT~\cite{Flint} only supports extensions of prime fields. In
+Sagemath~\cite{Sagemath}, the same is true for default finite fields, where
+asking for an extension of degree $3$ of $\mathbb{F}_{p^{3}}$ gives the
+extension
 \[
-  \texttt{0}\to\texttt{000}\quad\quad\texttt{1}\to\texttt{111},
+  \mathbb{F}_{p^{9}}/\mathbb{F}_p,
 \]
-then an error can be corrected, because if Bob receives, for example, the
-word \texttt{001}, he knows that is it most likely coming from
-the word \texttt{000}, and he can interpret it as coming from the bit \texttt{0} in
-Alice's initial message. More generally, if Bob receives the word
-\texttt{abc}, he
-interprets it as coming from the symbol \texttt{0} if there is a majority of
-\texttt{0} in the word \texttt{abc}. Conversely, if there is a majority of
-\texttt{1} in the word \texttt{abc}, he interprets the word as the symbol
-\texttt{1}. Of course, if there are too much errors on a single word, it is
-still possible to misinterpret it. For example, if the word
-\texttt{000} becomes \texttt{110} after going through the communication channel,
-then Bob will decode it as $\texttt{111}\to\texttt{1}$. This strategy is known
-as the binary repetition code of
-length $3$ and is an example of an error correction code. The whole procedure is
-described in Figure~\ref{fig:rep3}.
-\begin{figure}[h]
-  \centering
-  \begin{tikzpicture}
-    \node (msg-init) at (0,3)
-    {\texttt{\phantom{ }0\phantom{ } \phantom{ }0\phantom{ } \phantom{
-    }1\phantom{ }  \phantom{ }0\phantom{ }  \phantom{ }1\phantom{ }  \phantom{
-    }1\phantom{ }  \phantom{ }0\phantom{ }  \phantom{ }0\phantom{ }  \phantom{
-    }0\phantom{ }  \phantom{ }1\phantom{ }  \phantom{ }0\phantom{ }  \phantom{
-    }1\phantom{ }  \phantom{ }0\phantom{ }  \phantom{ }1\phantom{ }  \phantom{
-    }1\phantom{ }  \phantom{ }1\phantom{ }}};
-    \node (msg) at (0,2)
-    {\texttt{000 000 111 000 111 111 000 000 000 111 000 111 000 111 111 111}};
-    \node (msg-dec) at (0,0)
-  {\texttt{000 0\textcolor{red}{1}0 111 000 \textcolor{red}{0}11 111
-  00\textcolor{red}{1} 000 0\textcolor{red}{11} 111 0\textcolor{red}{1}0 111 000 11\textcolor{red}{0} 111 \textcolor{red}{0}11}};
-    \node (channel) at (0, 1) {Communication channel};
-    \node (msg-end) at (0,-1)
-    {\texttt{\phantom{ }0\phantom{ } \phantom{ }0\phantom{ } \phantom{
-    }1\phantom{ }  \phantom{ }0\phantom{ }  \phantom{ }1\phantom{ }  \phantom{
-    }1\phantom{ }  \phantom{ }0\phantom{ }  \phantom{ }0\phantom{ }  \phantom{
-    }\textcolor{red}{1}\phantom{ }  \phantom{ }1\phantom{ }  \phantom{ }0\phantom{ }  \phantom{
-    }1\phantom{ }  \phantom{ }0\phantom{ }  \phantom{ }1\phantom{ }  \phantom{
-    }1\phantom{ }  \phantom{ }1\phantom{ }}};
-    \draw[->] (msg-init) -- (msg);
-    \draw[->] (msg) -- (channel);
-    \draw[->] (channel) -- (msg-dec);
-    \draw[->] (msg-dec) -- (msg-end);
-  \end{tikzpicture}
-  \caption{The binary repetition code of length $3$.}
-  \label{fig:rep3}
-\end{figure}
-In order to correct more errors, we could use repetition codes with bigger
-lengths. Though, when we use a repetition code of length $n$, we have to send
-$n$ times more information in the communication channel, which comes at a cost
-in real life situations. We thus have to balance the cost coming from the length
-of the code with the number of errors we want to be able to correct. In fact,
-depending on the quality of the communication channel, all codes are not
-suitable. Claude Shannon proved in
-1948~\cite{Shannon48} that we can define a quantity called the \emph{capacity}
-of the channel that essentially measures how much information we can send
-through a communication channel. It also measures how much repetition we
-must add in our code in order to send something through the communication
-channel in a reliable way. Coding theory is still an active research field, thus
-there are plenty of open problems and the question ``What is the best code we
-can use?'' has no definitive answer. The codes used in practice
-are a bit more subtle that the repetition code, even if they follow the same
-logic. Finite fields are used to represent and manipulate codewords of error
-correction codes. For example, the Reed-Solomon codes~\cite{RS60}, that are used
-in consumer technologies like CDs, DVDs, Blu-ray discs, QR codes, but also in
-space NASA missions, use sequences of values taken in a finite field as
-codewords. Some other codes, like the geometric Goppa codes~\cite{Goppa81}, are
-based on algebraic function fields, a mathematical structure that is based on
-top of finite fields and involves finite field extensions.
-In conclusion, exactly like in cryptography, finite fields are
-ubiquitous in coding theory, and efficient arithmetic in finite fields ensures
-at the same time fast coding and fast decoding.
+thus Sagemath ``forgets'' the $\mathbb{F}_{p^{3}}$-vector space structure of
+$\mathbb{F}_{p^{9}}$. In the majority of computer algebra systems, it is
+impossible to easily manage user-defined finite fields, \ie compatible
+embeddings between finite fields are supported only when the fields are defined
+using Conway polynomials. Consequently, even if the arithmetic of each finite
+field extension is usually efficient, there is often room to improvement when it
+comes to the management of several finite field extensions.
 
-\section{Finite fields arithmetic}
+Yet, these features are sometimes needed in algorithms, for example the
+quasi-polynomial algorithm for discrete logarithm in finite fields of small
+characteristic~\cite{GKZ14} is based on a tower of extensions of $\mathbb{F}_q$,
+and deals with polynomials defined over a field $K$ that changes during the
+algorithm and belongs to the tower.
 
-As stated in Sections~\ref{sec:crypto} and~\ref{sec:coding}, cryptographic
-protocols and codes rely on
-mathematical structures in order to work. The one we will study throughout this
-document is called \emph{finite field}. A \emph{field} is a mathematical
-structure (we also say \emph{algebraic structure}) composed of elements that we
-can \emph{add}, \emph{substract}, \emph{multiply}, and \emph{divide} (except by
-zero). It is a well-known algebraic structure: for example the set of real
-numbers, denoted by $\mathbb{R}$, is a field. Indeed, the elements in
-$\mathbb{R}$, for example $0, 1, -3, 5631$ but also more complicated numbers
-such as $\pi, \sqrt 2, \frac{7}{13}$ can be added, substracted, multiplied or
-divided. Numbers in $\mathbb{R}$ can have an infinite number of decimals, for
-example the $60$ first decimals of the constant $\pi$ are
-\[
-  \pi = 3.14159265358979323846264338327950288419716939937510582097494\dots.
-\]
-A computer only has a finite memory, \ie the quantity of information it can
-store is finite. As a consequence, it is impossible to store all the decimals of
-$\pi$, and, more generally, the decimals of a lot of numbers in $\mathbb{R}$. It
-is still possible to work with numbers in $\mathbb{R}$ on a computer, but it is
-somewhat harder than to work with elements in a \emph{finite} algebraic
-structure, \ie a set composed of $n$ elements, with
-\[
-  n < \infty.
-\]
-One example of such a structure was given in Section~\ref{sec:crypto}: the
-cyclic groupe $\mathbb{Z}/26\mathbb{Z}$ that is composed of the ``numbers'' $0,
-1, \dots, 25$. They are not the same numbers as those we know though, since with
-the elements of $\mathbb{Z}/26\mathbb{Z}$ we have, for example
-\[
-  3 - 4 = -1 = 25,
-\]
-and this is not true for the actual numbers in $\mathbb{R}$, but we still write
-them the same way for convenience. We already defined an
-addition and substraction on $\mathbb{Z}/26\mathbb{Z}$, and we could also define
-a multiplication and a division in a very natural way. Finite fields are a
-generalization of spaces like
-$\mathbb{Z}/26\mathbb{Z}$. The set $\mathbb{Z}/26\mathbb{Z}$ is not a field for
-technical reasons, but to think of finite fields as sets like this is a good
-enough approximation for this introduction.
+\paragraph{Contributions.}
 
-Because the elements of a finite field are, by definition, finite, they are
-somewhat easier to manipulate on a computer. Moreover, the field structure
-allows us to manipulate the elements like usual numbers (\ie with additions,
-multiplications, ...), which makes them useful. This is why today, finite fields
-are everywhere in cryptography, but also in other domains at the crossroad of
-mathematics and computer science, like coding theory.
+During this thesis, we studied both the arithmetic of individual finite field
+extensions, and the arithmetic of several extensions at once.
+In~\cite{RR21}, we generelize results known for the bilinear complexity to the
+multilinear complexity and to the hypersymmetric complexity. We also give a new
+algorithm to find formulas for the multiplications in $\K$-algebras, and give
+experimental results in the case of a finite field extension
+$\mathbb{F}_{p^{k}}$.
 
-Sometimes, simple mathematical problems are well understood on a theoretical
-point of view, but there are still open questions concerning practical aspects.
-For example, the multiplication of two integers $a$ and $b$ in $\mathbb{N}$ is a
-simple problem, that can be done by hand by children. Still, the question of how
-to compute it on a computer (in an optimal way) is open, and there are still
-research articles~\cite{HVDH19} on that problem.
-Finite field arithmetic (\ie how to perform operations such as additions and
-multiplications) is very well understood, because the finite field structure is
-rather simple. But again, the best way of multiplying two elements in a finite
-field is still unknown. This is the subject of this thesis: the study of the
-finite field arithmetic.
+Concerning the arithmetic of several extensions, we studied how to deal with an
+arbitrary collection of extension, that we call a \emph{lattice of compatibly
+embedded finite fields}. In~\cite{DRR18}, we describe an implementation of a
+framework due to Bosma, Canon and Steel~\cite{BCS97}, that allows to embed
+user-defined finite fields, and is thus an alternative to Conway polynomials.
+Thanks to the kind invitation of its developpers, this implementation is
+now part of the computer algebra system Nemo. Prior to that, it was only
+available in Magma~\cite{Magma}. We also worked on a new framework for computing
+compatible embeddings between finite fields in~\cite{DRR19}. This new framework
+is an in-between of the Bosma-Canon-Steel framework and the Conway polynomials
+and brings new ideas to compute compatible embeddings, based on Kummer theory.
 
 \section{Organization of the document}
 \subsection{Efficient arithmetic in a single finite field}
@@ -450,7 +128,7 @@ extension
   \mathbb{F}_{p^k}.
 \]
 \paragraph{Preliminaries.} We begin in Chapter~\ref{chap:preliminary} by
-recalling foundamental
+recalling fundamental
 facts about the mathematical objects that we use in the rest of the document. We
 present some properties about \emph{finite fields}, that are at the center of
 this thesis. In particular, we recall the structure of finite fields, and how to
@@ -466,18 +144,18 @@ function fields}, an algebraic structure that we use in some proofs in
 Chapters~\ref{chap:bilinear} and~\ref{chap:hypersymmetric}. We briefly recall
 what \emph{places} are, and that they are essentially equivalent to a discrete
 valuation or a valuation ring. We describe how to evaluate an element
-$z$ of the algebraic function field to a place $P$, and give the definition of
+$z$ of the algebraic function field at a place $P$, and give the definition of
 zero and pole, justifying the name of ``function'' field. We finally give the
 definition of \emph{divisors} and recall the usual results of the theory: the
 link between the degree and the dimension of a divisor, the definition of the
 \emph{genus} of an algebraic function field, and the Riemann-Roch theorem.
 
 In Section~\ref{sec:complexity-models}, we give the model of \emph{algebraic
-complexity} and explain why it is suitable in our work. We also give the usual
+complexity} and explain why it is suitable for our work. We also give the usual
 asymptotic notations \emph{big O} and \emph{little o}, that are used in the
 thesis to express asymptotic results.
 
-Finally in Section~\ref{sec:foundamental-algos}, we give references and recall
+Finally in Section~\ref{sec:fundamental-algos}, we give references and recall
 the complexity of some classic and very important routines: the Brent-Kung
 algorithm for modular composition, minimal polynomial computation, and the
 Berlekamp-Massey algorithm. These routines are used in some
@@ -537,13 +215,13 @@ in small dimension. Their algorithm enumerates all bilinear formulas of a given
 length, and can thus be used to find the minimal length of a formula for some
 bilinear map $\Phi$, \ie the bilinear complexity of $\Phi$. The
 algorithm is explained in details, and some improvements due to
-Covanov~\cite{Covanov19} are mentionned.
+Covanov~\cite{Covanov19} are mentioned.
 
 \paragraph{Hypersymmetric bilinear complexity.}
 In Chapter~\ref{chap:hypersymmetric}, we investigate new types of interesting
-complexities, and provide results both in small dimension and asymptotically.
-In Section~\ref{sec:sym-and-hypersym}, we generalize the notion of bilinear
-complexity to the product of $s\geq2$ variables
+complexity models, and provide results both in small dimension and
+asymptotically. In Section~\ref{sec:sym-and-hypersym}, we generalize the notion
+of bilinear complexity to the product of $s\geq2$ variables
 \[
   x_1\times x_2\times\dots\times x_{s-1}\times x_s
 \]
@@ -579,7 +257,7 @@ complexity.
 \subsection{Efficient arithmetic in a lattice of finite fields}
 In Part~\ref{part:lattice}, we study how to deal with multiple finite fields
 at once, in what we call a \emph{lattice of compatibly embedded finite fields}.
-This is the equivalent as wondering how to compute in the algebraic closure
+This is the equivalent to asking how to compute in the algebraic closure
 \[
   \bar{\mathbb{F}}_{p} = \bigcup_{k\geq1}\mathbb{F}_{p^k}
 \]
@@ -637,9 +315,9 @@ building block of the algorithms in Chapter~\ref{chap:standard}. Finally, the
 standard techniques that are used to answer the embedding evaluation problem are
 presented in Section~\ref{sec:evaluation}.
 
-\paragraph{From a single finite field to plenty: lattice of embeddings.}
+\paragraph{From a single finite field to plenty: lattices of embeddings.}
 In Chapter~\ref{chap:lattice}, we investigate \emph{the compatibility problem},
-that asks how to compute embeddings between potentially much more that two
+that asks how to compute embeddings between potentially many more that two
 finite fields, in a compatible way, \ie so that the diagrams made of the embeddings
 always commute. This can be expressed in other words: given any three finite
 field extensions 
@@ -695,7 +373,8 @@ alternative to them. We describe it in details in Section~\ref{sec:bcs-alg}.
 This framework was first available in the computer algebra system
 Magma~\cite{Magma} since at least 1997. To the best of my knowledge, the only
 additional computer algebra system using the Bosma-Canon-Steel framework is
-Nemo~\cite{Nemo}. The framework was implemented in Fall 2019 and all the
+Nemo~\cite{Nemo}. The framework was implemented in Fall 2019, when I was kindly
+invited to the university of Kaiserslautern by the developers of Nemo. All the
 implementation details, as well as experimental results, are given in
 Section~\ref{sec:bcs-implem}.
 

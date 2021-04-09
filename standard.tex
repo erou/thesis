@@ -1960,35 +1960,3 @@ characteristic $p$ on the timings is minimal, compared to the other parameters.
   \label{fig:embed-primes}
 \end{figure}
 
-\section{Conclusion and perspectives}
-\label{sec:perspectives}
-
-In this chapter, we introduced a new idea to produce a lattice of compatibly
-embedded finite fields, based on both Conway polynomials and the Bosma-Canon-Steel
-framework. Conway polynomials are used in many computer algebra systems, and
-the Bosma-Canon-Steel framework is used in Magma. Our idea exploits new
-techniques and is thus
-interesting in itself. Furthermore, it also leads to a new family of (standard)
-polynomials that can be used to define finite fields. Nevertheless, this new
-family has no practical impact at the moment. Indeed, we can prove that
-computing these polynomials is essentially equivalent to the computation of
-Conway polynomials. Indeed, with our polynomials, one can recover a standard
-solution $\alpha_m$ of~\eqref{eq:h90-kummer} and deduce the value
-\[
-  (\zeta_{p^a-1})^a.
-\]
-Then, by taking a $a$-th root, which is done in polynomial time in $m$, one can
-find $\zeta_{p^a-1}$ and recover the associated Conway polynomial by computing a
-minimal polynomial. This means that an efficient algorithm to compute our
-standard polynomials would lead to an efficient algorithm to compute Conway
-polynomials, which would be unexpected. We thus do not have great hope to find
-such an algorithm, however the implemention presented in
-Section~\ref{sec:implementation-std-lattices} is not the only possible way to
-exploit our definitions. Indeed, it could be possible to loosen the assumption
-that a cyclotomic lattice exists, and thus find a middle ground between the
-rigidity of Conway polynomials and the flexibility of the Bosma-Canon-Steel
-framework, for example by lazily computing the roots of unity only when needed.
-An orthogonal line of work would be to construct a complete lattice of
-compatibly embedded finite fields, \ie working even with degrees that are not
-coprime with the characteristic $p$ of the base field $\K$.
-%
