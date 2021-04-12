@@ -10,8 +10,8 @@ what to expect in each chapter.
 Finite fields are the central object of this thesis. They play a special role in
 computer algebra, since they are the building block of more complex structures
 like for example vector spaces of matrices or of polynomials. Other useful
-objects, like agebraic curves, are also built upon them. In consequence, the
-applications of finite fields are abundant. There are especially important in
+objects, like agebraic curves, are also built upon them. As a consequence, the
+applications of finite fields are abundant. They are especially important in
 modern communication, since they are ubiquitous in coding theory and
 cryptography. Because of their special role, it is crucial to
 understand how to efficiently compute in finite fields, and there has been
@@ -37,21 +37,23 @@ representing $x$ and $y$, thus addition in $\mathbb{F}_{p^{k}}$ costs up to $k$
 additions in $\K$. The situation for multiplication is not so clear, since it is
 linked with polynomial multiplication, which is a more complex operation. The
 optimal way of multiplying two polynomials over a finite field is not known, and
-there was even some progress on that question quite recently~\cite{HVDH19ff}.
-Depending on the size of $k$, the fastest way of multiplying elements in
+there was even some progress on that question quite recently~\cite{HVDH19ff},
+yielding an algorithm for finite field multiplication in
+$\mathbb{F}_{p^{k}}$ with an asymptotic complexity of $O(k\log(k))$.
+In practice, depending on the size of $k$, the fastest way of multiplying
+elements in
 $\mathbb{F}_{p^k}$ is different, thus computer algebra systems typically change
 which algorithm is used depending on the size of $k$. For very small $k$, the
 naive multiplication algorithm for polynomials, that has an asymptotic
 (algebraic) complexity of $O(k^2)$, is the best. Then Karatsuba's
 algorithm~\cite{Karatsuba63} is used, with a complexity of $O(k^{\log_2(3)})$
 and $\log_2(3)\approx1.58$. Finally the best option for
-large $k$ is to use Fast Fourier Transform (FFT)~\cite{CT65, SS71}, with a
+large $k$ is to use the Fast Fourier Transform (FFT)~\cite{CT65, SS71}, with a
 complexity of $O(k\log(k)\log\log(k))$.
 
 All these costs are measured using the algebraic complexity model, where all operations
-are assumed to cost the same unit amount. However, as suggested by the
-efficiency of Karatsuba's algorithm, that minimizes the number of
-multiplications, and by timings in practice, the multiplication operation in $\K$
+are assumed to cost the same unit amount. However, as suggested by timings in
+practice, the multiplication operation in $\K$
 is more expensive (\ie takes more time) than addition. Thus, in order to obtain
 efficient multiplication algorithms in finite field extensions
 $\mathbb{F}_{p^{k}}$, research has been done on the minimal number of
@@ -82,8 +84,8 @@ extension
 \[
   \mathbb{F}_{p^{9}}/\mathbb{F}_p,
 \]
-thus Sagemath ``forgets'' the $\mathbb{F}_{p^{3}}$-vector space structure of
-$\mathbb{F}_{p^{9}}$. In the majority of computer algebra systems, it is
+that is described by an irreducible polynomial in $\K[x]$ of degree $9$.
+In the majority of computer algebra systems, it is
 impossible to easily manage user-defined finite fields, \ie compatible
 embeddings between finite fields are supported only when the fields are defined
 using Conway polynomials. Consequently, even if the arithmetic of each finite
@@ -98,25 +100,29 @@ algorithm and belongs to the tower.
 
 \paragraph{Contributions.}
 
-During this thesis, we studied both the arithmetic of individual finite field
-extensions, and the arithmetic of several extensions at once.
-In~\cite{RR21}, we generelize results known for the bilinear complexity to the
-multilinear complexity and to the hypersymmetric complexity. We also give a new
-algorithm to find formulas for the multiplications in $\K$-algebras, and give
-experimental results in the case of a finite field extension
-$\mathbb{F}_{p^{k}}$.
+While preparing this thesis, we studied both the arithmetic of individual finite
+field extensions, and the arithmetic of several extensions at once.
+In~\cite{RR21}, we generalize results known for the bilinear complexity to the
+\emph{multilinear complexity} and to the \emph{hypersymmetric complexity}. We
+also give a new algorithm to find formulas for the multiplications in
+$\K$-algebras, and give experimental results in the case of a finite field
+extension $\mathbb{F}_{p^{k}}$.
 
 Concerning the arithmetic of several extensions, we studied how to deal with an
 arbitrary collection of extension, that we call a \emph{lattice of compatibly
 embedded finite fields}. In~\cite{DRR18}, we describe an implementation of a
 framework due to Bosma, Canon and Steel~\cite{BCS97}, that allows to embed
 user-defined finite fields, and is thus an alternative to Conway polynomials.
-Thanks to the kind invitation of its developpers, this implementation is
+Thanks to the kind invitation by its developpers, this implementation is
 now part of the computer algebra system Nemo. Prior to that, it was only
 available in Magma~\cite{Magma}. We also worked on a new framework for computing
 compatible embeddings between finite fields in~\cite{DRR19}. This new framework
 is an in-between of the Bosma-Canon-Steel framework and the Conway polynomials
 and brings new ideas to compute compatible embeddings, based on Kummer theory.
+
+This document also presents an extended version of the articles~\cite{RR21}
+and~\cite{DRR18}, respectively in Parts~\ref{part:single}
+and~\ref{part:lattice}.
 
 \section{Organization of the document}
 \subsection{Efficient arithmetic in a single finite field}
@@ -169,7 +175,7 @@ computing bilinear maps. In this model, only multiplications are counted, which
 is justified because in practice multiplications are harder to compute than
 additions. The bilinear complexity of a map is then given by the minimal number
 of needed multiplications. Karatsuba's algorithm is a practical example of the
-interest of this complexity model. Indeed, the idea behind this algorithm is to
+interest in this complexity model. Indeed, the idea behind this algorithm is to
 multiply two degree $1$ polynomials
 \[
   A = a_1 X + a_0\text{ and }B = b_1 X + b_0
@@ -196,11 +202,11 @@ how it is equivalent to the rank of the tensor corresponding to $\Phi$. We also
 present the \emph{symmetric} version of the bilinear complexity, which counts
 the minimal number of symmetric multiplications that we need in order to compute
 $\Phi$, and that is also studied in the litterature. We are in particular
-interested in the multiplication in finite field extensions and on understanding
+interested in the multiplication in finite field extensions and in understanding
 the (symmetric) bilinear complexity of this bilinear map.
 
-In Section~\ref{sec:chudchud-algo}, we recall the principle of evaluation and
-interpolation and present an algorithm due to Chudnovsky and
+In Section~\ref{sec:chudchud-algo}, we recall the principle of
+evaluation-interpolation and present an algorithm due to Chudnovsky and
 Chudnovsky~\cite{CC88} based on evaluation and interpolation on the places of an
 algebraic function field. This seminal algorithm gives an asymptotic
 \emph{linear} bound on
@@ -208,7 +214,8 @@ both the bilinear complexity and the symmetric bilinear complexity of the
 product in finite field extensions. It was extensively studied, giving birth to
 many improvements~\cite{BR04, CO10, Randriam12} that we succinctly present.
 
-However, since Chudnovsky and Chudnovsky's algorithm is not practical, we also
+However, Chudnovsky and Chudnovsky's algorithm only gives good asymptotic
+bilinear formulas, hence we also
 give in Section~\ref{sec:algorithmic-searches} an algorithm due to Barbulescu,
 Detrey, Estibal and Zimmermanm~\cite{BDEZ12} to compute the bilinear complexity
 in small dimension. Their algorithm enumerates all bilinear formulas of a given
@@ -239,7 +246,7 @@ Detrey, Estibal and Zimmermanm, to compute this complexity in small dimension.
 We explain our algorithm in details and provide experimental results concerning
 the hypersymmetric bilinear complexity of the multiplication in finite field
 extensions in Section~\ref{sec:algo-small-dim}. Using \emph{universal formulas},
-\ie formulas that are true for almost all prime $p$, we also give theoretical
+\ie formulas that are true for almost any prime $p$, we also give theoretical
 results on the hypersymmetric complexity in finite field extensions
 \[
   \mathbb{F}_{p^{k}}
@@ -301,15 +308,15 @@ from the solutions of equations of the form
 \[
   (\sigma\otimes 1)(x) = (1\otimes\zeta)x
 \]
-in Kummer algebras. We call these equations~\eqref{eq:h90-kummer}.
-Kummer algebras, together with the solutions of~\eqref{eq:h90-kummer}, are
+in Kummer algebras. We call these equations Hilbert $90$.
+Kummer algebras, together with the solutions of Hilbert $90$, are
 extensively studied in Section~\ref{sec:kummer-algebras}, because they are also
 of central importance in Chapter~\ref{chap:standard}.
 
 Using the results of Section~\ref{sec:kummer-algebras}, we explain in
 Section~\ref{sec:lenstra-allombert-isomorphism} how to derive the elements
-$\alpha$ and $\beta$ from the solutions of~\eqref{eq:h90-kummer}. Finally, we
-present the known techniques to compute solutions of~\eqref{eq:h90-kummer} in
+$\alpha$ and $\beta$ from the solutions of Hilbert $90$. Finally, we
+present the known techniques to compute solutions of Hilbert $90$ in
 Section~\ref{sec:computing-h90}. The Lenstra-Allombert algorithm serves as the
 building block of the algorithms in Chapter~\ref{chap:standard}. Finally, the
 standard techniques that are used to answer the embedding evaluation problem are
@@ -360,8 +367,9 @@ by computing a norm. Naturally, before using Conway polynomials, we first need
 to compute them. This is a problem because we do not know any efficient
 algorithm to compute Conway polynomials. As a consequence, Conway polynomials
 are usually precomputed up to some degree $d$ in most computer algebra systems,
-and it is no longer possible to compute embeddings with finite field extensions
-that have a degree larger than this given degree $d$.
+and it is no longer possible, or computationally expensive, to compute embeddings
+with finite field extensions that have a degree larger than this given degree
+$d$.
 
 In Section~\ref{sec:bosma-canon-steel}, we introduce another solution to the
 compatibility problem, called the Bosma-Canon-Steel framework~\cite{BCS97}.
@@ -400,7 +408,7 @@ Kummer algebra
 \[
   A_n = \mathbb{F}_{p^n}\otimes \mathbb{F}_{p}(\zeta_n)
 \]
-such that $\mathbb{F}_{p}(\zeta_n)$ is an extension of degree $a$. We see that
+such that $\left[ \mathbb{F}_{p}(\zeta_n):\mathbb{F}_p \right]=a$. We see that
 the solutions derived from the standard solution also share some special
 properties, and that all these solutions can be used to obtain
 compatible embeddings between all the associated finite field extension
@@ -418,5 +426,4 @@ We analyze the complexity of this new framework in
 Section~\ref{sec:implementation-std-lattices} and provide an implementation in
 the Julia programming language~\cite{Julia}, using Nemo. We see that our
 construction is practical, and that embeddings are computed in a reasonable
-time. In Section~\ref{sec:perspectives}, we discuss the limitations of our
-approach and propose new perspectives of research.
+time.

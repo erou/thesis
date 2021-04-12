@@ -10,7 +10,7 @@ fields}.
 \clearpage
 
 \paragraph{Outline of Chapter~\ref{chap:standard}.} In this chapter, we
-construct new theoretic tools in order to build a new framework to manage finite
+construct new theoretic tools to build a new framework to manage finite
 field extensions. Before studying these objects in details in the following
 sections, we briefly explain our general strategy. If we have three integers
 \[
@@ -40,7 +40,7 @@ embeddings, one must have
 \[
   ((\zeta_n)^{n/m})^{m/l} = (\zeta_m)^{m/l} = \zeta_l.
 \]
-This is essentially how Conway polynomials work: one
+This is similar to how Conway polynomials work: one
 ensures that every finite field can be described as $\mathbb{F}_{p}(\zeta)$ for
 some primitive root $\zeta$ that is compatible with every other primitive root.
 A simple way of obtaining such a compatible configuration is to start from the root
@@ -80,13 +80,14 @@ embeddings between the finite fields $\mathbb{F}_{p^{l}},
   \end{tikzpicture}
 \end{center}
 Because we can deduce compatible embeddings from a solution $\alpha$
-of~\eqref{eq:h90-kummer} in a big algebra, we study the biggest algebra for a
-given field of scalars $\mathbb{F}_{p^{a}}=\mathbb{F}_p(\zeta_{p^a-1})$, that we
-call \emph{complete algebra}, and that is given by
+of~\eqref{eq:h90-kummer} in a large algebra, we study the largest algebra for a
+given field of scalars $\mathbb{F}_{p^{a}}=\mathbb{F}_p(\zeta_{p^a-1})$, \ie the
+largest algebra for a given level $a$.
+We call this largest algebra the \emph{complete algebra} of level $a$, and it is
+given by
 \[
   A_{p^a-1} = \mathbb{F}_{p^{p^a-1}}\otimes \mathbb{F}_p(\zeta_{p^a-1}).
 \]
-These algebras are also the biggest algebras for a given level $a$.
 We see in Section~\ref{sec:standardization} that the solutions $\alpha$
 of~\eqref{eq:h90-kummer} for $\zeta_{p^a-1}$ in complete algebras all share a
 very special property: they satisfy
@@ -101,7 +102,7 @@ constant
 \[
   c = (\zeta_{p^a-1})^a
 \]
-are linked with a solution $\alpha$ in the complete algebra of level $a$.
+are linked to a solution $\alpha$ in the complete algebra of level $a$.
 We thus call these special solutions \emph{standard}, and we show in
 Section~\ref{sec:towards-standard-embeddings} how to construct compatible
 embeddings from them, that we call \emph{standard embeddings}. Given a Kummer
@@ -115,7 +116,7 @@ finite field extensions. We finally show how to link complete algebras of
 different levels in Section~\ref{sec:standard-embeddings}, so that two standard
 solutions of~\eqref{eq:h90-kummer} in two arbitrary Kummer algebras can always
 be used to compute a compatible embedding between the associated finite fields.
-Again, in the general case of two arbitrary Kummer algebra, the computed
+Again, in the general case of two arbitrary Kummer algebras, the computed
 embedding is called \emph{standard}, and it is also compatible with future
 embeddings, meaning that the framework is incremental. We then discuss the
 implementation of the framework in
