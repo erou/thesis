@@ -1,10 +1,12 @@
-This introduction is intended for all readers, not only mathematicians. We
-first present some applications of the object at the center of this thesis, the
-\emph{finite fields} structure, in order to grasp how useful it is in real life.
-Those eager to learn more about the technical details or the mathematics behind
-the exposed subjects can do so by reading the articles and books for which we
-give references. Of course, this thirst for mathematics can also be fulfilled
-(up to a point) by reading the next chapters of this thesis.
+Cette préface est déstinée à tous les lecteurs, toutes les lectrices, et pas
+seulement les mathématiciens et mathématiciennes. Après les remerciements
+d'usage, on présentera quelques applications des \emph{corps finis}, l'objet au
+cœur de ce document, afin de comprendre l'étendue de leur utilité. Celles et ceux
+voulant assouvir leur soif de détails techniques et de mathématiques
+pourront le faire en parcourant les références bibliographiques proposées. Cela
+sera sans doute aussi possible (jusqu'à un certain point) en lisant les autres
+chapitres de ce manuscrit, ainsi que la fin de cette préface, qui donne un
+résumé détaillé du contenu du document.
 
 \minitoc
 % TODO
@@ -13,27 +15,45 @@ give references. Of course, this thirst for mathematics can also be fulfilled
 % Find an illustration (something linked with crypto preferably)
 \clearpage
 
-\section{Applications of finite fields}
+\section*{Remerciements}
+\addcontentsline{toc}{section}{Remerciements}
 
-During my PhD, I would always explain to non-mathematicians that I was doing a
-PhD in \emph{cryptography}. This is in fact a lie, because even if
-the words ``cryptography'' and ``cryptanalysis'' were initially among those composing
-the title of this project, that was first called \emph{Efficient arithmetic for
-cryptography and cryptanalysis}, the thesis is definitely more oriented
-towards the two first words: \emph{efficient arithmetic}. Still, cryptography
-is one of the motivations and sometimes the inspiration for this work. The
-problems we focus on either have their roots or have applications in
-cryptography, thus we begin by explaining what that is.
+\clearpage
+\section*{Applications des corps finis}
+\addcontentsline{toc}{section}{Applications des corps finis}
 
-\subsection{Cryptography}
+On peut se demander, probablement à juste titre, à quoi sert une thèse en
+mathématiques fondamentales. J'ai la chance d'avoir travaillé sur un sujet qui,
+quoique relativement abstrait, possède des applications extrêmement utiles, et
+ce dans la vie de tous les jours, pour quasiment tout le monde. Nous allons donc
+voir deux applications élégantes des \emph{corps finis}, qui illustrent
+l'intérêt de ces objets mathématiques.
+
+\subsection*{Cryptography}
+\addcontentsline{toc}{subsection}{Cryptographie}
 \label{sec:crypto}
 
-As we are social animals, we often need to communicate with each other.
-Sometimes, we want our communications to be secret: the reasons behind this
-wish are multiple: military information, business, secret love stories, banking
-information, personal medical information, and so on... Cryptography is the
-practice and study of the techniques used to secure communications, in the
-presence of third parties called \emph{adversaries}. Historically, cryptography
+Pendant toute la durée de mon doctorat, j'ai expliqué aux non-mathématiciens que
+je faisais une thèse en \emph{cryptographie}. C'est en fait un mensonge, car
+même si le titre initial du projet de thèse était \emph{Arithmétique efficace
+pour la cryptographie et la cryptanalyse}, je me suis finalement intéressé
+aux deux premiers mots seulement : arithmétique efficace. Cependant, la
+cryptographie reste une source d'inspiration et une des motivations derrière ces
+travaux. Les recherches que nous avons menées viennent souvent de la
+cryptographie, ou bien ont une application dans cette discipline, nous
+commencerons donc par expliquer ce que ``cryptographie'' signifie.
+
+Nous sommes des animaux sociaux, et nous avons donc besoin de communiquer les
+uns avec les autres. Parfois, nous voulons que nos échanges restent privés.
+Les raisons derrière ce souhait peuvent être multiples : informations
+militaires, commerciales, médicales, bancaires, histoires amoureuses... La
+cryptographie est la science qui étudie les techniques utilisées pour sécuriser
+les communications, en présence d'une tierce partie appelée \emph{adversaire}.
+Historiquement, la cryptographie s'est d'abord concentré sur le chiffrement des
+messages (leur confidentialité), c'est-à-dire rendre le message illisible pour
+quelqu'un qui l'intercepterait ou obtiendrait une copie.
+
+Historically, cryptography
 focused on \emph{encryption} of messages (message confidentiality), \ie making
 the message unreadable for someone intercepting or eavesdropping it. For the
 rightful recipient of the message to be able to read the message, he or she had
@@ -261,7 +281,8 @@ extensions is used. In the domain of curve-based cryptography, pairing friendly
 curves~\cite{Joux00, FST10} are also defined on some finite field extension
 $\mathbb{F}_{q^k}$.
 
-\subsection{Coding theory}
+\subsection*{Coding theory}
+\addcontentsline{toc}{subsection}{Théorie des codes}
 \label{sec:coding}
 
 Another very elegant (and useful) application of finite fields is
@@ -379,7 +400,8 @@ In conclusion, exactly like in cryptography, finite fields are
 ubiquitous in coding theory, and efficient arithmetic in finite fields ensures
 at the same time fast coding and fast decoding.
 
-\section{Finite fields arithmetic}
+\section*{Finite fields arithmetic}
+\addcontentsline{toc}{section}{Arithmétique des corps finis}
 
 As stated in Sections~\ref{sec:crypto} and~\ref{sec:coding}, cryptographic
 protocols and codes rely on
@@ -439,3 +461,225 @@ multiplications) is very well understood, because the finite field structure is
 rather simple. But again, the best way of multiplying two elements in a finite
 field is still unknown. This is the subject of this thesis: the study of the
 finite field arithmetic.
+
+\section*{Résumé des travaux}
+\addcontentsline{toc}{section}{Résumé des travaux}
+
+Ce résumé présente de manière détaillée l'ensemble des travaux réalisés pendant
+ma thèse, ainsi que la façon dont est organisé ce manuscrit. Cette partie est
+donc dédiée à un ``public scientifique averti''.
+
+\subsection*{Arithmétique efficace dans une extension fixée}
+\addcontentsline{toc}{subsection}{Arithmétique efficace dans une extension fixée}
+
+Ce document est composé de deux parties, qui sont essentiellement indépendantes.
+Dans la Partie~\ref{part:single}, nous étudions l'arithmétique d'une extension
+de corps fini fixée
+\[
+  \mathbb{F}_{p^{k}}.
+\]
+\paragraph{Préliminaires.} Nous commençons dans le
+Chapitre~\ref{chap:preliminary} par rappeler les faits fondamentaux concernant
+les objets que nous utiliserons dans le reste du document. En particulier, on
+rappelle la structure des corps finis, ainsi que la manière de les construire
+comme des quotients d'anneaux de polynômes
+\[
+  \mathbb{F}_p[x]/(P(x)).
+\]
+Nous donnons quelques propriétés des extensions de corps finis concernant leur
+structure d'espace vectoriel ainsi que sur leur groupe d'automorphismes.
+
+Dans la Section~\ref{sec:algebraic-function-fields}, nous présentons les
+\emph{corps de
+fonctions algébrique}, une structure algébrique que nous utilisons dans les
+preuves des Chapitres~\ref{chap:bilinear} et~\ref{chap:hypersymmetric}. On
+rappelle brièvement ce que sont les \emph{places}, et qu'elles sont
+essentiellement équivalentes aux notions de valuations discrètes et d'anneaux de
+valuations. On décrit comment évaluer un élément $z$ d'un corps de fonction
+algébrique à une place $P$, et on donne la définition d'un zéro et d'un pôle, ce
+qui justifie le nom de corps de ``fonction''. Enfin, on donne la définition d'un
+\emph{diviseur} et on rappelle les résultats habituels de la théorie : le lien
+entre le degré et la dimension d'un diviseur, la définition du \emph{genre} d'un
+corps de fonctions algébrique, et le théorème de Riemann-Roch.
+
+Dans la Section~\ref{sec:complexity-models}, on donne le modèle de la
+\emph{complexité algébrique} et on explique pourquoi ce modèle est pertinent
+pour nos travaux. On rappelle également les notions de \emph{grand O} et
+\emph{petit o}, qui sont utilisées pour exprimer des résultats asymptotiques.
+
+Enfin, dans la Section~\ref{sec:fundamental-algos}, nous donnons des références
+bibliographiques, ainsi que la complexité de certains algorithmes classiques et
+important dans notre travail : l'algorithme de Brent-Kung pour la composition
+modulaire, le calcul de polynôme minimal, et l'algorithme de Berlekamp-Massey.
+Ces routines sont utilisés dans plusieurs algorithmes de ce manuscrit, notamment
+dans les Chapitres~\ref{chap:isomorphism} et~\ref{chap:standard}.
+
+\paragraph{Complexité bilinéaire et algorithmes de type Chudnovsky$^2$.} Dans le
+Chapitre~\ref{chap:bilinear}, nous présentons la théorie de la \emph{complexité
+bilinéaire}, un modèle alternatif de complexité utilisé pour mesurer le coût de
+calcul de certaines applications bilinéaires. Dans ce modèle, seules les
+multiplications sont comptées, ce qui est justifié par le fait qu'en pratique
+les multiplications sont plus coûteuse que les additions. La complexité
+bilinéaire d'une application est alors donnée par le nombre minimal de
+multiplications nécessaires au calcul de l'application en question. L'algorithme
+de Karatsuba est un exemple pratique de l'intérêt de ce modèle de complexité. En
+effet, l'idée derrière cet algorithme est de multiplier deux polynômes de degré
+$1$
+\[
+  A = a_1 X + a_0\text{ et }B = b_1 X + b_0
+\]
+avec seulement trois produits
+\[
+  c_0 = a_0b_0,
+\]
+\[
+  c_1 = (a_0+a_1)(b_0+b_1),
+\]
+et
+\[
+  c_\infty = a_1b_1,
+\]
+à la place des quatre produits classiques $a_0b_0$, $a_0b_1$, $a_1b_0$ et
+$a_1b_1$ comme suit :
+\[
+  AB = c_\infty X^2 + (c_1-c_\infty-c_0) X + c_0.
+\]
+Dans la Section~\ref{sec:bilinear-complexity}, après avoir rigoureusement
+définit la complexité bilinéaire d'une application bilinéaire $\Phi$ en
+utilisant des \emph{formules bilinéaires}, nous expliquons que cette définition
+est en réalité équivalente au rang du tenseur correspondant à $\Phi$. Nous
+présentons également la version \emph{symétriques} de la complexité bilinéaire,
+qui compte le nombre minimal de multiplications symétriques nécessaire au calcul
+de $\Phi$, et qui est également étudiée dans la littérature. Nous sommes
+particulièrement intéressés par la multiplication dans les extensions de corps
+finis, et par sa complexité bilinéaire (symétrique).
+
+Dans la Section~\ref{sec:chudchud-algo}, nous redonnons le principe
+d'évaluation-interpolation et nous présentons un algorithme dû à Chudnovsky et
+Chudnovsky~\cite{CC88} basé sur l'évaluation et l'interpolation sur des places
+de corps de fonctions algébrique. Cet algorithme fondateur donne une borne
+asymptotique \emph{linéaire} en le degré de l'extension, que ce soit pour la
+complexité bilinéaire ou la complexité bilinéaire symétrique de la
+multiplication dans une extension de corps fini. Il a été très étudié, et nous
+présentons brièvement quelques améliorations~\cite{BR04, CO10, Randriam12}.
+
+Toutefois, l'algorithme de Chudnovsky et Chudnovsky donne uniquement une borne
+sur la complexité bilinéaire, qui s'avère être asymptotiquement bonne. Ainsi,
+nous donnons aussi dans la Section~\ref{sec:algorithmic-searches} un algorithme
+de Barbulescu, Detrey, Estibal et Zimmermann~\cite{BDEZ12} qui permet de
+calculer la complexité bilinéaire en petite dimension. Leur algorithme énumère
+toutes les formules biinéaires pour une longueur donnée, et peut ainsi être
+utilisé pour obtenir la longueur minimale d'une formule permettant de calculer
+une application bilinéaire $\Phi$, autrement dit cet algorithme permet de
+calculer la complexité bilinéaire de $\Phi$. L'algorithme est expliqué en
+détails, et quelques améliorations dûes à Covanov~\cite{Covanov19} sont
+mentionnées.
+
+\paragraph{Complexité bilinéaire hypersymétrique.} Dans le
+Chapitre~\ref{chap:hypersymmetric}, nous nous intéressons à de nouveaux modèles
+de complexité, et nous donnons des résultats à la fois en petite dimension et
+asymptotiquement. Dans la Section~\ref{sec:sym-and-hypersym}, nous généralisons
+la notion de complexité bilinéaire dans le cas du produit de $s\geq2$ variables
+\[
+  x_1\times x_2 \times\dots x_{s-1}\times x_s
+\]
+dans une extension de corps fini $\mathbb{F}_{p^{k}}$. En adaptant l'algorithme
+de Chudnovsky et Chudnovsky dans ce cas, nous montrons dans la
+Section~\ref{sec:asymptotic} que cette \emph{complexité multilinéaire} reste
+linéaire en le degré $k$ de l'extension, comme dans le cas de la complexité
+bilinéaire classique.
+
+Dans ce chapitre, on définit également une nouvelle complexité appelée
+\emph{complexité bilinéaire hypersymétrique}, qui est inspiré de la complexité
+bilinéaire symétrique usuelle, dans laquelle une condition de symétrie
+additionnelle est étudiée. Dans la Section~\ref{sec:algo-small-dim}, nous
+donnons un alorithme \emph{ad hoc} de recherche
+de formules hypersymétriques, inspiré par l'algorithme de Barbulescu, Detrey,
+Estibal and Zimmermann, qui nous permet de calculer la complexité bilinéaire
+hypersymétrique. Nous analysons notre algorithme en détails, et donnons des
+résultats expérimentaux issus de notre implémentation, dans le cas de la
+multiplication dans les extensions de corps finis. En utilisant des
+\emph{formules universelles}, c'est-à-dire des formules qui sont vraies pour
+presque tout nombre premier $p$, nous donnons aussi des résultats théoriques
+concernant la complexité bilinéaire hypersymétrique dans les extensions de corps
+finis
+\[
+  \mathbb{F}_{p^{k}}
+\]
+et dans des algèbres de polynômes tronqués
+\[
+  \mathbb{F}_p[T]/(T^k)
+\]
+en petite dimension $k$, qui généralisent des résultats connus pour la
+complexité bilinéaire. Nous obtenons également la linéarité de la complexité
+bilinéaire hypersymétrique de la multiplication dans l'extension
+$\mathbb{F}_{p^{k}}$ en le degré de l'extension $k$, comme corollaire du même
+résultat pour la complexité multilinéaire.
+
+\subsection*{Arithmétique efficace dans un réseau d'extensions}
+\addcontentsline{toc}{subsection}{Arithmétique efficace dans réseau d'extensions}
+
+Dans la Partie~\ref{part:lattice}, nous étudions comment gérer plusieurs
+corps finis simultanément, dans ce que l'on appelle un \emph{réseau de corps
+finis compatiblement plongés}. D'un point de vue théorique, cela revient à se
+demander comment calculer dans la clôture algébrique
+\[
+  \bar{\mathbb{F}}_{p} = \bigcup_{k\geq1}\mathbb{F}_{p^k}
+\]
+du corps de base $\mathbb{F}_p$.
+
+\paragraph{Algorithmes d'isomorphisme.} Le Chapitre~\ref{chap:isomorphism} est
+dédié au problème de l'isomorphisme, qui demande de calculer efficacement un
+isomorphisme (ou plus généralement un plongement)
+\[
+  K\emb L
+\]
+entre deux corps finis $K$ et $L$. Dans la Section~\ref{sec:prelim-naive-algo},
+nous exposons le problème de l'isomorphisme, et, suivant la présentation faite
+dans~\cite{BDDFS17}, nous le divisons en deux parties : le problème de la
+description du plongement et le problème de l'évaluation du plongement. Le
+problème de la description du plongement consiste à trouver des éléments
+$\alpha\in K$ et $\beta\in L$ tels que
+\[
+  K = \mathbb{F}_{p}(\alpha)
+\]
+et tel qu'il existe un plongement $\phi:K\emb L$ qui envoie $\alpha$ vers
+$\beta$. Connaissant $\alpha$ et $\beta$, le problème de l'évaluation du
+plongement consiste alors à évaluer $\phi$ de manière efficace. Nous traitons
+d'abord le problème de la description et nous présentons l'algorithme naïf, basé
+sur la factorisation de polynômes, dans la
+Section~\ref{sec:embedding-description}.
+
+Dans la Section~\ref{sec:allombert}, nous présentons un algorithme plus élaboré
+dû à Allombert~\cite{Allombert02} et inspiré par le travail de
+Lenstra~\cite{Lenstra91}, que nous appelons algorithme de Lenstra-Allombert.
+L'algorithme de Lenstra-Allombert est basé sur la théorie de Kummer, qui étudie
+certaines extensions de corps, et utilise des racines primitives de l'unité. Si
+l'extension $\mathbb{F}_{p^{n}}$ admet une racine $n$-ième de l'unité primitive
+$\zeta_n$,
+alors la description de l'algorithme est plus simple et est donnée dans la
+Section~\ref{sec:preliminaries}. Sinon, il est nécessaire d'ajouter
+artificiellement une racine $\zeta_n$ à l'extension $\mathbb{F}_{p^{n}}$, ce qui
+nous conduit à étudier les algèbres de la forme
+\[
+  A_n = \mathbb{F}_{p^{n}}\otimes\mathbb{F}_p(\zeta_n)
+\]
+que nous appelons \emph{algèbres de Kummer}. Les éléments $\alpha$ et $\beta$
+décrivant le plongement donnés par l'algorithme de Lenstra-Allombert sont alors
+déduits des solutions d'équations de la forme
+\[
+  (\sigma\otimes1)(x) = (1\otimes\zeta)x
+\]
+dans des algèbres de Kummer. Ces équations sont appelées Hilbert $90$. Les
+algèbres de Kummer, ainsi que les solutions de Hilbert $90$, sont étudiées en
+détail dans la Section~\ref{sec:kummer-algebras}, car elles jouent un rôle
+central dans le Chapitre~\ref{chap:standard}.
+
+En utilisant les résultats de la Section~\ref{sec:kummer-algebras}, nous
+expliquons dans la Section~\ref{sec:lenstra-allombert-isomorphism} comment
+obtenir les éléments $\alpha$ et $\beta$ des solutions de Hilbert $90$. Puis,
+on présente les techniques pour obtenir les solutions de Hilbert $90$ dans la
+Section~\ref{sec:computing-h90}. Enfin, les techniques standards permettant de
+répondre au problème de l'évaluation du plongement sont traitées dans la
+Section~\ref{sec:evaluation}.
+%
