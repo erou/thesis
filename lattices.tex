@@ -288,7 +288,7 @@ require any computation and the form of the embedding is already known. The
 only condition is to define each extension using the Conway polynomial of the
 corresponding degree. These polynomials always exist so this is possible,
 although the best known algorithm to compute Conway polynomials has exponential
-complexity~\cite{HL98} in the degree of the polynomial. Because the cost of
+complexity~\cite{HL04} in the degree of the polynomial. Because the cost of
 computing Conway polynomials is
 prohibitive, they are often precomputed and tabulated up to a certain degree in
 many computer algebra systems. As a result, most computer algebra systems use
@@ -649,7 +649,7 @@ common subfields, like shown in Figure~\ref{fig:incomplete-sev}.% and let
   \label{fig:incomplete-sev}
 \end{figure}
 In the same fashion as was done in Proposition~\ref{prop:number-embeddings}, we
-can abtractly describe how many compatible embeddings exist (this is done
+can abstractly describe how many compatible embeddings exist (this is done
 in~\cite[Section 2.5]{BCS97}), but we rather focus on the constructive part. In
 some sense, this is just a generalization of
 Proposition~\ref{prop:number-embeddings-constructive}, where we allow an
@@ -1037,7 +1037,6 @@ several subfields exist, as explained in
 Proposition~\ref{prop:several-subfields} and
 Remark~\ref{rem:greatest-common-subfield}.
 \begin{figure}[h]
-  \label{fig:illustration-common-subfield}
   \centering
   \begin{tikzpicture}
     \node (d) at (0, 0) {$\mathbb{F}_{p^{d}}$};
@@ -1050,6 +1049,7 @@ Remark~\ref{rem:greatest-common-subfield}.
   \end{tikzpicture}
   \caption{The computation of an embedding with a common subfield, that leads to
   the factorization of a polynomial of degree at most $m/d$.}
+  \label{fig:illustration-common-subfield}
 \end{figure}
 As an illustration of that phenomenon, note that if the finite fields
 $\mathbb{F}_{p^{2}}$, $\mathbb{F}_{p^{3}}$, $\mathbb{F}_{p^{6}}$ and

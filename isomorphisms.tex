@@ -219,10 +219,10 @@ that $n$ divides $p-1$.
  \[
    K/\K
  \]
- and consider the following equation in $K$.
+ and consider the following equation in $K$:
  \begin{equation}
    \tag{H90}
-   \sigma(x) = \zeta x
+   \sigma(x) = \zeta x.
    \label{eq:h90}
  \end{equation}
 The solutions of~\eqref{eq:h90} form a one dimensional $\K$-vector space and if
@@ -359,7 +359,7 @@ in
 \begin{enumerate}
   \item finding $\alpha_K\in K$ and $\alpha_L\in L$ with
     $\sigma(\alpha_K)=\zeta\alpha_K$ and $\sigma(\alpha_L)=\zeta\alpha_L$;
-  \item computing a $n$-th root $c$ of $\alpha_K^n/\alpha_L^n$;
+  \item computing a $n$-th root $c\in\K$ of $\alpha_K^n/\alpha_L^n$;
   \item returning the isomorphism described by $\alpha_K\mapsto c\alpha_L$.
 \end{enumerate}
 
@@ -408,7 +408,9 @@ of~\cite{DRR19}, we call these algebras \emph{Kummer algebras}.
     \nu(n) = \mathrm{ord}_{(\mathbb{Z}/n\mathbb{Z})^\times}(p) = \left[
       \mathbb{F}_{p}(\zeta):\K \right],
   \]
-  that is the degree of its field of scalars.
+  where $\mathrm{ord}_{(\mathbb{Z}/n\mathbb{Z})^\times}(p)$ is the order of $p$
+  in the multiplicative group $(\mathbb{Z}/n\mathbb{Z})^\times$. The level
+  $\nu(n)$ of $A_n$ is the degree of its field of scalars.
 \end{defi}
 Let $\sigma:x\mapsto x^p$ be the Frobenius automorphism of the extension
 \[
@@ -514,8 +516,8 @@ to the eigenvalue $\zeta$ is described by the equation
  \end{proof}
  \begin{rem}
    \label{rem:fixed-elems}
-   We can use the proof of Lemma~\ref{lm:fixed-elems} (modulo appropriate
-   changes) in order to prove that the set of elements in $A_n$ fixed by
+   We can use the proof of Lemma~\ref{lm:fixed-elems}, \emph{mutatis mutandis},
+   in order to prove that the set of elements in $A_n$ fixed by
    $1\otimes\sigma'$, with $\sigma'$ the Frobenius automorphism of the extension
    $\mathbb{F}_{p}(\zeta)/\K$, is $\mathbb{F}_{p^n}\otimes1$. In the remainder
    of the document, we write $\sigma$ for both $\sigma$ and $\sigma'$.
@@ -1046,7 +1048,7 @@ $\mathbb{F}_{p^m}$ can be done at a cost of $O(M(m)\log(m))$ operations in $\K$,
 as explained in~\cite{DDS14}. Fortunately, the map $\psi^t$, that is easy to
 compute, is closely related to $\psi^{-1}$, the map that we want. In particular, if
 $K\cong L$ and $\psi$ is an isomorphism of fields, we have that $\psi^t$ is
-exaclty $\psi^{-1}$. Indeed, in that case, the map $\psi$ preserves the bilinear
+exactly $\psi^{-1}$. Indeed, in that case, the map $\psi$ preserves the bilinear
 form, \ie for all $x, y\in K$, we have
 \[
   \ps{\psi(x)}{\psi(y)}_L = \ps{x}{y}_K.
@@ -1067,7 +1069,7 @@ and
 \]
 we have
 \begin{align*}
-  \tr_{L/\K}(x) &= \sum_{j=0}^{n-1}\sigma^i(x) \\
+  \tr_{L/\K}(x) &= \sum_{i=0}^{n-1}\sigma^i(x) \\
   &= \sum_{i=0}^{d-1}\sum_{j=0}^{m-1}\sigma^{im+j}(x)\\
   &= \sum_{i=0}^{d-1}\sum_{j=0}^{m-1}\sigma^{j}(x)\\
   &= \sum_{i=0}^{d-1}\tr_{\psi(K)/\K}(x)

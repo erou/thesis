@@ -254,3 +254,6 @@ TSWLatexianTemp*
 *.swp
 
 thesis.pdf
+
+# Reviews directory
+reviews

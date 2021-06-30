@@ -85,11 +85,11 @@ general, it seems to be hard to find the bilinear complexity of a given algebra,
 for example the bilinear complexity of $\K^{3\times3}$ is not known.
 In the litterature, work has been done both to algorithmically find the bilinear complexity of
 small algebras~\cite{BDEZ12, Covanov19} and to understand how the bilinear
-complexity asymptotically grows~\cite{CC88, BCPRRR19}. Chudnovsky and Chudnovsky
-proved in 1988 that the bilinear complexity of an extension field
+complexity asymptotically grows~\cite{CC88, BCPRRR21}. In 1988, Chudnovsky and Chudnovsky
+proposed a new method using evaluation-interpolation on curves, leading to the
+proof that the bilinear complexity of an extension field
 $\mathbb{F}_{q^k}/\mathbb{F}_{q}$ is linear in the degree $k$ of the
-extension, using an evaluation-interpolation method on curves. We present this
-method in Section~\ref{sec:evalinter}.
+extension~\cite{Ballet99}. We present this method in Section~\ref{sec:evalinter}.
 
 \paragraph{Bilinear formulas.}
 
@@ -123,7 +123,7 @@ and
 \]
 be two vectors.
 A bilinear formula of length $n$ for a bilinear map $\Phi$ is essentially a way
-of computing $\Phi(x, y)$ using a number $n$ of $2$-variable multiplicaitons in $\K$.
+of computing $\Phi(x, y)$ using a number $n$ of $2$-variable multiplications in $\K$.
 Indeed, for each $1\leq j \leq n$ we have
 \[
   \varphi_j(x) = \sum_{i=1}^l a_{i, j}x_i
@@ -174,7 +174,7 @@ corresponding to $\Phi$~\cite{Randriam12}, as shown in Example~\ref{ex:bilinear-
   &((x_0, x_1), (y_0, y_1))&\mapsto&(x_0y_0+x_1y_1, x_0y_1+x_1y_0+x_1y_1)
 \end{array}
 \]
-Let $e_0=(1,0)$ and $e_1=(0,1)$ the vectors of the cannonical basis of
+Let $e_0=(1,0)$ and $e_1=(0,1)$ the vectors of the canonical basis of
 $(\mathbb{F}_{2})^2$, and let $e_0^\vee$ and $e_1^\vee$ the vectors of the dual
 basis, \ie the linear forms $e_0^\vee$ and $e_1^\vee$ are given by
 \[
@@ -524,7 +524,7 @@ that we finally evaluate at the place $Q$ to recover
 \[
   g(Q) = f_x(Q)f_y(Q) = xy.
 \]
-This whole process costs $n$ multiplication: those that appear when we compute
+This whole process costs $n$ multiplications: those that appear when we compute
 the coefficient-wise multiplication of $a_x$ and $a_y$.
 Details can be found in~\cite{CC88}. Another version of Theorem~\ref{thm:cc88},
 generalized to the case of the multiplication of an arbitrary number $s\geq2$ of
@@ -549,10 +549,10 @@ complexity of the multiplication in the finite field extension
 is \emph{linear} in the degree of the extension $k$. Theorem~\ref{thm:cc88} was
 then generalized by Ballet and Rolland~\cite{BR04} and Cenk and
 Özbudak~\cite{CO10} in order to exploit places of higher degrees.
-Finally the most general version, allowing us to use asymetric
+Finally the most general version, allowing us to use asymmetric
 formulas, was proposed by Randriambololona in~\cite{Randriam12}.
 All the historical and technical details can be found in the survey of Ballet,
-Chaumine, Pieltant, Rambaud, Randriambololona and Rolland~\cite{BCPRRR19}.
+Chaumine, Pieltant, Rambaud, Randriambololona and Rolland~\cite{BCPRRR21}.
 
 \section{Algorithmic searches in small dimension}
 \label{sec:algorithmic-searches}

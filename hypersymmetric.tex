@@ -196,7 +196,8 @@ V$ such that for all $x\in V$, we have
 \]
 Under these conditions, we can now write a symmetric formula for $\Phi$ as
 \[
-  \Phi(x, y) = \sum_{j=1}^t\ps{a_j}{x}\ps{a_j}{y}w_j
+  \Phi(x_1, \dots, x_s) =
+  \sum_{j=1}^t\ps{a_j}{x_1}\dots\ps{a_j}{x_s}w_j.
 \]
 where for all $1\leq j\leq t$, $a_j\in V$ is a vector of $V$. As a consequence,
 we can also describe a symmetric formula for $\Phi$ as the data of vectors
@@ -468,7 +469,7 @@ Lemma~\ref{lm:action-sym}.
  \end{align*}
  Thus we have a new symmetric formula for $\Phi$.
 \end{proof}
-When this action, does not change the formula, we then say that it is
+When this action does not change the formula, we then say that it is
 $\sigma$-invariant.
 \begin{defi}[$\sigma$-invariance]
   Let $(a_j)_{1\leq j\leq t}$ and
@@ -547,18 +548,18 @@ for our $\K$-automorphism.
   \[
   \begin{array}{cccc}
     \tau: & \A & \to & \K \\
-    & \sum_{j=0}^{k-1}x_j T^j & \mapsto & x_0
+    & \sum_{j=0}^{k-1}x_j T^j & \mapsto & x_{k-1}
   \end{array}
 \]
 and
 \[
   \ps{x}{y} = \tau(xy).
 \]
-Indeed, if $x=\sum_{j=0}^{k-1}T^j$ and $y=\sum_{j=0}^{k-1}y_jT^j$, we have
+Indeed, if $x=\sum_{j=0}^{k-1}x_jT^j$ and $y=\sum_{j=0}^{k-1}y_jT^j$, we have
 \[
-  \tau(x, y) = x_0y_{k-1} + x_1y_{k-2} + \dots + x_{k-1}y_0,
+  \tau(xy) = x_0y_{k-1} + x_1y_{k-2} + \dots + x_{k-1}y_0,
 \]
-thus $\tau$ is a non-degenerate bilinear form.
+thus $\ps{\cdot}{\cdot}$ is a non-degenerate bilinear form.
 \end{itemize}
 We denote by $\mutri_q(k)$ the trisymmetric bilinear complexity of the
 $2$-variable product in $\mathbb{F}_{q^k}$ and by $\hmutri_q(k)$ the
@@ -604,7 +605,7 @@ algorithm to find trisymmetric formulas, exploiting the vector space structure.
 
 In all the section, we assume that $\K=\mathbb{F}_q$ is the finite field with
 $q$ elements, $V$ is a finite-dimensional $\K$-vector space equipped with a
-non-degenerate bilinear form, written as a saclar product $\ps{\cdot}{\cdot}$,
+non-degenerate bilinear form, written as a scalar product $\ps{\cdot}{\cdot}$,
 and $\Phi:V\times V\to V$ is a hypersymmetric bilinear map for which we want to
 compute trisymmetric decompositions
 \[
@@ -759,7 +760,7 @@ $(\lambda_1, a_1)$, we will thus exhaustively search through scalars
 $\lambda_2\in\K$ and vectors $a_2$ in
 \[
   \E_1^{\left\{ (\lambda_1, a_1) \right\}} = \left\{
-    a\in\E_1\mid\text{there exists}\,\lambda\in\K\text{ such that}\,\rank(b_1-\lambda f(a)) <\rank(b_1)
+    a\in\E_1\mid\exists\lambda\in\K,\,\rank(b_1-\lambda f(a)) <\rank(b_1)
 \right\}.
 \]
 Then, after each choice of $(\lambda_2, a_2)$, we will search through scalars
@@ -896,7 +897,7 @@ with $r_1$ the rank of the bilinear form $b_1\in\B$. If we have strictly more
 than $r_1$ different vectors in $(a_j)_{1\leq j\leq t}$ that belong to $\E_1$,
 then Algorithm~\ref{algo:trisymmin} will not find this decomposition. Indeed,
 Algorithm~\ref{algo:mindecomp} only finds \emph{minimal} decompositions of $b_1$
-into $r_1$ bilinear forms of rank $1$, \ie finds decompositions with exaclty
+into $r_1$ bilinear forms of rank $1$, \ie finds decompositions with exactly
 $r_1$ vectors in $(a_j)_{1\leq j\leq t}$ that are in $\E_1$. More generally, in
 Algorithm~\ref{algo:mindecomp}, when working with a bilinear form $b$ of rank
 $r$, it is possible that the best \emph{local} decompositions (\ie on only one
@@ -1316,7 +1317,7 @@ us to find Galois invariant formulas of length $11$ for $\mathbb{F}_{3^5}$ and
 of length $10$ for $\mathbb{F}_{5^5}$ and $\mathbb{F}_{7^5}$.
 Joint with the obvious inequalities
 $\mu_q(k)\leq\musym_q(k)\leq\mutri_q(k)\leq\mutriG_q(k)$ and with known lower
-bounds from \cite[Thm. 2.2]{BCPRRR19} and \cite{BDEZ12},
+bounds from \cite[Thm. 2.2]{BCPRRR21} and \cite{BDEZ12},
 this gives 
 \[
   10\leq\mu_3(5)\leq\musym_3(5)=\mutri_3(5)=\mutriG_3(5)=11,
@@ -1335,7 +1336,7 @@ In this setting our exhaustive search found no Galois invariant decomposition of
 length up to $15$. Since all orbits are of length $7$, except the trivial orbit
 of length $1$, the minimal length for a Galois invariant decomposition is congruent
 to $0$ or $1$ modulo $7$, so we deduce that it is at least $21$. Furthermore, we
-know~\cite[Table~2]{BCPRRR19} that $\musym_3(7)\leq19$, so we have
+know~\cite[Table~2]{BCPRRR21} that $\musym_3(7)\leq19$, so we have
 \[
   \mu_3(7)\leq\musym_3(7)\leq 19<21\leq \mutriG_3(7).
 \]
@@ -1393,7 +1394,7 @@ and
 \[
   \E = \bigcup_{i=1}^k\E_i
 \]
-be subsets of $\A$. Now, for earch $a\in \E$, we write 
+be subsets of $\A$. Now, for each $a\in \E$, we write 
 \[
   \bff(a) = a\otimes \f(a),
 \]
@@ -1404,7 +1405,7 @@ finding a trisymmetric decomposition of the product in
 $\A$ is the same as finding elements $a_1\dots,
 a_n\in\E$ and $\lambda_1, \dots, \lambda_n\in\mathbb{F}_q$ with
 \[
-  B = \sum_{j=1}^n \lambda_j\bff(a).
+  B = \sum_{j=1}^n \lambda_j\bff(a_j).
 \]
 Let $A$ be the matrix which columns are the $\bff(a)$ for all $a\in\E$, then the
 problem is to find a solution $X$ of
@@ -1422,7 +1423,7 @@ For any odd $q$ we have
 \end{prop}
 \begin{proof}
 The fact that $\mu_q(2)=3$ is not new and follows, for example, from~\cite[Thm.
-2.2]{BCPRRR19}. In order to prove that
+2.2]{BCPRRR21}. In order to prove that
 $\mutri_q(2) = 3$, we find a \emph{universal} trisymmetric formula of length
 $3$. We know that we can find a non-square element $\zeta$ in $\mathbb{F}_q$, we
 can then define
@@ -1587,7 +1588,7 @@ Section~\ref{sec:formulas-algebras}, \ie
 \begin{itemize}
   \item if $\A=\mathbb{F}_{q^k}$, $\tau=\tr$ is the trace map;
   \item if $\A = \mathbb{F}_{q}[T]/(T^k)$ and $x=\sum_{j=0}^{k-1}x_jT^j$, then
-    $\tau(x) = x_0$ is the map sending an element to its constant coefficient.
+    $\tau(x) = x_{k-1}$ is the map sending an element to its leading coefficient.
 \end{itemize}
 Our aim is to show that the trisymmetric bilinear complexities $\mutri_q(k)$ and $\hmutri_q(k)$ grow linearly as $k\to\infty$.
 Our proof will involve higher multilinear maps, and in turn, give results for them as well.
@@ -1921,6 +1922,7 @@ For $q$ a square, $q\geq(s+3)^2$ we have
 \[
 \Mhyp_{q,s}\leq(1+\epsilon_{s+1}(q))(s+1),
 \]
+with $\epsilon_s(q)=\frac{s-1}{\sqrt{q}-s-1}$,
 and in particular we have
 \[ \Mtri_q\leq 3\left(1+\frac{2}{\sqrt{q}-4}\right) \]
 for $q$ a square, $q\geq 25$.
